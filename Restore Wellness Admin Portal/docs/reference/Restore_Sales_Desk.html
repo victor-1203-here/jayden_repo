@@ -1,0 +1,1233 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Restore Sales Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#F2F5F1;--surface:#FFFFFF;--surface-2:#F6F8F5;--ink:#16211B;--muted:#5B6B62;--line:#DCE4DD;
+  --accent:#1D6A4C;--accent-ink:#FFFFFF;--accent-soft:#E1EEE6;
+  --warn:#8F5B10;--warn-soft:#F6EAD3;--danger:#B23A2E;--danger-soft:#F7E1DE;
+  --blue:#3F6FA8;--blue-soft:#E2EAF4;--co:#8CA396;--staff:#D9A441;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0D1310;--surface:#151E19;--surface-2:#1A241E;--ink:#E3ECE5;--muted:#95A79C;--line:#2A372F;
+    --accent:#5CC495;--accent-ink:#0B1A12;--accent-soft:#1B3127;
+    --warn:#E3AE5E;--warn-soft:#382B16;--danger:#EC8173;--danger-soft:#3A1E1A;
+    --blue:#82ABDF;--blue-soft:#1C2A3B;--co:#6F8479;--staff:#C99434;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0D1310;--surface:#151E19;--surface-2:#1A241E;--ink:#E3ECE5;--muted:#95A79C;--line:#2A372F;
+  --accent:#5CC495;--accent-ink:#0B1A12;--accent-soft:#1B3127;
+  --warn:#E3AE5E;--warn-soft:#382B16;--danger:#EC8173;--danger-soft:#3A1E1A;
+  --blue:#82ABDF;--blue-soft:#1C2A3B;--co:#6F8479;--staff:#C99434;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.55}
+.app{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:18px 72px;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{margin:0;text-wrap:balance}
+h2{font-size:16px;font-weight:700}
+h3{font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+p{margin:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{width:34px;height:34px;border-radius:50%;background:var(--accent);position:relative;flex:none}
+.mark::after{content:"";position:absolute;inset:9px;border-radius:50%;border:2.5px solid var(--accent-ink);border-right-color:transparent;transform:rotate(-40deg)}
+.brand h1{font-size:19px;font-weight:700}
+.sub{color:var(--muted);font-size:12.5px}
+.month{display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px}
+.month button{border:0;background:none;width:30px;height:30px;border-radius:50%;font-size:17px;line-height:1}
+.month button:hover{background:var(--surface-2)}
+.month span{min-width:88px;text-align:center;font-weight:600}
+
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:0;background:none;padding:10px 14px;color:var(--muted);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:700}
+.tabs .badge{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--danger);color:#fff;font-size:11px;font-weight:700;margin-left:5px;text-align:center}
+
+.status{padding:10px 14px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-size:13px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+
+/* commission card */
+.comm{background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.comm .l{font-size:12px;opacity:.82}
+.comm .big{font-size:32px;font-weight:600;line-height:1.1}
+.comm .kv{display:flex;flex-wrap:wrap;gap:22px}
+.comm .kv > div{display:flex;flex-direction:column}
+.comm .kv .v{font-size:16px;font-weight:600}
+
+/* forms */
+form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+form .full{grid-column:1/-1}
+label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted);font-weight:500}
+input,select,textarea{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:14px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:60px}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+@media (max-width:440px){form{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:5px 12px;font-size:13px}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{flex:1;border:0;background:var(--surface-2);padding:8px;font-size:13px;color:var(--muted)}
+.seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn{border:0;border-radius:8px;padding:11px 18px;background:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink);font-weight:500;padding:8px 14px}
+.btn.sm{padding:6px 12px;font-size:13px}
+.hint{font-size:12px;color:var(--muted)}
+.preview{grid-column:1/-1;padding:10px 12px;border-radius:8px;background:var(--accent-soft);color:var(--accent);font-size:13px}
+.formswitch{display:flex;gap:8px;flex-wrap:wrap}
+
+/* tables & lists */
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:12px;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+tfoot td{font-weight:700;border-top:2px solid var(--line);border-bottom:0}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 9px;border-radius:999px;white-space:nowrap}
+.tag.ok{background:var(--accent-soft);color:var(--accent)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.bad{background:var(--danger-soft);color:var(--danger)}
+.tag.plain{background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.tag.blue{background:var(--blue-soft);color:var(--blue)}
+.linkbtn{border:0;background:none;color:var(--muted);font-size:12px;padding:2px 4px;text-decoration:underline;text-underline-offset:2px}
+.linkbtn.armed{color:var(--danger);font-weight:700}
+.toggle{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;white-space:nowrap}
+.toggle.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.empty{padding:20px 8px;text-align:center;color:var(--muted);font-size:13px}
+.item{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:5px;background:var(--surface)}
+.item .h{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.item .h b{font-size:15px}
+.meta{font-size:12.5px;color:var(--muted)}
+.list{display:flex;flex-direction:column;gap:10px}
+details.cust{border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+details.cust summary{list-style:none;cursor:pointer;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:4px 12px}
+details.cust summary::-webkit-details-marker{display:none}
+details.cust .body{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+
+/* finance */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:3px}
+.tile .l{font-size:12px;color:var(--muted)}
+.tile .v{font-size:20px;font-weight:600}
+.tile .n{font-size:11.5px;color:var(--muted)}
+.tile .n.bad{color:var(--danger);font-weight:600}
+.split{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--surface-2)}
+.split div{height:100%}
+.legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px;font-size:13px}
+@media (max-width:520px){.legend{grid-template-columns:1fr}}
+.legend div{display:flex;justify-content:space-between;gap:8px}
+.legend span{color:var(--muted);display:flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.leaders{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:600px){.leaders{grid-template-columns:1fr}}
+.leader{background:var(--accent-soft);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.leader .v{font-size:20px;font-weight:600;color:var(--accent)}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:grid;grid-template-columns:minmax(90px,160px) 1fr auto;gap:10px;align-items:center;font-size:13px}
+.bar-track{height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.bar-track i{display:block;height:100%;background:var(--accent)}
+.warnline{padding:8px 12px;border-radius:8px;background:var(--danger-soft);color:var(--danger);font-size:12.5px}
+.okline{padding:8px 12px;border-radius:8px;background:var(--accent-soft);color:var(--accent);font-size:12.5px}
+.inline-in{width:110px;padding:6px 8px;font-size:13px;text-align:right}
+.setgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.mrow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);cursor:pointer}
+.mrow input{width:18px;height:18px;margin-top:2px;accent-color:var(--accent)}
+.mrow.on{border-color:var(--accent);background:var(--accent-soft)}
+.mrow .nm{font-weight:600}
+.mrow .pr{font-weight:600;white-space:nowrap}
+.mrow .pr.none{color:var(--warn);font-weight:500;font-size:12.5px}
+.qline{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.qtotal{display:flex;justify-content:space-between;align-items:baseline;padding-top:8px;border-top:2px solid var(--ink)}
+.qtotal .v{font-size:26px;font-weight:600}
+[hidden]{display:none!important}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:500;max-width:calc(100% - 32px);box-shadow:0 6px 24px rgba(0,0,0,.18);z-index:10}
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <div><h1>Restore Sales Tracker</h1><p class="sub" id="whoLine">Connecting…</p></div>
+    </div>
+    <label id="actWrap" hidden style="flex-direction:row;align-items:center;gap:8px">View as<select id="actAs" style="max-width:190px"></select></label>
+    <div class="month" aria-label="Choose month">
+      <button id="mPrev" type="button" aria-label="Previous month">‹</button>
+      <span id="mLabel" class="num"></span>
+      <button id="mNext" type="button" aria-label="Next month">›</button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-tab="home">My sales</button>
+    <button role="tab" data-tab="follow">Follow-ups</button>
+    <button role="tab" data-tab="crm">Customers</button>
+    <button role="tab" data-tab="quote">Quote</button>
+    <button role="tab" data-tab="pay" hidden>My payout</button>
+    <button role="tab" data-tab="fin" data-mgmt hidden>Departments & payouts</button>
+    <button role="tab" data-tab="set" data-mgmt hidden>Settings</button>
+  </nav>
+
+  <div id="status" class="status" hidden></div>
+
+  <!-- CLAIM -->
+  <section id="claimPanel" class="panel" hidden>
+    <h2>First time here: who are you?</h2>
+    <p class="hint">Pick your name. Once management confirms it, you can start recording. This account will only ever see your own records.</p>
+    <div class="formswitch" id="claimList"></div>
+    <p id="claimState" class="okline" hidden></p>
+  </section>
+
+  <!-- HOME -->
+  <section id="tab-home" class="stack" hidden>
+    <div class="cols">
+      <div class="stack">
+        <div class="comm" id="mineCard"></div>
+        <div class="panel">
+          <div class="formswitch" id="formSwitch">
+            <button type="button" class="btn sm" data-form="sale">Record a sale</button>
+            <button type="button" class="btn sm ghost" data-form="consult" id="consultBtn" hidden>New consult</button>
+          </div>
+
+          <form id="saleForm" autocomplete="off">
+            <label>Date<input type="date" id="sDate" required></label>
+            <label>Product / service<select id="sProduct"></select></label>
+            <label>Customer name<input id="sCust" required placeholder="e.g. Ms Tan"></label>
+            <label>Phone<input id="sPhone" type="tel" inputmode="tel" maxlength="20" placeholder="e.g. 012-345 6789"></label>
+            <label>Amount paid RM (incl. SST)<input id="sAmt" type="number" min="0" step="0.01" required inputmode="decimal"></label>
+            <label id="sRouteWrap">How was it sold?<select id="sRoute"></select></label>
+            <label id="sSpkWrap" hidden>Webinar speaker<select id="sSpeaker"></select></label>
+            <label id="sAgentWrap" hidden>Customer brought in by an affiliate?<select id="sAgent"></select></label>
+            <label id="sDaysWrap" hidden>Supply bought (days)<input id="sDays" type="number" min="0" step="1" inputmode="numeric"></label>
+            <label class="full">Note (optional)<input id="sNote" placeholder="e.g. instalment 1"></label>
+            <div class="preview" id="sPreview">Enter an amount to see the commission for this sale.</div>
+            <div class="full"><button class="btn" type="submit" id="sSubmit">Save sale</button></div>
+          </form>
+
+          <form id="consultForm" autocomplete="off" hidden>
+            <label>Date<input type="date" id="cDate" required></label>
+            <label>Mode<select id="cMode"><option>In person (centre)</option><option>Online</option></select></label>
+            <label>Customer name<input id="cCust" required placeholder="e.g. Ms Wong"></label>
+            <label>Phone<input id="cPhone" type="tel" inputmode="tel" maxlength="20" placeholder="e.g. 012-345 6789"></label>
+            <div class="full stack" style="gap:6px"><span class="hint" style="font-weight:500">Main concerns</span><div class="chips" id="cIssues"></div></div>
+            <label class="full">Details<textarea id="cIssueText" placeholder="e.g. HbA1c 6.1, tired in the afternoons"></textarea></label>
+            <label class="full">Customer feedback<textarea id="cFeedback" placeholder="e.g. willing to change breakfast, worried about eating out"></textarea></label>
+            <div class="full stack" style="gap:6px"><span class="hint" style="font-weight:500">Readiness</span><div class="seg" id="cWill"><button type="button">Low</button><button type="button" class="on">Medium</button><button type="button">High</button></div></div>
+            <label>Sold<select id="cProduct"></select></label>
+            <label>Amount paid RM<input id="cAmt" type="number" min="0" step="0.01" inputmode="decimal"></label>
+            <label id="cRouteWrap">How was it sold?<select id="cRoute"></select></label>
+            <label id="cSpkWrap" hidden>Webinar speaker<select id="cSpeaker"></select></label>
+            <label id="cAgentWrap" hidden>Customer brought in by an affiliate?<select id="cAgent"></select></label>
+            <label id="cDaysWrap" hidden>Supplement supply (days)<input id="cDays" type="number" min="0" step="1" inputmode="numeric"></label>
+            <label>Next follow-up<input type="date" id="cFu"></label>
+            <label>Referrals<select id="cRef"><option value="0">None</option><option value="1">1 person</option><option value="2">2 or more</option></select></label>
+            <label class="full">Follow-up task<input id="cFuWhat" placeholder="e.g. check how breakfast went in week one"></label>
+            <div class="preview" id="cPreview">If there is a sale, its commission shows here.</div>
+            <div class="full"><button class="btn" type="submit" id="cSubmit">Save consult</button></div>
+            <p class="full hint">🔒 Customer health details are visible only to you and management.</p>
+          </form>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="row"><h2>My records this month</h2><span class="hint">Commission counts once management confirms payment</span></div>
+        <div class="tablewrap"><table id="myRecords"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOLLOW -->
+  <section id="tab-follow" class="stack" hidden>
+    <div class="panel">
+      <div class="row"><h2>Customers to follow up</h2><span class="hint" id="followNote"></span></div>
+      <div class="list" id="followList"></div>
+    </div>
+  </section>
+
+  <!-- CRM -->
+  <section id="tab-crm" class="stack" hidden>
+    <div class="panel">
+      <div class="row"><h2 id="crmTitle">My customers</h2><input id="crmSearch" placeholder="Search name or phone" style="max-width:240px"></div>
+      <div class="list" id="crmList"></div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <section id="tab-quote" class="stack" hidden>
+    <div class="cols">
+      <div class="panel">
+        <h2>Build a blood test quote</h2>
+        <div class="row" style="justify-content:flex-start;align-items:flex-end">
+          <label style="flex:1;min-width:180px">Customer name (optional)<input id="qCust" placeholder="e.g. Ms Tan"></label>
+          <div class="seg" id="qGender" style="min-width:170px"><button type="button" data-g="f" class="on">Female</button><button type="button" data-g="m">Male</button></div>
+        </div>
+        <div class="stack" style="gap:6px"><span class="hint" style="font-weight:500">What is the customer worried about? Pick all that apply.</span><div class="chips" id="qSym"></div></div>
+        <h3>1 · BASE</h3>
+        <div id="qBase"></div>
+        <h3>2 · ADD-ON PACKAGES</h3>
+        <div class="list" id="qBundles"></div>
+        <details id="qOtherBox"><summary class="hint" style="cursor:pointer;font-weight:600">3 · Add single tests</summary><div class="list" id="qSingles" style="margin-top:10px"></div></details>
+      </div>
+      <div class="panel" id="qSummary"></div>
+    </div>
+  </section>
+
+  <!-- MY PAYOUT (staff & affiliates) -->
+  <section id="tab-pay" class="stack" hidden>
+    <div class="tiles" id="payTiles"></div>
+    <div class="panel">
+      <div class="row"><h2>My commission rates</h2><span class="hint">On the amount paid, excluding SST</span></div>
+      <div class="tablewrap"><table id="payRates"></table></div>
+      <p class="hint" id="payRatesNote"></p>
+    </div>
+    <div class="cols">
+      <div class="panel"><h2>Where it comes from</h2><div class="bars" id="payBreak"></div></div>
+      <div class="panel"><h2>Last 6 months</h2><div class="tablewrap"><table id="payHist"></table></div></div>
+    </div>
+    <div class="panel">
+      <div class="row"><h2>Commission lines · <span id="payMonth"></span></h2><span class="hint">Only payments management has confirmed are paid at month end</span></div>
+      <div class="tablewrap"><table id="payLines"></table></div>
+    </div>
+  </section>
+
+  <!-- FINANCE -->
+  <section id="tab-fin" class="stack" hidden>
+    <div class="tiles" id="finTiles"></div>
+    <div class="panel">
+      <div class="row"><h2>Department profit · <span id="finMonthLbl2"></span></h2><span class="hint">Confirmed payments only</span></div>
+      <div class="tablewrap"><table id="deptTable"></table></div>
+      <p class="hint">Department profit = revenue excl. SST − product cost − front-line commission − the department's own salaries, ads and other costs. Shared costs (rent, utilities, HR & accounts, software) stay with the company and are not charged to any department.</p>
+    </div>
+    <div class="panel">
+      <div class="row"><h2>How the profit is split</h2><span class="hint" id="splitNote"></span></div>
+      <div class="split" id="finSplit" role="img" aria-label="Profit split"></div>
+      <div class="legend" id="finLegend"></div>
+      <div id="finCheck" class="stack" style="gap:8px"></div>
+      <div class="leaders" id="finLeaders"></div>
+    </div>
+    <div class="panel">
+      <div class="row"><h2>Costs this month</h2><span class="hint" id="expNote"></span></div>
+      <div class="tablewrap"><table id="expTable"></table></div>
+      <h3>SHARED COSTS (COMPANY)</h3>
+      <div class="setgrid" id="sharedGrid"></div>
+      <p class="hint">Product costs are estimated automatically: each product's cost per sale in Settings, or its category margin %.</p>
+    </div>
+    <div class="panel">
+      <h2>Commission payable this month</h2>
+      <div class="tablewrap"><table id="finPay"></table></div>
+    </div>
+    <div class="cols">
+      <div class="panel"><h2>Top products</h2><div class="bars" id="finTop"></div></div>
+      <div class="panel"><h2>How it was sold · repeat buyers</h2><div class="bars" id="finSrc"></div><p class="hint" id="finRepeat"></p></div>
+    </div>
+    <div class="panel">
+      <div class="row"><h2>Sales track list · <span id="finMonthLbl"></span></h2><div class="row" style="gap:8px"><button class="btn sm" type="button" id="xlsxMonth">Download this month (Excel)</button><button class="btn ghost sm" type="button" id="xlsxBtn">Full backup (Excel)</button></div></div>
+      <p class="hint" id="finListSum"></p>
+      <div id="finFlags" class="stack" style="gap:6px"></div>
+      <div class="tablewrap"><table id="finAll"></table></div>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="tab-set" class="stack" hidden>
+    <div class="panel">
+      <h2>People & account links</h2>
+      <p class="hint">Everyone picks their name the first time they open the page; the request appears here for you to confirm. The role decides how commission is calculated.</p>
+      <div class="tablewrap"><table id="setRoster"></table></div>
+      <div class="list" id="setClaims"></div>
+      <div class="row" style="justify-content:flex-start"><input id="newPerson" placeholder="New member name" style="max-width:200px"><select id="newRole" style="max-width:200px"></select><button class="btn ghost sm" type="button" id="addPerson">Add to list</button></div>
+    </div>
+    <div class="panel">
+      <h2>Departments</h2>
+      <p class="hint">Each department's HOD sets its front-line rates below and receives the HOD share of that department's profit.</p>
+      <div class="setgrid" id="setDepts"></div>
+    </div>
+    <div class="panel">
+      <h2>Commission rates (on amount paid, excluding SST)</h2>
+      <div class="tablewrap"><table id="setRates"></table></div>
+      <div id="setCaps" class="stack" style="gap:6px"></div>
+      <p class="hint">Three rules for every HOD: everyone's commission on a sale together stays within the cap (margin × 25%, or × 40% for partner-delivered services); prices and discounts are set by the company; rates change once a quarter, never mid-month. Refunded sales take the commission back in the month of the refund.</p>
+    </div>
+    <div class="panel">
+      <h2>Products</h2>
+      <div class="tablewrap"><table id="setProducts"></table></div>
+      <div class="row" style="justify-content:flex-start"><input id="npName" placeholder="Name" style="max-width:200px"><select id="npCat" style="max-width:120px"><option value="restore">Restore</option><option value="blood">Blood test</option><option value="consult">Consultation</option><option value="product">Supplements</option><option value="fir">FIR sauna</option><option value="iv">Doctor / IV drip</option></select><input id="npPrice" type="number" placeholder="Price" style="max-width:100px"><input id="npDays" type="number" placeholder="Supply days" style="max-width:110px"><button class="btn ghost sm" type="button" id="addProduct">Add</button></div>
+    </div>
+    <div class="panel">
+      <h2>Blood test price list</h2>
+      <p class="hint">These are the prices everyone quotes. A package's crossed-out price is the sum of its item prices. Single tests without a price show "ask management".</p>
+      <div class="tablewrap"><table id="setMarkers"></table></div>
+      <div class="row" style="justify-content:flex-start"><input id="nmName" placeholder="Test name" style="max-width:220px"><input id="nmPrice" type="number" placeholder="Price RM" style="max-width:110px"><button class="btn ghost sm" type="button" id="addMarker">Add single test</button></div>
+    </div>
+    <div class="panel">
+      <h2>Margins & split (management only)</h2>
+      <div class="setgrid">
+        <label>Restore margin %<input id="mgR" type="number"></label>
+        <label>Blood test margin %<input id="mgB" type="number"></label>
+        <label>Consultation margin %<input id="mgC" type="number"></label>
+        <label>Supplements margin %<input id="mgP" type="number"></label>
+        <label>FIR sauna margin %<input id="mgF" type="number"></label>
+        <label>Doctor / IV margin %<input id="mgI" type="number"></label>
+        <label>SST %<input id="mgSst" type="number"></label>
+        <label>HOD share of own dept profit %<input id="mgHod" type="number" step="1"></label>
+        <label>Company reserve %<input id="mgCo" type="number" step="0.01"></label>
+        <label>Commission cap · own services (% of margin)<input id="mgCapOwn" type="number"></label>
+        <label>Commission cap · partner services (% of margin)<input id="mgCapPartner" type="number"></label>
+        <label>Default online ads RM<input id="mgAds" type="number"></label>
+        <label>Default shared costs RM<input id="mgFixed" type="number"></label>
+      </div>
+      <h3>EQUAL-SPLIT WEIGHTS</h3>
+      <div class="setgrid" id="mgSplit"></div>
+      <div><button class="btn" type="button" id="saveMg">Save</button></div>
+      <p class="hint" id="usage"></p>
+    </div>
+  </section>
+</div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+(function(){
+const CATS={restore:"Restore",blood:"Blood test",consult:"Consultation",product:"Supplements",fir:"FIR sauna",iv:"Doctor / IV drip"};
+const CAT_KEYS=Object.keys(CATS);
+const PARTNER_CATS=["iv"];
+const DEPTS={online:"Online marketing",bd:"Business development",clinical:"Nutrition delivery"};
+const DEPT_KEYS=Object.keys(DEPTS);
+const ROLES={cs:"Customer service",nut:"Nutritionist",sales:"BD staff",agent:"Affiliate",mgmt:"HOD"};
+const ISSUES=["Blood sugar","Cholesterol","Uric acid","Blood pressure","Weight","Gut","Fatigue","Sleep","Thyroid","Women's health","Other"];
+const every=v=>Object.fromEntries(CAT_KEYS.map(c=>[c,v]));
+const DEF_PUBLIC={
+  products:[
+    {id:"p1",name:"Program · Restore 30",cat:"restore",price:1899,days:0},
+    {id:"p2",name:"Care Plan · Consultation",cat:"consult",price:350,days:0},
+    {id:"p3",name:"Care Plan · Credit Top-up",cat:"blood",price:3000,days:0},
+    {id:"p4",name:"Blood Test · Personal",cat:"blood",price:0,days:0},
+    {id:"p6",name:"Blood Test · Corporate",cat:"blood",price:0,days:0},
+    {id:"p7",name:"Supplements",cat:"product",price:0,days:30},
+    {id:"p8",name:"FIR Sauna · 30 min",cat:"fir",price:80,days:0},
+    {id:"p9",name:"Doctor home visit / IV drip",cat:"iv",price:0,days:0}
+  ],
+  rates3:{speaker:every(3),closer:every(3),agent:{restore:10,blood:10,consult:10,product:5,fir:10,iv:5},lead:every(2),trail:every(2),
+    corpStaff:every(5),corpAgent:{restore:10,blood:13,consult:10,product:5,fir:10,iv:5},
+    nutProb:{restore:3,blood:0,consult:3,product:3,fir:3,iv:3},nut:{restore:3,blood:0,consult:3,product:3,fir:3,iv:3},std:every(3)},
+  deptHod:{online:"Levin",bd:"Jayden",clinical:"Amanda"},
+  roster:[
+    {name:"Levin",role:"mgmt",uid:null},{name:"Jayden",role:"mgmt",uid:null},{name:"Amanda",role:"mgmt",uid:null},
+    {name:"Sophia",role:"cs",uid:null},{name:"Jia Ling",role:"nut",uid:null},{name:"Ms Lee",role:"nut",uid:null},
+    {name:"Sam",role:"agent",uid:null},{name:"Benne",role:"agent",uid:null}
+  ]
+};
+const DEF_PRIV={companyPct:33.33,hodPct:20,capOwn:25,capPartner:40,margins:{restore:74,blood:60,consult:90,product:40,fir:95,iv:20},sst:8,ads:10000,fixed:10000,split:{Levin:1,Jayden:1,Amanda:1}};
+const S={db:null,user:null,dl:null,uid:null,canEdit:false,pub:clone(DEF_PUBLIC),priv:clone(DEF_PRIV),mcfg:null,claims:[],data:{},subs:{},tab:"home",
+  month:(()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");})(),monthSub:null,pending:false};
+function clone(o){return JSON.parse(JSON.stringify(o));}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const n=v=>{const x=parseFloat(v);return isFinite(x)?x:0;};
+const rm=v=>(v<0?"−":"")+"RM "+Math.abs(Math.round(v*100)/100).toLocaleString("en-MY",{minimumFractionDigits:2,maximumFractionDigits:2});
+const rm0=v=>(v<0?"−":"")+"RM "+Math.round(Math.abs(v)).toLocaleString("en-MY");
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const addDays=(ds,k)=>{const d=new Date(ds+"T00:00:00");d.setDate(d.getDate()+k);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const dayDiff=ds=>Math.round((new Date(ds+"T00:00:00")-new Date(today()+"T00:00:00"))/86400000);
+const normPhone=p=>String(p||"").replace(/\D/g,"").replace(/^60/,"").replace(/^0/,"");
+function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2800);}
+function status(m){const e=$("status");e.hidden=!m;e.textContent=m||"";}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+
+/* ---------- identity & data helpers ---------- */
+function selfEntry(){return S.uid?S.pub.roster.find(r=>r.uid===S.uid):null;}
+function me(){if(S.canEdit&&S.actAs){const r=S.pub.roster.find(x=>x.name===S.actAs);if(r)return r;}return selfEntry();}
+function slugKey(name){return "p-"+String(name||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+function keyOf(r){return r.uid||slugKey(r.name);}
+function actUid(){const m=me();if(!m)return null;return m.uid||(S.canEdit?slugKey(m.name):null);}
+function scoped(){return !S.canEdit||!!S.actAs;}
+function personByUid(uid){return S.pub.roster.find(r=>r.uid===uid||(!r.uid&&slugKey(r.name)===uid));}
+function product(id){return S.pub.products.find(p=>p.id===id);}
+function allSales(){const out=[];for(const [uid,d] of Object.entries(S.data)){const p=personByUid(uid);(d.sales||[]).forEach(s=>out.push(Object.assign({uid,seller:p?p.name:"(unlinked)",role:p?p.role:"cs"},s)));}return out;}
+function allConsults(){const out=[];for(const [uid,d] of Object.entries(S.data)){const p=personByUid(uid);(d.consults||[]).forEach(c=>out.push(Object.assign({uid,who:p?p.name:"(unlinked)"},c)));}return out;}
+const SST_CATS=["restore","blood","consult"];
+function netOf(s){return SST_CATS.includes(s.cat)?n(s.amount)/(1+n(S.priv.sst||8)/100):n(s.amount);}
+function netPublic(amount,cat){return SST_CATS.includes(cat)?amount/1.08:amount;}
+const RATE_ROWS=[
+  ["online","speaker","Webinar speaker"],
+  ["online","closer","Closing: webinar follow-up or online enquiry (paid in class → the speaker)"],
+  ["bd","agent","Affiliate sells it (also: a blood test sold to the affiliate's customer)"],
+  ["bd","lead","Team leader override, on their own affiliates' sales"],
+  ["bd","trail","Affiliate's customer buys more after a consult → the affiliate"],
+  ["bd","corpStaff","Corporate deal closed by staff"],
+  ["bd","corpAgent","Corporate deal closed by an affiliate"],
+  ["clinical","nutProb","Nutritionist on probation: upsell and own sales"],
+  ["clinical","nut","Nutritionist, confirmed: upsell and own sales"],
+  ["all","std","Any other staff selling directly"]
+];
+const ROUTES={webinar:"Webinar · I closed it after class",webinar_live:"Webinar · customer paid during class",funnel:"Online enquiry or auto funnel · I closed it",upsell:"After a consult or report (upsell)",agent:"I sold it myself",corp:"Corporate deal",direct:"Other direct sale"};
+const ROUTE_SHORT={webinar:"Webinar",webinar_live:"Webinar (paid in class)",funnel:"Online enquiry",upsell:"Upsell",agent:"Affiliate",corp:"Corporate",direct:"Direct"};
+const ROUTE_DEPT={webinar:"online",webinar_live:"online",funnel:"online",upsell:"clinical",agent:"bd",corp:"bd"};
+const LEGACY_ROUTE={oneone:"upsell",webinar_self:"webinar_live"};
+function routeOptions(cat,role){
+  if(role==="agent")return["agent","corp"];
+  if(role==="nut")return["upsell","webinar","webinar_live","direct"];
+  if(role==="cs")return["webinar","funnel","direct"];
+  if(role==="sales")return["corp","direct"];
+  return["webinar","webinar_live","funnel","upsell","corp","direct"];
+}
+function routeOf(s){const r=LEGACY_ROUTE[s.route]||s.route;const o=routeOptions(s.cat,s.role);return o.includes(r)?r:o[o.length-1];}
+function rates(){const d=DEF_PUBLIC.rates3,t=S.pub.rates3||{};const o={};Object.keys(d).forEach(k=>o[k]=Object.assign({},d[k],t[k]||{}));return o;}
+function R(row,cat){return n((rates()[row]||{})[cat]);}
+function person(name){return S.pub.roster.find(r=>r.name===name);}
+function roleOf(name){const p=person(name);return p?p.role:"cs";}
+function hodOf(d){return Object.assign({},DEF_PUBLIC.deptHod,S.pub.deptHod||{})[d];}
+function personDept(name){const p=person(name);if(p&&p.dept&&DEPTS[p.dept])return p.dept;const role=p?p.role:"cs";
+  if(role==="mgmt")return DEPT_KEYS.find(k=>hodOf(k)===name)||"online";
+  return role==="nut"?"clinical":role==="cs"?"online":"bd";}
+function deptOf(s){return ROUTE_DEPT[routeOf(s)]||personDept(s.seller);}
+function marginOf(cat){const m=S.priv.margins||{};return n(m[cat]??DEF_PRIV.margins[cat]);}
+function capPct(cat){return marginOf(cat)*n(PARTNER_CATS.includes(cat)?(S.priv.capPartner??DEF_PRIV.capPartner):(S.priv.capOwn??DEF_PRIV.capOwn))/100;}
+function nutRow(name){const p=person(name);return p&&p.prob?"nutProb":"nut";}
+function creditsOf(s){
+  const net=netPublic(n(s.amount),s.cat);const out=[];const cat=s.cat;
+  const add=(name,kind,rate)=>{if(name&&rate>0)out.push({name,kind,rate,amt:net*rate/100});};
+  const lead=a=>{const p=person(a);if(p&&p.by&&p.by!==a)add(p.by,"Team leader override ("+a+")",R("lead",cat));};
+  const route=routeOf(s);const ref=s.agentRef&&s.agentRef!==s.seller?s.agentRef:null;
+  if(route==="agent"){add(s.seller,"Affiliate sale",R("agent",cat));lead(s.seller);}
+  else if(route==="corp"){if(s.role==="agent"){add(s.seller,"Corporate deal",R("corpAgent",cat));lead(s.seller);}else add(s.seller,"Corporate deal",R("corpStaff",cat));}
+  else if(route==="webinar"){add(s.speaker,"Webinar speaker",R("speaker",cat));add(s.seller,"Closing",R("closer",cat));}
+  else if(route==="webinar_live"){add(s.speaker,"Webinar speaker",R("speaker",cat));add(s.speaker,"Closing (paid in class)",R("closer",cat));}
+  else if(route==="funnel")add(s.seller,"Closing",R("closer",cat));
+  else if(ref&&cat==="blood"){add(ref,"Blood test · affiliate's customer",R("agent",cat));lead(ref);}
+  else{const row=(route==="upsell"||s.role==="nut")?nutRow(s.seller):"std";
+    add(s.seller,route==="upsell"?"Upsell":"Direct sale",R(row,cat));if(ref)add(ref,"Customer referral (trail)",R("trail",cat));}
+  return out;
+}
+function creditFor(s,name){return creditsOf(s).filter(c=>c.name===name).reduce((a,c)=>a+c.amt,0);}
+function commOf(s){return creditsOf(s).reduce((a,c)=>a+c.amt,0);}
+function ratePctOf(s){return creditsOf(s).reduce((a,c)=>a+c.rate,0);}
+function monthEntries(list,month){const out=[];list.forEach(s=>{if(s.month===month)out.push({s,sign:1});if(s.refundedIn===month&&s.verified)out.push({s,sign:-1});});return out;}
+function phoneOwners(){const m={};allSales().slice().sort((a,b)=>(a.date||"").localeCompare(b.date||"")||(a.createdAt||"").localeCompare(b.createdAt||"")).forEach(s=>{const ph=normPhone(s.phone4);if(ph.length<7||m[ph])return;
+  const r=routeOf(s);m[ph]={agent:(s.role==="agent"&&(r==="agent"||r==="corp"))?s.seller:(s.agentRef||null),date:s.date,id:s.id};});return m;}
+
+/* ---------- month ---------- */
+function setMonth(m){S.month=m;$("mLabel").textContent=m;subMonthCfg();render();}
+$("mPrev").onclick=()=>{let [y,m]=S.month.split("-").map(Number);m--;if(m<1){m=12;y--;}setMonth(y+"-"+String(m).padStart(2,"0"));};
+$("mNext").onclick=()=>{let [y,m]=S.month.split("-").map(Number);m++;if(m>12){m=1;y++;}setMonth(y+"-"+String(m).padStart(2,"0"));};
+$("mLabel").textContent=S.month;
+
+/* ---------- tabs ---------- */
+$("tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;lsSet("rw_tab2",S.tab);render();});
+const TABS=["home","follow","crm","quote","pay","fin","set"];
+function showTabs(){
+  const m=me();const bound=!!m;
+  if(!bound&&!S.canEdit){$("tabs").hidden=true;TABS.forEach(t=>$("tab-"+t).hidden=true);return;}
+  $("tabs").hidden=false;
+  // management tabs only for management; when management "views as" a staff member, show exactly what that person sees
+  const mgmtTabs=S.canEdit&&!(S.actAs&&m&&m.role!=="mgmt");
+  const payTab=bound&&m.role!=="mgmt";
+  if(!mgmtTabs&&(S.tab==="fin"||S.tab==="set"))S.tab="home";
+  if(!payTab&&S.tab==="pay")S.tab="home";
+  if(!bound&&S.canEdit&&S.tab==="home")S.tab="set";
+  $("tabs").querySelectorAll("[data-mgmt]").forEach(b=>b.hidden=!mgmtTabs);
+  $("tabs").querySelector('[data-tab="pay"]').hidden=!payTab;
+  $("tabs").querySelector('[data-tab="home"]').hidden=!bound;
+  const isAgent=bound&&m.role==="agent";$("tabs").querySelector('[data-tab="follow"]').hidden=isAgent;if(isAgent&&S.tab==="follow")S.tab="home";
+  $("tabs").querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===S.tab)));
+  TABS.forEach(t=>$("tab-"+t).hidden=t!==S.tab);
+}
+
+/* ---------- forms ---------- */
+function fillProductSelect(sel,withNone){
+  const cur=sel.value;
+  sel.innerHTML=(withNone?'<option value="">No sale</option>':"")+S.pub.products.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}${p.price?" · RM"+Number(p.price).toLocaleString("en-MY"):""}</option>`).join("");
+  if([...sel.options].some(o=>o.value===cur))sel.value=cur;
+}
+$("sDate").value=today();$("cDate").value=today();
+$("cIssues").innerHTML=ISSUES.map(i=>`<button type="button" class="chip">${i}</button>`).join("");
+$("cIssues").querySelectorAll(".chip").forEach(c=>c.onclick=()=>c.classList.toggle("on"));
+$("cWill").querySelectorAll("button").forEach(b=>b.onclick=()=>{$("cWill").querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");});
+$("formSwitch").querySelectorAll("[data-form]").forEach(b=>b.onclick=()=>{
+  const f=b.dataset.form;$("saleForm").hidden=f!=="sale";$("consultForm").hidden=f!=="consult";
+  $("formSwitch").querySelectorAll("[data-form]").forEach(x=>x.classList.toggle("ghost",x.dataset.form!==f));
+});
+function fillRoute(prefix){
+  const m=me();const p=product($(prefix+"Product").value);const sel=$(prefix+"Route");
+  if(!m||!p){$(prefix+"RouteWrap").hidden=true;$(prefix+"SpkWrap").hidden=true;$(prefix+"AgentWrap").hidden=true;return;}
+  const opts=routeOptions(p.cat,m.role);const cur=sel.value;
+  sel.innerHTML=opts.map(o=>`<option value="${o}">${ROUTES[o]}</option>`).join("");
+  if(opts.includes(cur))sel.value=cur;
+  $(prefix+"RouteWrap").hidden=opts.length<2;
+  const spk=sel.value==="webinar"||sel.value==="webinar_live";$(prefix+"SpkWrap").hidden=!spk;
+  const ag=$(prefix+"Agent");const showAg=m.role!=="agent"&&(sel.value==="upsell"||sel.value==="direct");$(prefix+"AgentWrap").hidden=!showAg;
+  const c3=ag.value;ag.innerHTML='<option value="">No, a company customer</option>'+S.pub.roster.filter(r=>r.role==="agent").map(r=>`<option value="${esc(r.name)}">${esc(r.name)}</option>`).join("");
+  if([...ag.options].some(o=>o.value===c3))ag.value=c3;
+  const ss=$(prefix+"Speaker");const c2=ss.value||lsGet("rw_spk")||"";
+  ss.innerHTML='<option value="">Choose the speaker…</option>'+S.pub.roster.filter(r=>r.role!=="agent").map(r=>`<option value="${esc(r.name)}">${esc(r.name)}</option>`).join("");
+  if([...ss.options].some(o=>o.value===c2))ss.value=c2;
+}
+function onProductChange(prefix){
+  fillRoute(prefix);
+  const p=product($(prefix+"Product").value);
+  if(p&&p.price&&!n($(prefix+"Amt").value))$(prefix+"Amt").value=p.price;
+  const showDays=p&&p.cat==="product";
+  $(prefix+"DaysWrap").hidden=!showDays;
+  if(showDays&&!n($(prefix+"Days").value))$(prefix+"Days").value=p.days||"";
+  updatePreviews();
+}
+$("sProduct").onchange=()=>{$("sAmt").value="";onProductChange("s");};
+$("cProduct").onchange=()=>{$("cAmt").value="";onProductChange("c");};
+["sAmt","cAmt"].forEach(id=>$(id).addEventListener("input",updatePreviews));
+["s","c"].forEach(p=>{$(p+"Route").addEventListener("change",()=>{fillRoute(p);updatePreviews();});$(p+"Speaker").addEventListener("change",()=>{lsSet("rw_spk",$(p+"Speaker").value);updatePreviews();});$(p+"Agent").addEventListener("change",updatePreviews);});
+function previewFor(prefix){
+  const m=me();const p=product($(prefix+"Product").value);const amt=n($(prefix+"Amt").value);
+  if(!m||!p||!amt)return null;
+  const ss=$(prefix+"SpkWrap").hidden?null:$(prefix+"Speaker").value;
+  const ar=$(prefix+"AgentWrap").hidden?null:($(prefix+"Agent").value||null);
+  const cr=creditsOf({amount:amt,cat:p.cat,route:$(prefix+"Route").value,speaker:ss,seller:m.name,role:m.role,agentRef:ar});
+  const mine=cr.filter(c=>c.name===m.name);const others=cr.filter(c=>c.name!==m.name);
+  const mineTxt=mine.length?`Your commission ≈ ${rm(mine.reduce((a,c)=>a+c.amt,0))} (${mine.map(c=>c.rate+"%").join(" + ")} of the amount excl. SST)`:"No commission for you on this sale";
+  return mineTxt+(others.length&&m.role!=="agent"?" · also credited: "+others.map(c=>c.name+" ("+c.kind+")").join(", "):"");
+}
+function updatePreviews(){
+  $("sPreview").textContent=previewFor("s")||"Enter an amount to see the commission for this sale.";
+  $("cPreview").textContent=previewFor("c")||"If there is a sale, its commission shows here.";
+}
+function saleDoc(date,cust,phone,p,amt,prefix,days,note,consultId){
+  const role=(me()||{}).role;const route=routeOptions(p.cat,role).includes($(prefix+"Route").value)?$(prefix+"Route").value:routeOptions(p.cat,role)[0];
+  const speaker=(route==="webinar"||route==="webinar_live")?($(prefix+"Speaker").value||null):null;
+  const agentRef=(!$(prefix+"AgentWrap").hidden&&$(prefix+"Agent").value)||null;
+  const d={date,month:date.slice(0,7),customer:cust,phone4:phone,productId:p.id,productName:p.name,cat:p.cat,amount:amt,
+    route,speaker,agentRef,days:p.cat==="product"?n(days):0,note:note||"",consultId:consultId||null,verified:false,createdAt:new Date().toISOString()};
+  if(d.days>0){d.repurchaseAt=addDays(date,Math.max(1,d.days-5));d.repurchaseDone=false;}
+  d.dept=deptOf(Object.assign({role,seller:(me()||{}).name},d));
+  return d;
+}
+function myCol(name){return S.db.collection("u/"+actUid()+"/"+name);}
+function canRecord(){const m=me();if(m&&!m.uid&&!S.canEdit){toast("Your account isn't linked yet");return false;}return !!(m&&S.db);}
+function writeErr(e){
+  if(e&&e.code==="quota_exceeded")toast("The database is full. Ask management to check Settings");
+  else if(e&&e.code==="invalid_argument")toast("You don't have permission to record. Ask management to give you Can interact access");
+  else toast("Not saved. Please try again");
+}
+$("saleForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!canRecord())return;const m=me();
+  const p=product($("sProduct").value);const amt=n($("sAmt").value);
+  if(!p){toast("Choose a product");return;} if(amt<=0){toast("Enter the amount paid");return;}
+  if(!$("sSpkWrap").hidden&&!$("sSpeaker").value){toast("Choose who gave the webinar");return;}
+  const d=saleDoc($("sDate").value||today(),$("sCust").value.trim().slice(0,60),$("sPhone").value.trim().slice(0,20),p,amt,"s",$("sDays").value,$("sNote").value.trim().slice(0,200));
+  $("sSubmit").disabled=true;
+  try{await myCol("sales").add(d);["sCust","sPhone","sAmt","sNote","sDays"].forEach(id=>$(id).value="");updatePreviews();
+    toast("Saved · your commission ≈ "+rm(creditFor(Object.assign({role:m.role,seller:m.name},d),m.name))+", pending payment confirmation");
+    if(d.month!==S.month)setMonth(d.month);}
+  catch(err){writeErr(err);}finally{$("sSubmit").disabled=false;}
+});
+$("consultForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!canRecord())return;const m=me();
+  const date=$("cDate").value||today();
+  const p=product($("cProduct").value);const amt=n($("cAmt").value);
+  if(p&&amt<=0){toast("Enter the amount for the sale");return;}
+  if(p&&!$("cSpkWrap").hidden&&!$("cSpeaker").value){toast("Choose who gave the webinar");return;}
+  const issues=[...$("cIssues").querySelectorAll(".chip.on")].map(c=>c.textContent);
+  const will=($("cWill").querySelector(".on")||{}).textContent||"Medium";
+  const c={date,month:date.slice(0,7),mode:$("cMode").value,customer:$("cCust").value.trim().slice(0,60),phone4:$("cPhone").value.trim().slice(0,20),
+    issues,issueText:$("cIssueText").value.trim().slice(0,1000),feedback:$("cFeedback").value.trim().slice(0,1000),will,
+    soldName:p?p.name:"",amount:p?amt:0,followUp:$("cFu").value||"",followWhat:$("cFuWhat").value.trim().slice(0,200),followDone:false,
+    referral:n($("cRef").value),createdAt:new Date().toISOString()};
+  $("cSubmit").disabled=true;
+  try{
+    const ref=await myCol("consults").add(c);
+    let msg="Consult saved";
+    if(p){const d=saleDoc(date,c.customer,c.phone4,p,amt,"c",$("cDays").value,"Consult sale",ref.id);await myCol("sales").add(d);
+      msg+=" · your commission ≈ "+rm(creditFor(Object.assign({role:m.role,seller:m.name},d),m.name));}
+    if(c.followUp)msg+=" · added to follow-ups on "+c.followUp.slice(5);
+    toast(msg);
+    ["cCust","cPhone","cIssueText","cFeedback","cAmt","cFuWhat","cFu","cDays"].forEach(id=>$(id).value="");$("cProduct").value="";$("cRef").value="0";
+    $("cIssues").querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));onProductChange("c");
+    if(c.month!==S.month)setMonth(c.month);
+  }catch(err){writeErr(err);}finally{$("cSubmit").disabled=false;}
+});
+
+/* ---------- small actions ---------- */
+function arm(btn,fn){if(btn.classList.contains("armed")){fn();return;}btn.classList.add("armed");const t=btn.textContent;btn.textContent="Tap again to confirm";setTimeout(()=>{btn.classList.remove("armed");btn.textContent=t;},3000);}
+async function upd(uid,col,id,patch){try{await S.db.doc("u/"+uid+"/"+col+"/"+id).update(patch);}catch(e){writeErr(e);}}
+async function del(uid,col,id){try{await S.db.doc("u/"+uid+"/"+col+"/"+id).delete();toast("Deleted");}catch(e){writeErr(e);}}
+
+/* ---------- render ---------- */
+function editing(){const a=document.activeElement;return a&&a.matches&&a.matches("#tab-set input, #tab-set select, #tab-fin input, #crmSearch");}
+document.addEventListener("focusout",()=>setTimeout(()=>{if(S.pending&&!editing()){S.pending=false;render();}},0));
+function render(){
+  if(editing()){S.pending=true;return;}
+  const m=me();
+  if(S.actAs&&m&&m.name===S.actAs)$("whoLine").innerHTML=`Viewing as <b>${esc(m.name)}</b> (${esc(ROLES[m.role]||"")})${m.uid?" · you can record for them":" · account not linked yet; what you record moves to them once they link"} · <button type="button" class="linkbtn" id="backSelf" style="color:var(--accent);font-weight:700">Back to myself</button>`;
+  else $("whoLine").innerHTML=m?`${esc(m.name)} · ${esc(ROLES[m.role]||"")}${S.canEdit?" · admin":""}`:(S.canEdit?"Management · name not linked":"Name not linked");
+  $("actWrap").hidden=!S.canEdit;
+  const bs=$("backSelf");if(bs)bs.onclick=()=>{S.actAs=null;lsSet("rw_actas","");render();};
+  if(S.canEdit&&document.activeElement!==$("actAs")){const self=selfEntry();
+    $("actAs").innerHTML=`<option value="">${self?"Myself ("+esc(self.name)+")":"Myself"}</option>`+S.pub.roster.filter(r=>!self||r.name!==self.name).map(r=>`<option value="${esc(r.name)}">${esc(r.name)} · ${esc(ROLES[r.role]||"")}</option>`).join("");
+    $("actAs").value=S.actAs||"";}
+  renderClaim();showTabs();
+  fillProductSelect($("sProduct"),false);fillProductSelect($("cProduct"),true);
+  $("consultBtn").hidden=!(m&&(m.role==="nut"||m.role==="mgmt"));
+  fillRoute("s");fillRoute("c");
+  if(m){renderMine();renderMyRecords();if(m.role!=="mgmt")renderPay();}
+  renderFollow();renderCRM();renderQuote();
+  if(S.canEdit){renderFin();renderSettings();}
+  updatePreviews();
+}
+$("actAs").onchange=()=>{S.actAs=$("actAs").value||null;lsSet("rw_actas",S.actAs||"");if(S.actAs&&(S.tab==="fin"||S.tab==="set"))S.tab="home";render();};
+function renderClaim(){
+  const bound=!!selfEntry()||(S.canEdit&&!!S.actAs);
+  $("claimPanel").hidden=bound||!S.uid||(S.canEdit&&S.tab!=="home"&&false);
+  if(bound||!S.uid){$("claimPanel").hidden=true;return;}
+  const mine=S.claims.find(c=>c.uid===S.uid);
+  const free=S.pub.roster.filter(r=>!r.uid);
+  if(S.canEdit){
+    $("claimList").innerHTML=free.map(r=>`<button type="button" class="btn ghost sm" data-self="${esc(r.name)}">I am ${esc(r.name)}</button>`).join("")||'<span class="hint">Every name on the list is linked. Add a person in Settings.</span>';
+    $("claimList").querySelectorAll("[data-self]").forEach(b=>b.onclick=()=>bind(b.dataset.self,S.uid));
+    $("claimState").hidden=true;$("claimPanel").hidden=false;return;
+  }
+  $("claimList").innerHTML=free.map(r=>`<button type="button" class="btn ghost sm" data-claim="${esc(r.name)}">${esc(r.name)}</button>`).join("");
+  $("claimList").querySelectorAll("[data-claim]").forEach(b=>b.onclick=async()=>{
+    try{await S.db.doc("u/"+S.uid).set({claim:b.dataset.claim,at:new Date().toISOString()});}catch(e){writeErr(e);}
+  });
+  $("claimState").hidden=!mine;
+  if(mine)$("claimState").textContent=`Sent as "${mine.claim}". Waiting for management to confirm; this page opens automatically once they do.`;
+  $("claimPanel").hidden=false;
+}
+function myData(){const u=actUid();const d=(u&&S.data[u])||{};return {sales:d.sales||[],consults:d.consults||[],credits:d.credits||[]};}
+function renderMine(){
+  const m=me();const sales=myData().sales.filter(s=>s.month===S.month);
+  const lines=payLines(S.month);
+  const cc=lines.filter(l=>l.s.verified).reduce((a,l)=>a+l.amt,0),pc=lines.filter(l=>!l.s.verified).reduce((a,l)=>a+l.amt,0);
+  const total=sales.reduce((a,s)=>a+n(s.amount),0);
+  const consults=myData().consults.filter(c=>c.month===S.month).length;
+  if(m.role==="mgmt"){
+    let shareHtml=`<div><div class="l">${esc(S.month)} my commission</div><div class="big num">${rm(cc+pc)}</div></div><p class="l">Your HOD share is shown under Departments & payouts.</p>`;
+    if(S.canEdit){const f=finance(S.month);const h=hodPayout(f,m.name);
+      const dn=h.depts.map(k=>DEPTS[k]).join(", ")||"no department";
+      shareHtml=`<div><div class="l">${esc(S.month)} my total (so far)</div><div class="big num">${rm(h.total)}</div></div>
+      <div class="kv"><div><span class="l">HOD share · ${esc(dn)}</span><span class="v num">${rm(h.own)}</span></div><div><span class="l">Equal split</span><span class="v num">${rm(h.eq)}</span></div><div><span class="l">My own commission</span><span class="v num">${rm(h.comm)}</span></div><div><span class="l">Awaiting confirmation</span><span class="v num">${rm(pc)}</span></div></div>
+      <p class="l">HOD share = ${Math.round(f.hodPct)}% of your department's profit. Equal split = what's left after every department's HOD share, shared costs and the company reserve.</p>`;}
+    $("mineCard").innerHTML=`${shareHtml}
+    <div class="kv"><div><span class="l">My own sales</span><span class="v num">${rm(total)}</span></div><div><span class="l">Sales</span><span class="v num">${sales.length}</span></div><div><span class="l">Consults</span><span class="v num">${consults}</span></div></div>`;return;
+  }
+  const tag=m.role==="nut"?(m.prob?" · probation":""):"";
+  $("mineCard").innerHTML=`<div><div class="l">${esc(S.month)} my commission${tag}</div><div class="big num">${rm(cc+pc)}</div></div>
+    <div class="kv"><div><span class="l">Confirmed, paid at month end</span><span class="v num">${rm(cc)}</span></div><div><span class="l">Awaiting payment confirmation</span><span class="v num">${rm(pc)}</span></div></div>
+    <div class="kv"><div><span class="l">Sales I recorded</span><span class="v num">${rm(total)}</span></div><div><span class="l">Sales</span><span class="v num">${sales.length}</span></div>${m.role==="nut"?`<div><span class="l">Consults</span><span class="v num">${consults}</span></div>`:""}</div>`;
+}
+function renderMyRecords(){
+  const m=me();const d=myData();
+  const rows=[...d.sales.filter(s=>s.month===S.month).map(s=>({k:"sale",x:Object.assign({role:m.role,seller:m.name},s)})),...d.consults.filter(c=>c.month===S.month&&!c.soldName).map(c=>({k:"consult",x:c}))]
+    .sort((a,b)=>(b.x.date||"").localeCompare(a.x.date||""));
+  if(!rows.length){$("myRecords").innerHTML=`<tbody><tr><td class="empty">No records this month yet.</td></tr></tbody>`;return;}
+  $("myRecords").innerHTML=`<thead><tr><th>Date</th><th>Customer · details</th><th class="r">Amount</th><th class="r">Commission</th><th>Status</th><th></th></tr></thead><tbody>`+rows.map(({k,x})=>{
+    if(k==="consult")return `<tr><td class="num">${esc(x.date.slice(5))}</td><td>${esc(x.customer)}<div class="meta">consult · ${esc((x.issues||[]).join(", ")||"—")} · no sale</div></td><td class="r">—</td><td class="r">—</td><td><span class="tag plain">consult</span></td><td><button class="linkbtn" data-del="consults:${esc(x.id)}">Delete</button></td></tr>`;
+    return `<tr><td class="num">${esc(x.date.slice(5))}</td><td>${esc(x.customer)}<div class="meta">${esc(x.productName)} · ${esc(ROUTE_SHORT[routeOf(x)]||"")}${x.speaker?" ("+esc(x.speaker)+")":""}${x.agentRef?" · affiliate "+esc(x.agentRef):""}</div></td><td class="r num">${rm(n(x.amount))}</td><td class="r num">${rm(creditFor(x,m.name))}</td>
+      <td>${x.refundedIn?`<span class="tag bad">Refunded ${esc(x.refundedIn)}</span>`:x.verified?'<span class="tag ok">Confirmed</span>':'<span class="tag warn">Pending</span>'}</td><td>${x.verified?"":`<button class="linkbtn" data-del="sales:${esc(x.id)}">Delete</button>`}</td></tr>`;}).join("")+`</tbody>`;
+  $("myRecords").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>arm(b,()=>{const [c,id]=b.dataset.del.split(":");del(actUid(),c,id);}));
+}
+function payLines(month){
+  const m=me();if(!m)return[];
+  const src=S.canEdit?allSales():myData().sales.map(s=>Object.assign({role:m.role,seller:m.name},s));
+  const out=[];monthEntries(src,month).forEach(({s,sign})=>creditsOf(s).filter(c=>c.name===m.name).forEach(c=>out.push({s,sign,c,amt:c.amt*sign})));
+  if(!S.canEdit){
+    // credits from other people's sales (webinar speaker, team leader override, customer referral) are copied here when management confirms the payment
+    (myData().credits||[]).forEach(x=>{const s={date:x.date,customer:x.customer,productName:x.productName,seller:x.seller,verified:true,refundedIn:x.refundedIn||null};const c={kind:x.kind,rate:n(x.rate),amt:n(x.amt)};
+      if(x.month===month)out.push({s,sign:1,c,amt:c.amt});if(x.refundedIn===month)out.push({s,sign:-1,c,amt:-c.amt});});
+  }
+  return out;
+}
+function myRateRows(m){
+  const rows=[];const isLead=S.pub.roster.some(r=>r.by===m.name&&r.role==="agent");
+  if(m.role==="agent")rows.push(["I sell it myself","agent"],["A corporate deal I close","corpAgent"],["My customer buys more after a consult","trail"]);
+  else if(m.role==="nut")rows.push(["After a consult or report, or my own sale",nutRow(m.name)],["I give the webinar","speaker"],["I close a webinar sale","closer"]);
+  else if(m.role==="cs")rows.push(["I close a webinar or online enquiry","closer"],["Other direct sale","std"]);
+  else if(m.role==="sales")rows.push(["A corporate deal I close","corpStaff"],["Other direct sale","std"]);
+  if(isLead)rows.push(["Team leader: my affiliates' own sales","lead"]);
+  return rows;
+}
+function renderPayRates(m){
+  const rows=myRateRows(m);
+  const cats=CAT_KEYS.filter(c=>rows.some(([,k])=>R(k,c)>0));
+  $("payRates").innerHTML=rows.length&&cats.length?`<thead><tr><th>When</th>${cats.map(c=>`<th class="r">${esc(CATS[c])}</th>`).join("")}</tr></thead><tbody>`+
+    rows.map(([l,k])=>`<tr><td>${esc(l)}</td>${cats.map(c=>{const v=R(k,c);return `<td class="r num">${v>0?v+"%":"—"}</td>`;}).join("")}</tr>`).join("")+`</tbody>`
+    :`<tbody><tr><td class="empty">Your rates haven't been set yet. Ask your HOD.</td></tr></tbody>`;
+  const notes=[];
+  if(m.role==="agent")notes.push("Customers you bring in stay yours: if a nutritionist sells them a blood test you still get your affiliate rate, and on anything else they buy later you get the referral rate.");
+  if(m.role==="nut")notes.push("Blood tests for an affiliate's customer count for the affiliate.");
+  notes.push("Commission counts once management confirms the customer has paid.");
+  $("payRatesNote").textContent=notes.join(" ");
+}
+function renderPay(){
+  const m=me();if(!m)return;
+  renderPayRates(m);
+  const lines=payLines(S.month).sort((a,b)=>(b.s.date||"").localeCompare(a.s.date||""));
+  const conf=lines.filter(l=>l.s.verified).reduce((a,l)=>a+l.amt,0);
+  const pend=lines.filter(l=>!l.s.verified).reduce((a,l)=>a+l.amt,0);
+  const refunds=lines.filter(l=>l.sign<0).reduce((a,l)=>a-l.amt,0);
+  const own=myData().sales.filter(s=>s.month===S.month);
+  $("payMonth").textContent=S.month;
+  $("payTiles").innerHTML=`
+    <div class="tile"><span class="l">To be paid for ${esc(S.month)}</span><span class="v num">${rm(conf)}</span><span class="n">Confirmed payments only</span></div>
+    <div class="tile"><span class="l">Awaiting confirmation</span><span class="v num">${rm(pend)}</span><span class="n">Added once management confirms the customer paid</span></div>
+    <div class="tile"><span class="l">Sales I recorded</span><span class="v num">${rm0(own.reduce((a,s)=>a+n(s.amount),0))}</span><span class="n">${own.length} sale${own.length===1?"":"s"}</span></div>
+    <div class="tile"><span class="l">Refunds taken back</span><span class="v num">${rm(refunds)}</span><span class="n">From refunds made this month</span></div>`;
+  const by={};lines.forEach(l=>{const k=l.c.kind.replace(/ \(.*\)$/,"");by[k]=(by[k]||0)+l.amt;});
+  const br=Object.entries(by).filter(([k,v])=>Math.abs(v)>0.004).sort((a,b)=>b[1]-a[1]);const bmax=Math.max(1,...br.map(x=>Math.abs(x[1])));
+  $("payBreak").innerHTML=br.length?br.map(([k,v])=>`<div class="bar-row"><span>${esc(k)}</span><span class="bar-track"><i style="width:${Math.abs(v)/bmax*100}%"></i></span><span class="num">${rm(v)}</span></div>`).join(""):`<p class="hint">No commission this month yet.</p>`;
+  const [y,mo]=S.month.split("-").map(Number);const months=[];for(let i=5;i>=0;i--){const d=new Date(y,mo-1-i,1);months.push(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"));}
+  $("payHist").innerHTML=`<thead><tr><th>Month</th><th class="r">Paid (confirmed)</th><th class="r">Still pending</th></tr></thead><tbody>`+months.slice().reverse().map(mm=>{const L=payLines(mm);const c=L.filter(l=>l.s.verified).reduce((a,l)=>a+l.amt,0),p=L.filter(l=>!l.s.verified).reduce((a,l)=>a+l.amt,0);
+    return `<tr><td class="num">${mm}${mm===S.month?' <span class="tag plain">this month</span>':""}</td><td class="r num">${rm(c)}</td><td class="r num">${p?rm(p):"—"}</td></tr>`;}).join("")+`</tbody>`;
+  $("payLines").innerHTML=lines.length?`<thead><tr><th>Date</th><th>Customer · product</th><th>Why</th><th class="r">Rate</th><th class="r">Commission</th><th>Status</th></tr></thead><tbody>`+
+    lines.map(l=>`<tr><td class="num">${esc((l.s.date||"").slice(5))}</td><td>${esc(l.s.customer)}<div class="meta">${esc(l.s.productName)}${l.s.seller&&l.s.seller!==m.name?" · recorded by "+esc(l.s.seller):""}</div></td><td>${esc(l.c.kind)}</td><td class="r num">${l.c.rate}%</td><td class="r num">${rm(l.amt)}</td>
+      <td>${l.sign<0?'<span class="tag bad">Refund</span>':l.s.refundedIn?`<span class="tag bad">Refunded ${esc(l.s.refundedIn)}</span>`:l.s.verified?'<span class="tag ok">Confirmed</span>':'<span class="tag warn">Pending</span>'}</td></tr>`).join("")+
+    `</tbody><tfoot><tr><td colspan="4">Total</td><td class="r num">${rm(conf+pend)}</td><td></td></tr></tfoot>`
+    :`<tbody><tr><td class="empty">No commission this month yet. Record a sale under My sales.</td></tr></tbody>`;
+}
+function followItems(){
+  const items=[];
+  const consults=!scoped()?allConsults():myData().consults.map(c=>Object.assign({uid:actUid(),who:(me()||{}).name},c));
+  const sales=!scoped()?allSales():myData().sales.map(s=>Object.assign({uid:actUid(),seller:(me()||{}).name},s));
+  consults.forEach(c=>{if(c.followUp&&!c.followDone)items.push({type:"Follow-up",date:c.followUp,cust:c.customer,phone:c.phone4,what:c.followWhat||"Follow up",who:c.who,uid:c.uid,col:"consults",id:c.id,field:"followDone",ctx:(c.issues||[]).join(", ")});});
+  sales.forEach(s=>{if(s.repurchaseAt&&!s.repurchaseDone)items.push({type:"Repurchase",date:s.repurchaseAt,cust:s.customer,phone:s.phone4,what:`${s.productName} running out (${s.days}-day supply bought ${s.date.slice(5)})`,who:s.seller,uid:s.uid,col:"sales",id:s.id,field:"repurchaseDone",ctx:""});});
+  return items.sort((a,b)=>a.date.localeCompare(b.date));
+}
+function renderFollow(){
+  const items=followItems();const overdue=items.filter(i=>dayDiff(i.date)<0).length;const due=items.filter(i=>dayDiff(i.date)<=0).length;
+  const tb=$("tabs").querySelector('[data-tab="follow"]');tb.innerHTML="Follow-ups"+(due?`<span class="badge">${due}</span>`:"");
+  $("followNote").textContent=items.length?`Overdue ${overdue} · today ${due-overdue} · upcoming ${items.length-due}`:"";
+  if(!items.length){$("followList").innerHTML=`<div class="empty">Nothing to follow up. Customers appear here when a consult has a follow-up date or supplements were sold.</div>`;return;}
+  $("followList").innerHTML=items.slice(0,200).map((i,k)=>{const dd=dayDiff(i.date);
+    const tag=dd<0?`<span class="tag bad">${-dd} days overdue</span>`:dd===0?`<span class="tag warn">Today</span>`:`<span class="tag plain">${esc(i.date.slice(5))}</span>`;
+    return `<div class="item"><div class="h"><b>${esc(i.cust)}${i.phone?" · "+esc(i.phone):""}</b><span>${tag} <span class="tag ${i.type==="Repurchase"?"blue":"plain"}">${i.type}</span></span></div>
+      <p>${esc(i.what)}</p><div class="row"><span class="meta">${S.canEdit?esc(i.who)+" · ":""}${esc(i.ctx)}</span><button type="button" class="btn ghost sm" data-done="${k}">Done</button></div></div>`;}).join("");
+  $("followList").querySelectorAll("[data-done]").forEach(b=>b.onclick=()=>{const i=items[+b.dataset.done];upd(i.uid,i.col,i.id,{[i.field]:true});});
+}
+function customers(){
+  const sales=!scoped()?allSales():myData().sales.map(s=>Object.assign({seller:(me()||{}).name},s));
+  const consults=!scoped()?allConsults():myData().consults.map(c=>Object.assign({who:(me()||{}).name},c));
+  const map={};
+  const key=(name,ph)=>(String(name||"").trim().toLowerCase())+"|"+(ph||"");
+  const get=(name,ph)=>{const k=key(name,ph);return map[k]||(map[k]={name:String(name||"").trim(),phone:ph||"",sales:[],consults:[],owners:new Set()});};
+  sales.forEach(s=>{const c=get(s.customer,s.phone4);c.sales.push(s);c.owners.add(s.seller);});
+  consults.forEach(x=>{const c=get(x.customer,x.phone4);c.consults.push(x);c.owners.add(x.who);});
+  return Object.values(map).map(c=>{c.total=c.sales.reduce((a,s)=>a+n(s.amount),0);
+    c.last=[...c.sales.map(s=>s.date),...c.consults.map(x=>x.date)].sort().pop()||"";
+    const lc=c.consults.slice().sort((a,b)=>b.date.localeCompare(a.date))[0];c.issues=lc?(lc.issues||[]):[];c.lastConsult=lc;
+    const next=[...c.consults.filter(x=>x.followUp&&!x.followDone).map(x=>x.followUp),...c.sales.filter(s=>s.repurchaseAt&&!s.repurchaseDone).map(s=>s.repurchaseAt)].sort()[0];c.next=next||"";
+    return c;}).sort((a,b)=>b.last.localeCompare(a.last));
+}
+$("crmSearch").addEventListener("input",()=>renderCRM(true));
+function renderCRM(force){
+  if(!force&&editing())return;
+  $("crmTitle").textContent=!scoped()?"All customers":(S.actAs?S.actAs+"'s customers":"My customers");
+  const q=$("crmSearch").value.trim().toLowerCase();
+  let list=customers();if(q)list=list.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q));
+  if(!list.length){$("crmList").innerHTML=`<div class="empty">${q?"No customer matches.":"No customers yet."}</div>`;return;}
+  $("crmList").innerHTML=list.slice(0,150).map(c=>`<details class="cust"><summary>
+      <b>${esc(c.name)}${c.phone?" · "+esc(c.phone):""}</b><span class="num">${rm0(c.total)}</span>
+      <span class="meta">${c.issues.length?esc(c.issues.join(", "))+" · ":""}${c.sales.length} purchases · last ${esc(c.last.slice(5))}${S.canEdit?" · "+esc([...c.owners].join(", ")):""}</span>
+      <span>${c.next?`<span class="tag ${dayDiff(c.next)<0?"bad":"plain"}">Follow up ${esc(c.next.slice(5))}</span>`:""}</span></summary>
+    <div class="body">
+      ${c.lastConsult?`<div><b>Latest consult (${esc(c.lastConsult.date)} · ${esc(c.lastConsult.who||"")})</b><p>${esc(c.lastConsult.issueText||"—")}</p><p class="meta">Feedback: ${esc(c.lastConsult.feedback||"—")} · readiness ${esc(c.lastConsult.will||"—")}</p></div>`:""}
+      <div><b>Purchases</b>${c.sales.length?c.sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(s=>`<p class="meta">${esc(s.date)} · ${esc(s.productName)} · ${rm(n(s.amount))}${s.days?" · "+s.days+"-day supply":""}</p>`).join(""):'<p class="meta">No purchases yet</p>'}</div>
+    </div></details>`).join("")+(list.length>150?`<p class="hint">Showing the latest 150. Search to find others.</p>`:"");
+}
+
+
+/* ---------- quote builder ---------- */
+S.qd={base:{name:"Standard Health Screening",price:108,items:[]},bundles:[],extras:[],symptoms:[],terms:[]};
+S.q={g:"f",sym:new Set(),base:true,b:new Set(),bOff:new Set(),singles:new Set(),consult:false};
+const rmTxt=v=>v==null||v===""?null:"RM"+Number(v).toLocaleString("en-MY");
+function qBundlesForGender(){return S.qd.bundles;}
+function qSuggestedB(){const set=new Set();S.qd.symptoms.forEach((sy,i)=>{if(S.q.sym.has(i))sy.b.forEach(id=>{const b=S.qd.bundles.find(x=>x.id===id);if(b&&(!b.gender||b.gender===S.q.g))set.add(id);});});return set;}
+function qBOn(id){const b=S.qd.bundles.find(x=>x.id===id);if(!b)return false;if(S.q.bOff.has(id))return false;return S.q.b.has(id)||qSuggestedB().has(id);}
+function qSelBundles(){return S.qd.bundles.filter(b=>qBOn(b.id));}
+function qCoveredMap(){const m={};qSelBundles().forEach(b=>b.items.forEach(it=>{(m[it.n]=m[it.n]||[]).push(b.name);}));return m;}
+function qAllSingles(){const seen={};S.qd.bundles.forEach(b=>b.items.forEach(it=>{if(!seen[it.n])seen[it.n]={n:it.n,p:it.p};}));S.qd.extras.forEach(e=>{if(!seen[e.n])seen[e.n]={n:e.n,p:e.p};});return Object.values(seen);}
+function bOrig(b){return b.items.some(it=>it.p==null||it.p==="")?null:b.items.reduce((a,it)=>a+n(it.p),0);}
+function qCalc(){
+  const lines=[];let total=0,orig=0;const missing=[];
+  if(S.q.base){lines.push({name:S.qd.base.name,price:S.qd.base.price});total+=n(S.qd.base.price);orig+=n(S.qd.base.price);}
+  const sel=qSelBundles();
+  sel.forEach(b=>{const o=bOrig(b);lines.push({name:b.name,price:b.price,orig:o,items:b.items.map(i=>i.n)});if(b.price==null||b.price===""){missing.push(b.name);return;}total+=n(b.price);orig+=o==null?n(b.price):o;});
+  const cov=qCoveredMap();const dups=[];
+  Object.entries(cov).forEach(([name,arr])=>{if(arr.length>1){const it=qAllSingles().find(x=>x.n===name);const p=n(it&&it.p)*(arr.length-1);if(p){dups.push({name,price:-p});total-=p;orig-=p;}}});
+  [...S.q.singles].forEach(name=>{if(cov[name])return;const it=qAllSingles().find(x=>x.n===name);if(!it)return;lines.push({name,price:it.p});if(it.p==null)missing.push(name);else{total+=n(it.p);orig+=n(it.p);}});
+  return{lines,dups,total,orig,missing,sel};
+}
+function renderQuote(){
+  if(!$("qSym"))return;
+  $("qGender").querySelectorAll("[data-g]").forEach(b=>{b.classList.toggle("on",b.dataset.g===S.q.g);b.onclick=()=>{S.q.g=b.dataset.g;renderQuote();};});
+  $("qSym").innerHTML=S.qd.symptoms.map((sy,i)=>`<button type="button" class="chip${S.q.sym.has(i)?" on":""}" data-sym="${i}">${esc(sy.label)}</button>`).join("");
+  $("qSym").querySelectorAll("[data-sym]").forEach(b=>b.onclick=()=>{const i=+b.dataset.sym;S.q.sym.has(i)?S.q.sym.delete(i):S.q.sym.add(i);renderQuote();});
+  const bs=S.qd.base;
+  $("qBase").innerHTML=`<label class="mrow${S.q.base?" on":""}"><input type="checkbox" id="qBaseChk" ${S.q.base?"checked":""}><span><span class="nm">${esc(bs.name)}</span><div class="meta">${esc((bs.items||[]).join(" · "))}</div></span><span class="pr">${rmTxt(bs.price)||"—"}</span></label>`;
+  $("qBaseChk").onchange=()=>{S.q.base=$("qBaseChk").checked;renderQuote();};
+  const sug=qSuggestedB();
+  $("qBundles").innerHTML=qBundlesForGender().map(b=>{const on=qBOn(b.id);const o=bOrig(b);const gTag=b.gender?` <span class="tag plain">${b.gender==="m"?"Men":"Women"}</span>`:"";
+    return `<label class="mrow${on?" on":""}"><input type="checkbox" data-bd="${esc(b.id)}" ${on?"checked":""}><span><span class="nm">${esc(b.name)}</span>${gTag}${sug.has(b.id)?' <span class="tag ok">suggested</span>':""}<div class="meta">${esc(b.items.map(i=>i.n).join(" · "))}</div></span><span class="pr${b.price==null?" none":""}">${rmTxt(b.price)||"ask management"}${o!=null&&o!==n(b.price)?`<div class="meta" style="text-decoration:line-through;text-align:right">${rmTxt(o)}</div>`:""}</span></label>`;}).join("");
+  $("qBundles").querySelectorAll("[data-bd]").forEach(c=>c.onchange=()=>{const id=c.dataset.bd;if(c.checked){S.q.bOff.delete(id);S.q.b.add(id);}else{S.q.b.delete(id);S.q.bOff.add(id);}renderQuote();});
+  const cov=qCoveredMap();
+  $("qSingles").innerHTML=qAllSingles().map(it=>{const inB=cov[it.n];const on=S.q.singles.has(it.n)&&!inB;
+    return `<label class="mrow${on?" on":""}" ${inB?'style="opacity:.55;cursor:default"':""}><input type="checkbox" data-sg="${esc(it.n)}" ${on?"checked":""} ${inB?"disabled":""}><span><span class="nm">${esc(it.n)}</span>${inB?`<div class="meta">Already in ${esc(inB[0])}</div>`:""}</span><span class="pr${it.p==null?" none":""}">${rmTxt(it.p)||"ask management"}</span></label>`;}).join("");
+  $("qSingles").querySelectorAll("[data-sg]").forEach(c=>c.onchange=()=>{c.checked?S.q.singles.add(c.dataset.sg):S.q.singles.delete(c.dataset.sg);renderQuote();});
+  const r=qCalc();const cp=S.pub.products.find(p=>/consultation/i.test(p.name));
+  const consult=S.q.consult&&cp?n(cp.price):0;const total=r.total+consult;const save=r.orig-r.total;
+  $("qSummary").innerHTML=`<h2>Quote</h2>
+    ${r.lines.length?r.lines.map(l=>`<div class="qline"><span>${esc(l.name)}</span><span class="num">${l.price==null?'<span style="color:var(--warn)">ask management</span>':rmTxt(l.price)}${l.orig&&l.orig!==l.price?` <span class="meta" style="text-decoration:line-through">${rmTxt(l.orig)}</span>`:""}</span></div>`).join(""):'<p class="hint">Nothing selected yet.</p>'}
+    ${r.dups.map(d=>`<div class="qline"><span class="meta">${esc(d.name)} is in two packages, charged once</span><span class="num">−${rmTxt(-d.price)}</span></div>`).join("")}
+    ${cp?`<label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-size:13.5px"><input type="checkbox" id="qConsult" style="width:18px;height:18px" ${S.q.consult?"checked":""}> Add ${esc(cp.name)} (${rmTxt(cp.price)})</label>`:""}
+    <div class="qtotal"><span>Total</span><span class="v num">${rm0(total)}</span></div>
+    ${save>0?`<p class="okline">Customer saves ${rm0(save)} with packages.</p>`:""}
+    ${r.missing.length?`<div class="warnline">No price yet for: ${esc(r.missing.join(", "))}. Check with management before sending.</div>`:""}
+    <p class="hint">Prices are fixed. For any discount, ask management.</p>
+    <div class="row" style="justify-content:flex-start">
+      <button class="btn sm" type="button" id="qCopy" ${r.lines.length?"":"disabled"}>Copy for WhatsApp</button>
+      <button class="btn ghost sm" type="button" id="qRecord" ${r.lines.length&&actUid()?"":"disabled"}>Record as a sale</button>
+      <button class="btn ghost sm" type="button" id="qClear">Clear</button>
+    </div>
+    <textarea id="qText" rows="10" hidden readonly></textarea>`;
+  const cc=$("qConsult");if(cc)cc.onchange=()=>{S.q.consult=cc.checked;renderQuote();};
+  $("qClear").onclick=()=>{S.q={g:S.q.g,sym:new Set(),base:true,b:new Set(),bOff:new Set(),singles:new Set(),consult:false};$("qCust").value="";renderQuote();};
+  $("qCopy").onclick=async()=>{
+    const cust=$("qCust").value.trim();
+    const L=[`*验血配套报价 Blood Test Quote*${cust?"\n"+cust:""}`,""];
+    r.lines.forEach(l=>{L.push(`• ${l.name} — ${l.price==null?"(price to confirm)":rmTxt(l.price)}${l.orig&&l.orig!==l.price?" (原价 "+rmTxt(l.orig)+")":""}`);if(l.items)L.push("   "+l.items.join(", "));});
+    r.dups.forEach(d=>L.push(`• ${d.name} 重复项目只收一次 — −${rmTxt(-d.price)}`));
+    if(S.q.consult&&cp)L.push(`• ${cp.name} — ${rmTxt(cp.price)}`);
+    L.push("",`*Total 总价: ${rm0(total)}*`);
+    if(save>0)L.push(`配套价帮你省了 ${rm0(save)}`);
+    if(S.qd.terms&&S.qd.terms.length){L.push("");S.qd.terms.forEach(t=>L.push("· "+t));}
+    const text=L.join("\n");
+    try{await navigator.clipboard.writeText(text);toast("Copied. Paste it into WhatsApp.");}
+    catch(e){const t=$("qText");t.hidden=false;t.value=text;t.focus();t.select();toast("Select all and copy the text below");}
+  };
+  $("qRecord").onclick=()=>{
+    const pers=S.pub.products.find(p=>/blood test/i.test(p.name)&&/personal/i.test(p.name));
+    S.tab="home";render();$("saleForm").hidden=false;$("consultForm").hidden=true;
+    if(pers){$("sProduct").value=pers.id;onProductChange("s");}
+    $("sAmt").value=r.total;$("sCust").value=$("qCust").value.trim();
+    $("sNote").value=r.lines.map(l=>l.name.split(" ")[0]==="Standard"?"Standard":l.name).join(", ").slice(0,200);
+    updatePreviews();
+    toast(S.q.consult?"Blood test filled in. Record the consultation as a separate sale.":"Sale form filled in. Check it and save.");
+  };
+}
+
+/* ---------- finance ---------- */
+const DEPT_EXP=[["salary","Salaries"],["ads","Ads"],["other","Other"]];
+const SHARED_EXP=[["rent","Rent"],["admin","Utilities, HR & accounts"],["software","Software"],["other","Other"]];
+const EXP_KEYS=[...DEPT_KEYS.flatMap(d=>DEPT_EXP.map(([k])=>d+"_"+k)),...SHARED_EXP.map(([k])=>"shared_"+k)];
+S.mdocs={};
+function expFor(month){
+  const d=S.mdocs["m-"+month];const e={};EXP_KEYS.forEach(k=>e[k]=0);
+  if(d&&EXP_KEYS.some(k=>d[k]!=null)){EXP_KEYS.forEach(k=>e[k]=n(d[k]));return{e,isDefault:false};}
+  if(d){e.online_ads=n(d.ads);e.shared_rent=n(d.rent);e.shared_software=n(d.software);e.shared_other=n(d.other)+n(d.fixed)+n(d.salary);return{e,isDefault:false};}
+  e.online_ads=n(S.priv.ads);e.shared_other=n(S.priv.fixed);return{e,isDefault:true};
+}
+function finance(month){
+  const everything=allSales();const all=everything.filter(s=>s.month===month);const conf=all.filter(s=>s.verified);
+  const ent=monthEntries(everything,month).filter(x=>x.s.verified);
+  const D={};DEPT_KEYS.forEach(k=>D[k]={rev:0,net:0,cost:0,comm:0,salary:0,ads:0,other:0,profit:0,hod:0,count:0});
+  let gross=0,sst=0,refunds=0,comm=0;const byProd={},bySrc={},per={};
+  const P=name=>per[name]||(per[name]={name,role:roleOf(name),sales:0,count:0,comm:0,items:{}});
+  ent.forEach(({s,sign})=>{const a=n(s.amount)*sign,net=netOf(s)*sign;gross+=a;sst+=a-net;if(sign<0)refunds-=a;
+    const uc=n((S.priv.costs||{})[s.productId]);const cost=uc>0?uc*sign:net*(1-marginOf(s.cat)/100);
+    const dd=D[deptOf(s)];dd.rev+=a;dd.net+=net;dd.cost+=cost;dd.count+=sign;
+    const pp=byProd[s.productName]||(byProd[s.productName]={rev:0,n:0});pp.rev+=a;pp.n+=sign;
+    const rk=ROUTE_SHORT[routeOf(s)]||"Other";bySrc[rk]=(bySrc[rk]||0)+a;
+    const q=P(s.seller);q.sales+=a;q.count+=sign;
+    creditsOf(s).forEach(c=>{const v=c.amt*sign;const x=P(c.name);x.comm+=v;x.items[c.kind]=(x.items[c.kind]||0)+v;dd.comm+=v;comm+=v;});});
+  const {e,isDefault}=expFor(month);const hodPct=n(S.priv.hodPct??DEF_PRIV.hodPct);
+  let deptTotal=0,hodTotal=0,deptCosts=0;
+  DEPT_KEYS.forEach(k=>{const d=D[k];d.salary=e[k+"_salary"];d.ads=e[k+"_ads"];d.other=e[k+"_other"];deptCosts+=d.salary+d.ads+d.other;
+    d.profit=d.net-d.cost-d.comm-d.salary-d.ads-d.other;d.hod=Math.max(0,d.profit)*hodPct/100;deptTotal+=d.profit;hodTotal+=d.hod;});
+  const shared=SHARED_EXP.reduce((a,[k])=>a+e["shared_"+k],0);
+  const base=deptTotal-hodTotal-shared;
+  const coPct=n(S.priv.companyPct??DEF_PRIV.companyPct);
+  const company=base>0?base*coPct/100:base;const pool=base>0?base-company:0;
+  Object.values(per).forEach(p=>{p.paid=p.comm;});
+  const net=gross-sst;const cost=DEPT_KEYS.reduce((a,k)=>a+D[k].cost,0);
+  const pending=all.filter(s=>!s.verified).reduce((a,s)=>a+n(s.amount),0);
+  return{all,conf,gross,sst,net,cost,comm,D,hodPct,hodTotal,deptTotal,deptCosts,shared,base,company,coPct,pool,exp:e,expDefault:isDefault,refunds,byProd,bySrc,per,pending};
+}
+function hodLeaders(){return S.pub.roster.filter(r=>r.role==="mgmt").map(r=>r.name);}
+function hodPayout(f,name){const split=S.priv.split||{};const leaders=hodLeaders();const shares=leaders.reduce((a,l)=>a+n(split[l]??1),0)||1;
+  const depts=DEPT_KEYS.filter(k=>hodOf(k)===name);const own=depts.reduce((a,k)=>a+f.D[k].hod,0);
+  const eq=leaders.includes(name)?f.pool*n(split[name]??1)/shares:0;const comm=(f.per[name]||{paid:0}).paid||0;
+  return{own,eq,comm,total:own+eq+comm,depts};}
+function renderFin(){
+  const f=finance(S.month);const leaders=hodLeaders();
+  const hodNames=[...new Set([...leaders,...DEPT_KEYS.map(hodOf).filter(Boolean)])];
+  $("finMonthLbl2").textContent=S.month;
+  if(!editing()){
+    const inp=k=>`<input class="inline-in num" type="number" min="0" step="10" data-exp="${k}" value="${f.exp[k]||""}" placeholder="0">`;
+    $("expTable").innerHTML=`<thead><tr><th>Department</th>${DEPT_EXP.map(([,l])=>`<th class="r">${l} RM</th>`).join("")}</tr></thead><tbody>`+
+      DEPT_KEYS.map(d=>`<tr><td><b>${esc(DEPTS[d])}</b><div class="meta">HOD ${esc(hodOf(d)||"—")}</div></td>${DEPT_EXP.map(([k])=>`<td class="r">${inp(d+"_"+k)}</td>`).join("")}</tr>`).join("")+`</tbody>`;
+    $("sharedGrid").innerHTML=SHARED_EXP.map(([k,l])=>`<label>${l} RM<input class="num" type="number" min="0" step="10" data-exp="shared_${k}" value="${f.exp["shared_"+k]||""}" placeholder="0"></label>`).join("");
+    document.querySelectorAll("#tab-fin [data-exp]").forEach(i=>i.onchange=saveExp);
+  }
+  $("expNote").textContent=f.expDefault?"Using the defaults from Settings until you enter this month's figures":"Department costs "+rm0(f.deptCosts)+" · shared "+rm0(f.shared);
+  const hodSum=hodNames.reduce((a,h)=>{const p=hodPayout(f,h);return a+p.own+p.eq;},0);
+  $("finTiles").innerHTML=`
+    <div class="tile"><span class="l">Confirmed revenue</span><span class="v num">${rm0(f.gross)}</span><span class="n">SST ${rm0(f.sst)} · pending ${rm0(f.pending)}</span></div>
+    <div class="tile"><span class="l">Department profit</span><span class="v num">${rm0(f.deptTotal)}</span><span class="n">All three departments, after their own costs</span></div>
+    <div class="tile"><span class="l">Company reserve ${Math.round(f.coPct)}%</span><span class="v num">${rm0(f.company)}</span><span class="n${f.base<0?" bad":""}">${f.base<0?"Loss this month":"Kept in the company"}</span></div>
+    <div class="tile"><span class="l">HOD payouts</span><span class="v num">${rm0(hodSum)}</span><span class="n">HOD ${Math.round(f.hodPct)}% ${rm0(f.hodTotal)} + equal split ${rm0(f.pool)}</span></div>`;
+  const T={rev:0,net:0,cost:0,comm:0,salary:0,ads:0,other:0,profit:0,hod:0};
+  DEPT_KEYS.forEach(k=>Object.keys(T).forEach(x=>T[x]+=f.D[k][x]));
+  const cell=v=>`<td class="r num">${v?rm0(v):"—"}</td>`;
+  $("deptTable").innerHTML=`<thead><tr><th>Department</th><th class="r">Revenue excl. SST</th><th class="r">Product cost</th><th class="r">Commission</th><th class="r">Salaries</th><th class="r">Ads</th><th class="r">Other</th><th class="r">Dept profit</th><th class="r">HOD ${Math.round(f.hodPct)}%</th></tr></thead><tbody>`+
+    DEPT_KEYS.map(k=>{const d=f.D[k];return `<tr><td><b>${esc(DEPTS[k])}</b><div class="meta">HOD ${esc(hodOf(k)||"—")} · ${d.count} sale${d.count===1?"":"s"}</div></td>${cell(d.net)}${cell(-d.cost)}${cell(-d.comm)}${cell(-d.salary)}${cell(-d.ads)}${cell(-d.other)}<td class="r num"><b${d.profit<0?' style="color:var(--danger)"':""}>${rm0(d.profit)}</b></td>${cell(d.hod)}</tr>`;}).join("")+
+    `</tbody><tfoot><tr><td>Total</td>${cell(T.net)}${cell(-T.cost)}${cell(-T.comm)}${cell(-T.salary)}${cell(-T.ads)}${cell(-T.other)}<td class="r num">${rm0(T.profit)}</td>${cell(T.hod)}</tr></tfoot>`;
+  $("splitNote").textContent=`Dept profit ${rm0(f.deptTotal)} − HOD ${Math.round(f.hodPct)}% ${rm0(f.hodTotal)} − shared costs ${rm0(f.shared)} = ${rm0(f.base)} → company ${Math.round(f.coPct)}%, rest split equally`;
+  const parts=[["Product cost",Math.max(0,f.cost),"#B9C4BD"],["Front-line commission",Math.max(0,f.comm),"var(--staff)"],["Department salaries, ads & other",Math.max(0,f.deptCosts),"var(--blue)"],["HOD "+Math.round(f.hodPct)+"% of own dept",Math.max(0,f.hodTotal),"color-mix(in srgb,var(--accent) 55%,var(--surface))"],["Shared costs",Math.max(0,f.shared),"#8D99AE"],["Company reserve "+Math.round(f.coPct)+"%",Math.max(0,f.company),"var(--co)"],["Equal split between HODs",Math.max(0,f.pool),"var(--accent)"]];
+  const tot=parts.reduce((a,p)=>a+p[1],0)||1;
+  $("finSplit").innerHTML=parts.map(p=>`<div style="width:${p[1]/tot*100}%;background:${p[2]}"></div>`).join("");
+  $("finLegend").innerHTML=parts.map(p=>`<div><span><i style="background:${p[2]}"></i>${p[0]}</span><b class="num">${rm0(p[1])}</b></div>`).join("");
+  const warns=[];
+  DEPT_KEYS.forEach(k=>{if(f.D[k].profit<0&&(f.D[k].count||f.D[k].salary||f.D[k].ads))warns.push(`<div class="warnline">${esc(DEPTS[k])} is ${rm0(-f.D[k].profit)} short this month, so its HOD share is RM 0.</div>`);});
+  if(f.conf.length&&f.base<0)warns.push(`<div class="warnline">After HOD shares and shared costs the company is ${rm0(-f.base)} short. Commission is still paid; there is no equal split this month.</div>`);
+  if(f.refunds>0)warns.push(`<div class="hint">Refunds this month: ${rm0(f.refunds)} taken off revenue and commission.</div>`);
+  $("finCheck").innerHTML=warns.join("")||(f.conf.length?`<div class="okline">Every department is in profit. The company keeps ${rm0(f.company)}; the HODs split ${rm0(f.pool)} equally on top of their own ${Math.round(f.hodPct)}%.</div>`:`<div class="hint">No confirmed payments this month yet.</div>`);
+  $("finLeaders").innerHTML=hodNames.map(l=>{const p=hodPayout(f,l);
+    return `<div class="leader"><b>${esc(l)}</b><span class="v num">${rm(p.total)}</span><span class="hint">HOD share ${rm0(p.own)}${p.depts.length?" ("+esc(p.depts.map(k=>DEPTS[k]).join(", "))+")":""} + equal ${rm0(p.eq)} + own commission ${rm0(p.comm)}</span></div>`;}).join("");
+  const rows=Object.values(f.per).filter(r=>Math.abs(r.comm)>0.004||r.count).sort((a,b)=>b.paid-a.paid);
+  const brk=r=>Object.entries(r.items).filter(([k,v])=>Math.abs(v)>0.004).map(([k,v])=>esc(k)+" "+rm0(v)).join(" · ");
+  $("finPay").innerHTML=rows.length?`<thead><tr><th>Name</th><th>Role · dept</th><th class="r">Own confirmed sales</th><th class="r">Count</th><th>Where it comes from</th><th class="r">Commission</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${esc(ROLES[r.role]||"")}<div class="meta">${esc(DEPTS[personDept(r.name)]||"")}</div></td><td class="r num">${rm(r.sales)}</td><td class="r num">${r.count}</td><td class="meta">${brk(r)}</td><td class="r num"><b>${rm(r.paid)}</b></td></tr>`).join("")+
+    `</tbody><tfoot><tr><td colspan="2">Total</td><td class="r num">${rm(rows.reduce((a,r)=>a+r.sales,0))}</td><td class="r num">${rows.reduce((a,r)=>a+r.count,0)}</td><td></td><td class="r num">${rm(f.comm)}</td></tr></tfoot>`
+    :`<tbody><tr><td class="empty">No commission to pay this month yet.</td></tr></tbody>`;
+  const top=Object.entries(f.byProd).sort((a,b)=>b[1].rev-a[1].rev);const tmax=top.length?top[0][1].rev:1;
+  $("finTop").innerHTML=top.length?top.slice(0,8).map(([k,v])=>`<div class="bar-row"><span>${esc(k)}</span><span class="bar-track"><i style="width:${v.rev/tmax*100}%"></i></span><span class="num">${rm0(v.rev)} · ${v.n} sold</span></div>`).join(""):`<p class="hint">No data yet.</p>`;
+  const src=Object.entries(f.bySrc);const smax=Math.max(1,...src.map(s=>s[1]));
+  $("finSrc").innerHTML=src.map(([k,v])=>`<div class="bar-row"><span>${k}</span><span class="bar-track"><i style="width:${v/smax*100}%;background:var(--blue)"></i></span><span class="num">${rm0(v)}</span></div>`).join("");
+  const cs=customers();const buyers=cs.filter(c=>c.sales.length);const repeat=buyers.filter(c=>c.sales.length>1).length;
+  const mb={};f.conf.forEach(s=>{const k=(s.customer||"").trim().toLowerCase()+"|"+(s.phone4||"");mb[k]=(mb[k]||0)+n(s.amount);});const nb=Object.keys(mb).length;
+  $("finRepeat").textContent=`${nb} customers this month, ${rm0(nb?f.gross/nb:0)} each on average · ${buyers.length} buyers to date, ${repeat} bought again (${buyers.length?Math.round(repeat/buyers.length*100):0}%)`;
+  const list=f.all.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  const owners=phoneOwners();
+  const flags=list.filter(s=>{const r=routeOf(s);if(s.agentRef||s.role==="agent"||!(r==="upsell"||r==="direct"))return false;const o=owners[normPhone(s.phone4)];return o&&o.agent&&o.id!==s.id&&o.agent!==s.seller;});
+  $("finFlags").innerHTML=flags.map(s=>{const o=owners[normPhone(s.phone4)];return `<div class="warnline">${esc(s.customer)} · ${esc(s.phone4)} first came in through affiliate <b>${esc(o.agent)}</b> (${esc(o.date)}). This ${esc(s.productName)} sale by ${esc(s.seller)} has no affiliate set. <button type="button" class="linkbtn" data-setref="${esc(s.uid)}|${esc(s.id)}|${esc(o.agent)}" style="color:var(--danger);font-weight:700">Credit ${esc(o.agent)}</button></div>`;}).join("");
+  $("finFlags").querySelectorAll("[data-setref]").forEach(b=>b.onclick=()=>{const [u,id,a]=b.dataset.setref.split("|");upd(u,"sales",id,{agentRef:a});toast("Credited to "+a+". Re-confirm the payment if it was already confirmed.");});
+  const lateRefunds=allSales().filter(s=>s.refundedIn===S.month&&s.month!==S.month&&s.verified);
+  $("finMonthLbl").textContent=S.month;const tAmt=list.reduce((a,x)=>a+n(x.amount),0);$("finListSum").textContent=list.length?`${list.length} sales · ${rm(tAmt)} total · ${list.filter(x=>x.verified).length} confirmed, ${list.filter(x=>!x.verified).length} pending`:"";
+  $("finAll").innerHTML=list.length?`<thead><tr><th>Date</th><th>Seller · dept</th><th>Customer · product</th><th>How sold</th><th class="r">Amount</th><th class="r">Excl. SST</th><th class="r">Commission</th><th>Payment</th><th></th></tr></thead><tbody>`+
+    list.map((s,k)=>{const pct=ratePctOf(s),cap=capPct(s.cat);const over=pct>cap+0.001;
+      return `<tr><td class="num">${esc(s.date.slice(5))}</td><td>${esc(s.seller)}<div class="meta">${esc(DEPTS[deptOf(s)]||"")}</div></td><td>${esc(s.customer)}${s.phone4?" · "+esc(s.phone4):""}<div class="meta">${esc(s.productName)}${s.note?" · "+esc(s.note):""}</div></td>
+      <td>${esc(ROUTE_SHORT[routeOf(s)]||"")}${s.speaker?`<div class="meta">speaker ${esc(s.speaker)}</div>`:""}${s.agentRef?`<div class="meta">affiliate ${esc(s.agentRef)}</div>`:""}</td><td class="r num">${rm(n(s.amount))}</td><td class="r num">${rm(netOf(s))}</td><td class="r num">${rm(commOf(s))}<div class="meta">${creditsOf(s).map(c=>esc(c.name)+" "+c.rate+"%").join(" · ")}</div>${over?`<span class="tag bad">${Math.round(pct*10)/10}% · over the ${Math.round(cap*10)/10}% cap</span>`:""}</td>
+      <td>${s.refundedIn?`<span class="tag bad">Refunded ${esc(s.refundedIn)}</span> <button class="linkbtn" data-unref="${k}">Undo</button>`:`<button type="button" class="toggle${s.verified?" on":""}" data-ver="${k}">${s.verified?"Confirmed":"Confirm payment"}</button>`}</td><td>${s.verified&&!s.refundedIn?`<button class="linkbtn" data-ref="${k}">Refund</button> `:""}<button class="linkbtn" data-fdel="${k}">Delete</button></td></tr>`;}).join("")+
+    lateRefunds.map(s=>`<tr><td class="num">${esc(s.date.slice(5))}</td><td>${esc(s.seller)}</td><td>${esc(s.customer)}<div class="meta">${esc(s.productName)} · sold ${esc(s.month)}</div></td><td><span class="tag bad">Refund</span></td><td class="r num">${rm(-n(s.amount))}</td><td class="r num">${rm(-netOf(s))}</td><td class="r num">${rm(-commOf(s))}</td><td colspan="2" class="meta">Commission taken back this month</td></tr>`).join("")+`</tbody>`
+    :`<tbody><tr><td class="empty">No sales this month yet.</td></tr></tbody>`;
+  $("finAll").querySelectorAll("[data-ver]").forEach(b=>b.onclick=()=>{const s=list[+b.dataset.ver];setVerified(s,!s.verified);});
+  $("finAll").querySelectorAll("[data-ref]").forEach(b=>b.onclick=()=>arm(b,()=>{const s=list[+b.dataset.ref];setRefund(s,today().slice(0,7));}));
+  $("finAll").querySelectorAll("[data-unref]").forEach(b=>b.onclick=()=>{const s=list[+b.dataset.unref];setRefund(s,null);});
+  $("finAll").querySelectorAll("[data-fdel]").forEach(b=>b.onclick=()=>arm(b,async()=>{const s=list[+b.dataset.fdel];await dropCredits(s);del(s.uid,"sales",s.id);}));
+}
+/* credits from someone else's sale are copied to that person's own list when the payment is confirmed, so staff and affiliates can see them */
+async function dropCredits(s){for(const p of (s.creditDocs||[])){try{await S.db.doc(p).delete();}catch(e){}}}
+async function setVerified(s,on){
+  await dropCredits(s);
+  if(!on){await upd(s.uid,"sales",s.id,{verified:false,creditDocs:[]});return;}
+  const paths=[];const cr=creditsOf(s).filter(c=>c.name!==s.seller);
+  for(let i=0;i<cr.length;i++){const c=cr[i];const p=person(c.name);if(!p)continue;const path="u/"+keyOf(p)+"/credits/"+s.id+"_"+i;
+    try{await S.db.doc(path).set({date:s.date,month:s.month,customer:s.customer||"",productName:s.productName||"",seller:s.seller,kind:c.kind,rate:c.rate,amt:Math.round(c.amt*100)/100,saleId:s.id,refundedIn:s.refundedIn||null});paths.push(path);}catch(e){}}
+  await upd(s.uid,"sales",s.id,{verified:true,verifiedAt:new Date().toISOString(),creditDocs:paths});
+}
+async function setRefund(s,month){
+  await upd(s.uid,"sales",s.id,{refundedIn:month});
+  for(const p of (s.creditDocs||[])){try{await S.db.doc(p).update({refundedIn:month});}catch(e){}}
+}
+async function saveExp(){const d={};document.querySelectorAll("#tab-fin [data-exp]").forEach(i=>d[i.dataset.exp]=n(i.value));try{await S.db.doc("private/m-"+S.month).set(d);toast("Costs saved");}catch(e){writeErr(e);}}
+
+/* ---------- excel ---------- */
+$("xlsxMonth").onclick=async()=>{
+  if(!window.XLSX){toast("The Excel tool didn't load. Reopen the page");return;}
+  if(!S.dl){toast("Downloads aren't available in this view");return;}
+  const f=finance(S.month);const r2=v=>Math.round(v*100)/100;
+  const rows=f.all.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(s=>({"Date":s.date,"Seller":s.seller,"Role":ROLES[s.role]||"","Department":DEPTS[deptOf(s)]||"","Customer":s.customer,"Phone":s.phone4,"Product":s.productName,"Category":CATS[s.cat]||s.cat,"How sold":ROUTE_SHORT[routeOf(s)]||"","Speaker":s.speaker||"","Affiliate":s.agentRef||"","Amount incl. SST":n(s.amount),"SST":r2(n(s.amount)-netOf(s)),"Amount excl. SST":r2(netOf(s)),"Commission total":r2(commOf(s)),"Commission to":creditsOf(s).map(c=>c.name+" "+c.rate+"% ("+c.kind+") RM"+c.amt.toFixed(2)).join("; "),"Payment":s.refundedIn?"Refunded "+s.refundedIn:s.verified?"Confirmed":"Pending","Note":s.note||""}));
+  const dept=DEPT_KEYS.map(k=>{const d=f.D[k];return{"Department":DEPTS[k],"HOD":hodOf(k)||"","Sales":d.count,"Revenue incl. SST":r2(d.rev),"Revenue excl. SST":r2(d.net),"Product cost (est.)":r2(d.cost),"Commission":r2(d.comm),"Salaries":d.salary,"Ads":d.ads,"Other":d.other,"Dept profit":r2(d.profit),["HOD "+Math.round(f.hodPct)+"%"]:r2(d.hod)};});
+  const sum=[["Month",S.month],["Confirmed revenue (incl. SST)",r2(f.gross)],["SST",r2(f.sst)],["Department profit",r2(f.deptTotal)],["HOD shares",r2(f.hodTotal)],...SHARED_EXP.map(([k,l])=>["Shared · "+l,n(f.exp["shared_"+k])]),["Left after HOD shares and shared costs",r2(f.base)],["Company reserve ("+Math.round(f.coPct)+"%)",r2(f.company)],["Equal split between HODs",r2(f.pool)],["Refunds this month",r2(f.refunds)],["Pending payments (not counted)",r2(f.pending)]];
+  const names=[...new Set([...Object.keys(f.per),...hodLeaders(),...DEPT_KEYS.map(hodOf).filter(Boolean)])];
+  const pay=names.map(nm=>{const r=f.per[nm]||{role:roleOf(nm),sales:0,count:0,paid:0,items:{}};const h=hodPayout(f,nm);
+    return{"Name":nm,"Role":ROLES[r.role]||"","Own confirmed sales":r2(r.sales),"Count":r.count,"Commission breakdown":Object.entries(r.items).map(([k,v])=>k+" RM"+v.toFixed(2)).join("; "),"Commission":r2(r.paid),"HOD share":r2(h.own),"Equal split":r2(h.eq),"Total to pay":r2(r.paid+h.own+h.eq)};});
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows.length?rows:[{"Note":"No sales this month"}]),"Sales");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(dept),"Departments");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Item","RM"],...sum]),"Summary");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(pay.length?pay:[{"Note":"Nothing to pay"}]),"Payouts");
+  const buf=XLSX.write(wb,{bookType:"xlsx",type:"array"});
+  try{await S.dl.save({filename:`Restore-sales-${S.month}.xlsx`,data:new Uint8Array(buf)});}catch(e){if(e&&e.code!=="declined")toast("Download failed");}
+};
+
+$("xlsxBtn").onclick=async()=>{
+  if(!window.XLSX){toast("The Excel tool didn't load. Reopen the page");return;}
+  if(!S.dl){toast("Downloads aren't available in this view");return;}
+  const wb=XLSX.utils.book_new();const r2=v=>Math.round(v*100)/100;
+  const sales=allSales().sort((a,b)=>a.date.localeCompare(b.date)).map(s=>({"Date":s.date,"Month":s.month,"Seller":s.seller,"Role":ROLES[s.role]||"","Department":DEPTS[deptOf(s)]||"","Customer":s.customer,"Phone":s.phone4,"Product":s.productName,"Category":CATS[s.cat]||s.cat,"Amount incl. SST":n(s.amount),"Amount excl. SST":r2(netOf(s)),"How sold":ROUTE_SHORT[routeOf(s)]||"","Speaker":s.speaker||"","Affiliate":s.agentRef||"","Commission":r2(commOf(s)),"Commission to":creditsOf(s).map(c=>c.name+" "+c.rate+"%").join("; "),"Payment":s.refundedIn?"Refunded "+s.refundedIn:s.verified?"Confirmed":"Pending","Supply days":s.days||"","Repurchase reminder":s.repurchaseAt||"","Note":s.note||""}));
+  const consults=allConsults().sort((a,b)=>a.date.localeCompare(b.date)).map(c=>({"Date":c.date,"Nutritionist":c.who,"Mode":c.mode,"Customer":c.customer,"Phone":c.phone4,"Concerns":(c.issues||[]).join(", "),"Details":c.issueText,"Feedback":c.feedback,"Readiness":c.will,"Sold":c.soldName||"No sale","Amount":c.amount||0,"Next follow-up":c.followUp||"","Follow-up task":c.followWhat||"","Followed up":c.followDone?"Yes":"No","Referrals":c.referral||0}));
+  const custs=customers().map(c=>({"Customer":c.name,"Phone":c.phone,"Total spent":r2(c.total),"Purchases":c.sales.length,"Consults":c.consults.length,"Last contact":c.last,"Concerns":c.issues.join(", "),"Next follow-up":c.next,"Handled by":[...c.owners].join(", ")}));
+  const months=[...new Set(allSales().map(s=>s.month))].sort();
+  const monthly=months.map(m=>{const f=finance(m);const o={"Month":m,"Confirmed revenue":Math.round(f.gross),"SST":Math.round(f.sst)};DEPT_KEYS.forEach(k=>{o[DEPTS[k]+" profit"]=Math.round(f.D[k].profit);});
+    return Object.assign(o,{"HOD shares":Math.round(f.hodTotal),"Shared costs":Math.round(f.shared),"Company reserve":Math.round(f.company),"Equal split":Math.round(f.pool),"Commission":Math.round(f.comm)});});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(sales.length?sales:[{"Note":"No sales yet"}]),"Sales");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(consults.length?consults:[{"Note":"No consults yet"}]),"Consults");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(custs.length?custs:[{"Note":"No customers yet"}]),"Customers");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(monthly.length?monthly:[{"Note":"No data yet"}]),"Monthly");
+  const buf=XLSX.write(wb,{bookType:"xlsx",type:"array"});
+  try{await S.dl.save({filename:`Restore-sales-backup-${today()}.xlsx`,data:new Uint8Array(buf)});}catch(e){if(e&&e.code!=="declined")toast("Download failed");}
+};
+
+/* ---------- settings ---------- */
+let setDirty=false;
+async function savePublic(next,msg){try{await S.db.doc("config/public").set(next);if(msg)toast(msg);}catch(e){writeErr(e);}}
+async function bind(name,uid){const next=clone(S.pub);next.roster.forEach(r=>{if(r.uid===uid)r.uid=null;});const r=next.roster.find(x=>x.name===name);if(r)r.uid=uid;
+  await savePublic(next,"Linked "+name);
+  const from=slugKey(name);let moved=0;
+  try{for(const col of ["sales","consults","credits"]){const sn=await S.db.collection("u/"+from+"/"+col).get();
+    for(const d of sn.docs){await S.db.doc("u/"+uid+"/"+col+"/"+d.id).set(d.data());await S.db.doc("u/"+from+"/"+col+"/"+d.id).delete();moved++;}}
+    if(moved)toast("Linked "+name+" · moved "+moved+" records recorded for them earlier");}catch(e){toast("Linked, but earlier records couldn't be moved. Try again from Settings.");}
+}
+async function renderSettings(){
+  if(editing()||setDirty)return;
+  const pub=S.pub;
+  $("newRole").innerHTML=Object.entries(ROLES).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+  $("setRoster").innerHTML=`<thead><tr><th>Name</th><th>Role</th><th>Department</th><th>Probation</th><th>Team leader (affiliates)</th><th>Account</th><th></th></tr></thead><tbody>`+pub.roster.map((r,i)=>`<tr>
+    <td><b>${esc(r.name)}</b></td>
+    <td><select data-role="${i}" style="max-width:160px">${Object.entries(ROLES).map(([k,v])=>`<option value="${k}" ${r.role===k?"selected":""}>${v}</option>`).join("")}</select></td>
+    <td><select data-dept="${i}" style="max-width:190px"><option value="">Auto (${esc(DEPTS[personDept(r.name)]||"")})</option>${DEPT_KEYS.map(k=>`<option value="${k}" ${r.dept===k?"selected":""}>${esc(DEPTS[k])}</option>`).join("")}</select></td>
+    <td>${r.role==="nut"?`<button type="button" class="toggle${r.prob?" on":""}" data-prob="${i}">${r.prob?"On probation":"Confirmed"}</button>`:'<span class="meta">—</span>'}</td>
+    <td>${r.role==="agent"?`<select data-by="${i}" style="max-width:150px"><option value="">None</option>${pub.roster.filter(x=>x.name!==r.name).map(x=>`<option value="${esc(x.name)}" ${r.by===x.name?"selected":""}>${esc(x.name)}</option>`).join("")}</select>`:'<span class="meta">—</span>'}</td>
+    <td>${r.uid?(r.uid===S.uid?'<span class="tag ok">You</span>':'<span class="tag ok">Linked</span>'):'<span class="tag plain">Not linked</span>'}</td>
+    <td>${r.uid?`<button class="linkbtn" data-unbind="${i}">Unlink</button>`:""} <button class="linkbtn" data-rm="${i}">Remove</button></td></tr>`).join("")+`</tbody>`;
+  $("setRoster").querySelectorAll("[data-role]").forEach(s=>s.onchange=()=>{const next=clone(S.pub);next.roster[+s.dataset.role].role=s.value;savePublic(next,"Role updated");});
+  $("setRoster").querySelectorAll("[data-dept]").forEach(s=>s.onchange=()=>{const next=clone(S.pub);next.roster[+s.dataset.dept].dept=s.value||null;savePublic(next,"Department updated");});
+  $("setRoster").querySelectorAll("[data-prob]").forEach(b=>b.onclick=()=>{const next=clone(S.pub);const r=next.roster[+b.dataset.prob];r.prob=!r.prob;savePublic(next,r.prob?"Set to probation":"Set to confirmed");});
+  $("setRoster").querySelectorAll("[data-by]").forEach(s=>s.onchange=()=>{const next=clone(S.pub);next.roster[+s.dataset.by].by=s.value||null;savePublic(next,"Team leader updated");});
+  $("setRoster").querySelectorAll("[data-unbind]").forEach(b=>b.onclick=()=>arm(b,()=>{const next=clone(S.pub);next.roster[+b.dataset.unbind].uid=null;savePublic(next,"Unlinked");}));
+  $("setRoster").querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>arm(b,()=>{const next=clone(S.pub);next.roster.splice(+b.dataset.rm,1);savePublic(next,"Removed; past records are kept");}));
+  const bound=new Set(pub.roster.map(r=>r.uid).filter(Boolean));
+  const claims=S.claims.filter(c=>!bound.has(c.uid));
+  let names={};if(S.user&&claims.length){try{names=await S.user.profiles(claims.map(c=>c.uid));}catch(e){}}
+  $("setClaims").innerHTML=claims.map(c=>`<div class="item"><div class="h"><b>${esc((names[c.uid]||{}).name||"A colleague")} says they are "${esc(c.claim)}"</b><span class="meta">${esc((c.at||"").slice(0,10))}</span></div>
+    <div class="row" style="justify-content:flex-start"><button type="button" class="btn sm" data-ok="${esc(c.uid)}" data-name="${esc(c.claim)}">Confirm</button><button type="button" class="btn ghost sm" data-no="${esc(c.uid)}">Decline</button></div></div>`).join("");
+  $("setClaims").querySelectorAll("[data-ok]").forEach(b=>b.onclick=()=>bind(b.dataset.name,b.dataset.ok));
+  $("setClaims").querySelectorAll("[data-no]").forEach(b=>b.onclick=async()=>{try{await S.db.doc("u/"+b.dataset.no).delete();}catch(e){writeErr(e);}});
+  const mg=pub.roster.filter(r=>r.role==="mgmt").map(r=>r.name);
+  $("setDepts").innerHTML=DEPT_KEYS.map(k=>`<label>${esc(DEPTS[k])} · HOD<select data-hod="${k}"><option value="">—</option>${mg.map(x=>`<option value="${esc(x)}" ${hodOf(k)===x?"selected":""}>${esc(x)}</option>`).join("")}</select></label>`).join("");
+  $("setDepts").querySelectorAll("[data-hod]").forEach(s=>s.onchange=()=>{const next=clone(S.pub);next.deptHod=Object.assign({},DEF_PUBLIC.deptHod,next.deptHod||{});next.deptHod[s.dataset.hod]=s.value||null;savePublic(next,"HOD updated");});
+  const rt=rates();
+  $("setRates").innerHTML=`<thead><tr><th>Dept</th><th>Case</th>${CAT_KEYS.map(c=>`<th class="r">${CATS[c]} %</th>`).join("")}</tr></thead><tbody>`+
+    `<tr><td class="meta">Cap</td><td class="meta">Everyone on one sale together, at most</td>${CAT_KEYS.map(c=>`<td class="r meta num">${Math.round(capPct(c)*10)/10}%</td>`).join("")}</tr>`+
+    RATE_ROWS.map(([d,k,l])=>`<tr><td class="meta">${d==="all"?"All":esc(hodOf(d)||DEPTS[d])}</td><td>${esc(l)}</td>${CAT_KEYS.map(c=>`<td class="r"><input class="inline-in num" style="width:70px" type="number" step="0.5" min="0" data-rate="${k}:${c}" value="${n((rt[k]||{})[c])}"></td>`).join("")}</tr>`).join("")+`</tbody>`;
+  $("setRates").querySelectorAll("[data-rate]").forEach(inp=>inp.onchange=()=>{const [k,c]=inp.dataset.rate.split(":");const next=clone(S.pub);next.rates3=next.rates3||{};next.rates3[k]=Object.assign({},(next.rates3[k]||{}));next.rates3[k][c]=n(inp.value);savePublic(next,"Commission rate updated");});
+  // worst-case stacks per category against the cap
+  const stacks=[["Affiliate + team leader","agent","lead"],["Corporate (affiliate) + team leader","corpAgent","lead"],["Nutritionist upsell + affiliate referral",null,"trail"],["Webinar speaker + closing","speaker","closer"]];
+  const over=[];CAT_KEYS.forEach(c=>{const cap=capPct(c);stacks.forEach(([l,a,b])=>{const v=(a?R(a,c):Math.max(R("nut",c),R("nutProb",c)))+R(b,c);if(v>cap+0.001)over.push(`${CATS[c]}: ${l} = ${v}% (cap ${Math.round(cap*10)/10}%)`);});});
+  $("setCaps").innerHTML=over.length?over.map(t=>`<div class="warnline">Over the cap · ${esc(t)}</div>`).join(""):`<div class="okline">Every combination is within its cap.</div>`;
+  $("setProducts").innerHTML=`<thead><tr><th>Name</th><th>Category</th><th class="r">Price</th><th class="r">Cost per sale RM 🔒</th><th class="r">Supply days</th><th></th></tr></thead><tbody>`+pub.products.map((p,i)=>`<tr><td>${esc(p.name)}</td><td>${esc(CATS[p.cat]||p.cat)}${PARTNER_CATS.includes(p.cat)?'<div class="meta">partner-delivered</div>':""}</td>
+    <td class="r"><input class="inline-in num" type="number" data-pprice="${i}" value="${p.price||""}" placeholder="Enter each time"></td>
+    <td class="r"><input class="inline-in num" type="number" min="0" data-pcost="${esc(p.id)}" value="${n((S.priv.costs||{})[p.id])||""}" placeholder="use margin %"></td>
+    <td class="r">${p.cat==="product"?`<input class="inline-in num" type="number" data-pdays="${i}" value="${p.days||""}">`:"—"}</td>
+    <td><button class="linkbtn" data-prm="${i}">Remove</button></td></tr>`).join("")+`</tbody>`;
+  $("setProducts").querySelectorAll("[data-pcost]").forEach(inp=>inp.onchange=async()=>{const next=clone(S.priv);next.costs=next.costs||{};const v=n(inp.value);if(v>0)next.costs[inp.dataset.pcost]=v;else delete next.costs[inp.dataset.pcost];
+    try{await S.db.doc("private/settings").set(next);toast("Cost saved (management only)");}catch(e){writeErr(e);}});
+  $("setProducts").querySelectorAll("[data-pprice]").forEach(inp=>inp.onchange=()=>{const next=clone(S.pub);next.products[+inp.dataset.pprice].price=n(inp.value);savePublic(next,"Price updated");});
+  $("setProducts").querySelectorAll("[data-pdays]").forEach(inp=>inp.onchange=()=>{const next=clone(S.pub);next.products[+inp.dataset.pdays].days=n(inp.value);savePublic(next,"Supply days updated");});
+  $("setProducts").querySelectorAll("[data-prm]").forEach(b=>b.onclick=()=>arm(b,()=>{const next=clone(S.pub);next.products.splice(+b.dataset.prm,1);savePublic(next,"Product removed");}));
+  const pr=S.priv;const mgn=c=>marginOf(c);
+  $("mgR").value=mgn("restore");$("mgB").value=mgn("blood");$("mgC").value=mgn("consult");$("mgP").value=mgn("product");$("mgF").value=mgn("fir");$("mgI").value=mgn("iv");
+  $("mgSst").value=pr.sst;$("mgHod").value=n(pr.hodPct??DEF_PRIV.hodPct);$("mgCo").value=n(pr.companyPct??DEF_PRIV.companyPct);
+  $("mgCapOwn").value=n(pr.capOwn??DEF_PRIV.capOwn);$("mgCapPartner").value=n(pr.capPartner??DEF_PRIV.capPartner);$("mgAds").value=pr.ads;$("mgFixed").value=pr.fixed;
+  $("mgSplit").innerHTML=mg.map(l=>`<label>${esc(l)}<input type="number" step="0.5" min="0" data-split="${esc(l)}" value="${n((pr.split||{})[l]??1)}"></label>`).join("");
+  const docs=Object.values(S.data).reduce((a,d)=>a+(d.sales||[]).length+(d.consults||[]).length+(d.credits||[]).length,0);
+  renderMarkerSettings();
+  $("usage").textContent=`Database usage: about ${docs} of 5,000 records. Download an Excel backup before it fills up.`;
+}
+
+function renderMarkerSettings(){
+  const d=S.qd;
+  const inp=(key,val,ph)=>`<input class="inline-in num" type="number" min="0" step="1" data-qp="${key}" value="${val??""}" placeholder="${ph||"set price"}">`;
+  let rows=`<tr><td><b>${esc(d.base.name)}</b><div class="meta">Base</div></td><td class="r">${inp("base",d.base.price)}</td></tr>`;
+  d.bundles.forEach((b,i)=>{rows+=`<tr><td><b>${esc(b.name)}</b><div class="meta">Package price · items below</div></td><td class="r">${inp("b:"+i,b.price)}</td></tr>`;
+    b.items.forEach((it,j)=>{rows+=`<tr><td style="padding-left:24px">${esc(it.n)}</td><td class="r">${inp("i:"+i+":"+j,it.p)}</td></tr>`;});});
+  d.extras.forEach((e,i)=>{rows+=`<tr><td>${esc(e.n)}<div class="meta">Single test</div></td><td class="r">${inp("e:"+i,e.p)}</td></tr>`;});
+  $("setMarkers").innerHTML=`<thead><tr><th>Item</th><th class="r">Price RM</th></tr></thead><tbody>${rows}</tbody>`;
+  $("setMarkers").querySelectorAll("[data-qp]").forEach(x=>x.onchange=()=>{const next=clone(S.qd);const v=x.value===""?null:n(x.value);const k=x.dataset.qp.split(":");
+    if(k[0]==="base")next.base.price=v;else if(k[0]==="b")next.bundles[+k[1]].price=v;else if(k[0]==="i")next.bundles[+k[1]].items[+k[2]].p=v;else if(k[0]==="e")next.extras[+k[1]].p=v;
+    saveQuoteCfg(next,"Price saved");});
+}
+async function saveQuoteCfg(next,msg){try{await S.db.doc("config/quote").set(next);if(msg)toast(msg);}catch(e){writeErr(e);}}
+$("addMarker").onclick=()=>{const nm=$("nmName").value.trim().slice(0,60);if(!nm)return;const next=clone(S.qd);next.extras.push({n:nm,p:$("nmPrice").value===""?null:n($("nmPrice").value)});saveQuoteCfg(next,"Added "+nm);["nmName","nmPrice"].forEach(i=>$(i).value="");};
+
+$("tab-set").addEventListener("input",e=>{if(e.target.closest("#mgSplit")||["mgR","mgB","mgC","mgP","mgF","mgI","mgSst","mgHod","mgCo","mgCapOwn","mgCapPartner","mgAds","mgFixed"].includes(e.target.id))setDirty=true;});
+$("saveMg").onclick=async()=>{
+  const split={};document.querySelectorAll("[data-split]").forEach(i=>split[i.dataset.split]=n(i.value));
+  const next=Object.assign(clone(S.priv),{margins:{restore:n($("mgR").value),blood:n($("mgB").value),consult:n($("mgC").value),product:n($("mgP").value),fir:n($("mgF").value),iv:n($("mgI").value)},sst:n($("mgSst").value)||8,
+    hodPct:$("mgHod").value===""?DEF_PRIV.hodPct:n($("mgHod").value),companyPct:$("mgCo").value===""?DEF_PRIV.companyPct:n($("mgCo").value),
+    capOwn:$("mgCapOwn").value===""?DEF_PRIV.capOwn:n($("mgCapOwn").value),capPartner:$("mgCapPartner").value===""?DEF_PRIV.capPartner:n($("mgCapPartner").value),ads:n($("mgAds").value),fixed:n($("mgFixed").value),split});
+  try{await S.db.doc("private/settings").set(next);setDirty=false;toast("Saved");}catch(e){writeErr(e);}
+};
+$("addPerson").onclick=()=>{const nm=$("newPerson").value.trim().slice(0,40);if(!nm)return;if(S.pub.roster.some(r=>r.name===nm)){toast("That name is already on the list");return;}const next=clone(S.pub);next.roster.push({name:nm,role:$("newRole").value,uid:null});$("newPerson").value="";savePublic(next,"Added "+nm);};
+$("addProduct").onclick=()=>{const nm=$("npName").value.trim().slice(0,60);if(!nm)return;const next=clone(S.pub);next.products.push({id:"p"+Date.now().toString(36),name:nm,cat:$("npCat").value,price:n($("npPrice").value),days:n($("npDays").value)});["npName","npPrice","npDays"].forEach(i=>$(i).value="");savePublic(next,"Added "+nm);};
+
+/* ---------- subscriptions ---------- */
+function subUid(uid){
+  if(S.subs[uid])return;
+  S.data[uid]=S.data[uid]||{sales:[],consults:[],credits:[]};
+  const u1=S.db.collection("u/"+uid+"/sales").onSnapshot(sn=>{S.data[uid].sales=sn.docs.map(d=>Object.assign({id:d.id},d.data()));render();},()=>{});
+  const u2=S.db.collection("u/"+uid+"/consults").onSnapshot(sn=>{S.data[uid].consults=sn.docs.map(d=>Object.assign({id:d.id},d.data()));render();},()=>{});
+  const u3=S.db.collection("u/"+uid+"/credits").onSnapshot(sn=>{S.data[uid].credits=sn.docs.map(d=>Object.assign({id:d.id},d.data()));render();},()=>{});
+  S.subs[uid]=()=>{u1();u2();u3();};
+}
+function syncSubs(){
+  const want=new Set(S.canEdit?S.pub.roster.map(keyOf):(me()?[S.uid]:[]));
+  Object.keys(S.subs).forEach(uid=>{if(!want.has(uid)){S.subs[uid]();delete S.subs[uid];delete S.data[uid];}});
+  want.forEach(subUid);
+}
+function subMonthCfg(){}
+async function boot(){
+  const t=lsGet("rw_tab2");if(t)S.tab=t;
+  render();
+  if(!window.claude||!window.claude.use){status("Open this page in Claude.");$("whoLine").textContent="Not connected";return;}
+  const [db,user,dl]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("downloads")]);
+  S.db=db;S.user=user;S.dl=dl;
+  if(!db){status("Can't reach the sales database. Make sure you're signed in and have Can interact access or higher.");$("whoLine").textContent="Not connected";return;}
+  if(user){S.uid=await user.id();S.canEdit=await user.canEdit();}
+  if(!S.uid){status("Your account wasn't recognised. Sign in and reopen the page.");return;}
+  if(S.canEdit){const a=lsGet("rw_actas");if(a)S.actAs=a;}
+  db.doc("config/public").onSnapshot(d=>{const v=d.exists?d.data():{};S.pub=Object.assign(clone(DEF_PUBLIC),v);if(!Array.isArray(S.pub.roster))S.pub.roster=clone(DEF_PUBLIC.roster);syncSubs();render();},()=>{});
+  db.doc("config/quote").onSnapshot(d=>{if(d.exists)S.qd=Object.assign({base:{name:"Standard Health Screening",price:108,items:[]},bundles:[],extras:[],symptoms:[],terms:[]},d.data());render();},()=>{});
+  if(S.canEdit){
+    db.doc("private/settings").onSnapshot(d=>{S.priv=Object.assign(clone(DEF_PRIV),d.exists?d.data():{});render();},()=>{});
+    db.collection("u").onSnapshot(sn=>{S.claims=sn.docs.map(d=>Object.assign({uid:d.id},d.data())).filter(c=>c.claim);render();},()=>{});
+    db.collection("private").onSnapshot(sn=>{const m={};sn.docs.forEach(d=>{if(d.id.startsWith("m-"))m[d.id]=d.data();});S.mdocs=m;render();},()=>{});
+  }else{
+    db.doc("u/"+S.uid).onSnapshot(d=>{S.claims=d.exists&&d.data().claim?[Object.assign({uid:S.uid},d.data())]:[];render();},()=>{});
+  }
+  onProductChange("s");onProductChange("c");
+  render();
+}
+boot();
+})();
+</script>
+
+</body></html>

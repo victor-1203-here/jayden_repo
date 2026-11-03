@@ -1,0 +1,212 @@
+{
+  "_notes": "Treatment plans (page 9). FAKE/test data in this build; Developer moves this into the database. Fields unit_cost and econ are Management-only (server must strip them for other roles). snapshot is written when a plan is submitted and keeps the prices/costs of that moment.",
+  "plans": [
+    {
+      "id": "pl-mvz08ejy",
+      "customer_phone": "60167788990",
+      "package_code": "CLIN-METAB",
+      "nutritionist_id": "u-jialing",
+      "status": "submitted",
+      "created": "2026-11-02",
+      "usage": [
+        {
+          "date": "2026-11-02",
+          "item": "sauna",
+          "qty": 3,
+          "amount_rm": 240,
+          "by": "u-jialing",
+          "note": ""
+        }
+      ],
+      "markers": [
+        "base",
+        "cardio",
+        "metabolic",
+        "fatty_liver",
+        "nutrient"
+      ],
+      "qty": {
+        "blood_test": 2,
+        "doctor": 2,
+        "initial_consult": 1,
+        "meal_plan": 1,
+        "follow_up": 8,
+        "tracking": 6,
+        "supplement": 5,
+        "course": 1,
+        "whatsapp": 6,
+        "sauna": 47,
+        "eecp_course": 2
+      },
+      "snapshot": {
+        "price_version": 3,
+        "taken": "2026-11-02",
+        "package_price": 11999,
+        "leader_override": true,
+        "econ": {
+          "price": 11999,
+          "net": 11110.185185185184,
+          "commission": 1000,
+          "override": 222.2037037037037,
+          "fee": 599.95,
+          "available": 9288.03148148148,
+          "lock": 5108.417314814814,
+          "budget": 4179.614166666665,
+          "valueTarget": 14398.8
+        },
+        "items": {
+          "blood_test": {
+            "price": 1218,
+            "unit_cost": 617
+          },
+          "doctor": {
+            "price": 300,
+            "unit_cost": 150
+          },
+          "initial_consult": {
+            "price": 350,
+            "unit_cost": 55.56
+          },
+          "meal_plan": {
+            "price": 300,
+            "unit_cost": 55.56
+          },
+          "follow_up": {
+            "price": 200,
+            "unit_cost": 41.67
+          },
+          "tracking": {
+            "price": 150,
+            "unit_cost": 101.76
+          },
+          "supplement": {
+            "price": 600,
+            "unit_cost": 240
+          },
+          "course": {
+            "price": 399,
+            "unit_cost": 0
+          },
+          "whatsapp": {
+            "price": 100,
+            "unit_cost": 10
+          },
+          "sauna": {
+            "price": 80,
+            "unit_cost": 2
+          },
+          "eecp_course": {
+            "price": 250,
+            "unit_cost": 100
+          }
+        }
+      },
+      "submitted": "2026-11-02",
+      "updated": "2026-11-02"
+    },
+    {
+      "id": "pl-mvz08ppx",
+      "customer_phone": "60123456781",
+      "package_code": "CLIN-METAB",
+      "nutritionist_id": "u-jialing",
+      "status": "approved",
+      "created": "2026-11-02",
+      "usage": [],
+      "markers": [
+        "base",
+        "cardio",
+        "metabolic",
+        "fatty_liver",
+        "nutrient"
+      ],
+      "qty": {
+        "blood_test": 2,
+        "doctor": 2,
+        "initial_consult": 1,
+        "meal_plan": 1,
+        "follow_up": 8,
+        "tracking": 6,
+        "supplement": 5,
+        "course": 1,
+        "whatsapp": 6,
+        "sauna": 47,
+        "eecp_course": 2,
+        "iv_nad100": 3
+      },
+      "snapshot": {
+        "price_version": 3,
+        "taken": "2026-11-02",
+        "package_price": 11999,
+        "leader_override": false,
+        "econ": {
+          "price": 11999,
+          "net": 11110.185185185184,
+          "commission": 1000,
+          "override": 0,
+          "fee": 599.95,
+          "available": 9510.235185185184,
+          "lock": 5230.629351851851,
+          "budget": 4279.605833333332,
+          "valueTarget": 14398.8
+        },
+        "items": {
+          "blood_test": {
+            "price": 1218,
+            "unit_cost": 617
+          },
+          "doctor": {
+            "price": 300,
+            "unit_cost": 150
+          },
+          "initial_consult": {
+            "price": 350,
+            "unit_cost": 55.56
+          },
+          "meal_plan": {
+            "price": 300,
+            "unit_cost": 55.56
+          },
+          "follow_up": {
+            "price": 200,
+            "unit_cost": 41.67
+          },
+          "tracking": {
+            "price": 150,
+            "unit_cost": 101.76
+          },
+          "supplement": {
+            "price": 600,
+            "unit_cost": 240
+          },
+          "course": {
+            "price": 399,
+            "unit_cost": 0
+          },
+          "whatsapp": {
+            "price": 100,
+            "unit_cost": 10
+          },
+          "sauna": {
+            "price": 80,
+            "unit_cost": 2
+          },
+          "eecp_course": {
+            "price": 250,
+            "unit_cost": 100
+          },
+          "iv_nad100": {
+            "price": 888,
+            "unit_cost": 710.4
+          }
+        }
+      },
+      "submitted": "2026-11-02",
+      "updated": "2026-11-02",
+      "decision": {
+        "by": "u-levin",
+        "date": "2026-11-02",
+        "note": "OK, customer needs NAD+"
+      }
+    }
+  ]
+}

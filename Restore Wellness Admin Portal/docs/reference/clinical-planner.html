@@ -1,0 +1,331 @@
+<title>CLINICAL 疗程规划器</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: working tool — left = treatment catalogue with steppers, right = sticky budget/value ledger. Palette = Restore Wellness Jotun colours */
+:root{
+  --bg:#f3eee5; --surface:#fffdf8; --line:#e0d7c8; --ink:#1f2b26; --muted:#6d7069;
+  --green:#345F50; --sage:#A5AA92; --brown:#A38A72; --ivory:#E6DBCA;
+  --ok:#2f7a4f; --warn:#a8741a; --bad:#b3362c; --bar:#e6dfd2;
+  --f-display:"Noto Serif SC","Songti SC",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --surface:#1b2420; --line:#2d3a34; --ink:#e7e2d8; --muted:#9ca39d;
+  --green:#8fc2ad; --sage:#7d8270; --brown:#c4a98e; --ivory:#2a3530; --ok:#6cc391; --warn:#e2b04a; --bad:#ef7b70; --bar:#2a3530; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --surface:#1b2420; --line:#2d3a34; --ink:#e7e2d8; --muted:#9ca39d;
+  --green:#8fc2ad; --sage:#7d8270; --brown:#c4a98e; --ivory:#2a3530; --ok:#6cc391; --warn:#e2b04a; --bad:#ef7b70; --bar:#2a3530; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;border-bottom:2px solid var(--green);padding-bottom:16px;margin-bottom:20px}
+.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--brown);font-weight:700;text-transform:uppercase}
+h1{font-family:var(--f-display);font-size:28px;margin:2px 0 0;color:var(--green);text-wrap:balance}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;padding:6px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--green);color:var(--surface);font-weight:500}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--brown);outline-offset:2px}
+.pkgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+.pkg{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:12px 14px;cursor:pointer;font:inherit}
+.pkg[aria-pressed="true"]{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+.pkg b{display:block;font-size:15px}
+.pkg span{color:var(--muted);font-size:12px}
+.pkg .p{font-family:var(--f-num);color:var(--green);font-size:15px;margin-top:4px;display:block}
+.hint{font-size:12px;color:var(--muted);margin:0 0 18px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.ledger{order:-1;position:static!important}}
+.cat{margin-bottom:18px}
+.cat h2{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 6px}
+.rows{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:9px 12px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row.on{background:color-mix(in srgb,var(--ivory) 60%,transparent)}
+.nm{min-width:0}
+.nm b{font-weight:500}
+.nm small{display:block;color:var(--muted);font-size:12px}
+.tag{font-size:11px;border:1px solid currentColor;border-radius:4px;padding:0 5px;margin-left:6px;white-space:nowrap}
+.tag.req{color:var(--green);font-weight:700}
+.tag.tbc{color:var(--warn)}
+.money{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:13px;text-align:right;white-space:nowrap}
+.money .c{display:block;color:var(--brown);font-size:12px}
+.money input{width:82px;font:inherit;font-family:var(--f-num);text-align:right;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);padding:2px 6px;margin-top:2px}
+.step{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.step button{width:30px;height:30px;border:0;background:var(--bg);color:var(--ink);font-size:16px;cursor:pointer}
+.step button:disabled{opacity:.35;cursor:not-allowed}
+.step input{width:44px;height:30px;border:0;border-left:1px solid var(--line);border-right:1px solid var(--line);text-align:center;font-family:var(--f-num);background:var(--surface);color:var(--ink)}
+.ledger{position:sticky;top:max(16px,env(safe-area-inset-top,0px));display:grid;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h3{margin:0 0 10px;font-size:13px;letter-spacing:.08em;color:var(--muted)}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+.kv span:last-child{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.kv.big span:last-child{font-size:18px;color:var(--green);font-weight:500}
+.kv.sub{color:var(--muted);font-size:13px}
+.meter{height:10px;border-radius:999px;background:var(--bar);overflow:hidden;margin:8px 0 4px}
+.meter i{display:block;height:100%;border-radius:999px;background:var(--green);transition:width .25s}
+.meter.over i{background:var(--bad)}
+.meter.val i{background:var(--ok)}
+.meter.short i{background:var(--warn)}
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid currentColor}
+.chip.ok{color:var(--ok)} .chip.warn{color:var(--warn)} .chip.bad{color:var(--bad)}
+.status{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.note{font-size:12px;color:var(--muted);margin:8px 0 0}
+.set{display:grid;gap:8px}
+.set label{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.set input{width:110px;font:inherit;font-family:var(--f-num);text-align:right;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);padding:3px 6px}
+.out{white-space:pre-wrap;font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;max-height:300px;overflow:auto}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{font:inherit;border:1px solid var(--green);background:var(--green);color:var(--surface);border-radius:8px;padding:7px 14px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--green)}
+.mk{padding:8px 12px 12px;border-top:1px dashed var(--line);background:color-mix(in srgb,var(--ivory) 35%,transparent)}
+.mk-h{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);margin-bottom:6px;font-family:var(--f-num)}
+.mk-over{color:var(--bad);font-weight:700}
+.mk-r{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:4px 0;cursor:pointer}
+.mk-n small{display:block;color:var(--muted);font-size:11px}
+.mk-warn{color:var(--bad);font-size:12px;margin:6px 0 0}
+.cust input{width:100%;font:inherit;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);padding:6px 8px;margin-bottom:10px}
+body.nutri .mgmt-only{display:none!important}
+@media (prefers-reduced-motion:reduce){.meter i{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Restore Wellness · CLINICAL</div>
+      <h1>疗程规划器</h1>
+    </div>
+    <div class="seg" role="group" aria-label="查看模式">
+      <button id="m-nutri" type="button" aria-pressed="true">营养师</button>
+      <button id="m-mgmt" type="button" aria-pressed="false">管理层</button>
+    </div>
+  </header>
+
+  <div class="pkgs" id="pkgs"></div>
+  <p class="hint" id="hint"></p>
+
+  <div class="grid">
+    <main id="catalog"></main>
+
+    <aside class="ledger">
+      <section class="card">
+        <h3>疗程预算</h3>
+        <div class="kv mgmt-only"><span>配套售价（含 SST）</span><span id="l-price"></span></div>
+        <div class="kv sub mgmt-only"><span>净额（÷1.08）</span><span id="l-net"></span></div>
+        <div class="kv sub mgmt-only"><span>− 代理佣金（固定）</span><span id="l-com"></span></div>
+        <div class="kv sub mgmt-only"><span id="l-feelab">− 付款手续费</span><span id="l-fee"></span></div>
+        <div class="kv mgmt-only"><span>可分配</span><span id="l-av"></span></div>
+        <div class="kv sub mgmt-only"><span id="l-locklab">保底（不动）</span><span id="l-lock"></span></div>
+        <div class="kv mgmt-only"><span>疗程预算（成本）</span><span id="l-budget"></span></div>
+        <div class="kv"><span>预算已用</span><span id="l-usedpct"></span></div>
+        <div class="meter" id="m-budget"><i></i></div>
+        <div class="kv sub"><span>其中必含项目</span><span id="l-reqpct"></span></div>
+        <div class="kv sub mgmt-only"><span>已用 / 剩余成本</span><span id="l-used"></span></div>
+      </section>
+
+      <section class="card">
+        <h3>顾客看到的价值</h3>
+        <div class="kv big"><span>方案总价值</span><span id="l-value"></span></div>
+        <div class="kv sub"><span>价值目标</span><span id="l-target"></span></div>
+        <div class="meter val" id="m-value"><i></i></div>
+        <div class="status" id="status"></div>
+      </section>
+
+      <section class="card mgmt-only">
+        <h3>这一单的利润</h3>
+        <div class="kv"><span>可分配 − 方案成本</span><span id="l-pf"></span></div>
+        <div class="kv sub"><span>占净额</span><span id="l-pfp"></span></div>
+        <p class="note">未扣广告、底薪、租金。</p>
+      </section>
+
+      <section class="card mgmt-only">
+        <h3>规则设定（这个配套）</h3>
+        <div class="set">
+          <label for="s-price">售价 RM（含 SST）<input id="s-price" type="number" min="0" step="1"></label>
+          <label for="s-com">代理佣金 RM（固定）<input id="s-com" type="number" min="0" step="100"></label>
+          <label for="s-lock">保底 %<input id="s-lock" type="number" min="0" max="100" step="5"></label>
+          <label for="s-mult">价值目标（售价 ×）<input id="s-mult" type="number" min="0" step="0.05"></label>
+          <label for="s-cap">每次验血建议上限 RM<input id="s-cap" type="number" min="0" step="50"></label>
+          <label for="s-fee">付款手续费 %（全部配套）<input id="s-fee" type="number" min="0" max="20" step="0.5"></label>
+        </div>
+        <p class="note">标「待确认」的价格和成本是估算，可以直接在左边改。改动只存在这个浏览器里。</p>
+        <div class="btns"><button class="btn ghost" id="reset" type="button">恢复这个配套的预设方案</button></div>
+      </section>
+
+      <section class="card">
+        <h3>给顾客的方案</h3>
+        <div class="cust"><input id="cname" placeholder="顾客名字（选填）" aria-label="顾客名字"></div>
+        <div class="out" id="out"></div>
+        <div class="btns"><button class="btn" id="copy" type="button">复制方案</button></div>
+        <p class="note" id="copied" hidden>已复制，可以直接贴到 WhatsApp。</p>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script>
+// ---- Assumptions (cost side) ----
+const NUTRI_PER_MIN = 250/(4.5*60);           // 营养师日薪 RM250 ÷ 一天约 4.5 个 60 分钟
+const SB_COST = 40 + 650/30 + 4.33*10*NUTRI_PER_MIN; // 追踪平台每人月费 RM40 + 固定月费 RM650 按 30 人分摊 + 营养师每周 10 分钟看数据
+// ---- 验血 marker 组合（营养师自己勾选；成本以较高地区的成本为准，待确认）----
+const MARKERS=[
+ {id:'base',name:'标准健康检查',desc:'血液、肾、尿酸、肝、血脂、血糖、HbA1c、尿液',price:108,cost:43.2,fixed:true},
+ {id:'cardio',name:'心血管风险',desc:'ApoA1、ApoB、CRP、Homocysteine',price:250,cost:100},
+ {id:'meta',name:'新陈代谢',desc:'TSH、FT3、FT4、Cortisol',price:220,cost:88},
+ {id:'liver',name:'脂肪肝风险',desc:'Ferritin、Fasting Insulin',price:280,cost:112},
+ {id:'nutri',name:'营养缺乏',desc:'Ferritin、Iron & TIBC、B12 & Folate、Vitamin D',price:360,cost:144},
+ {id:'fhorm',name:'女性荷尔蒙',desc:'',price:250,cost:100},
+ {id:'mhorm',name:'男性荷尔蒙',desc:'',price:250,cost:100},
+ {id:'fcancer',name:'女性癌症指标',desc:'',price:118,cost:47.2},
+ {id:'mcancer',name:'男性癌症指标',desc:'',price:98,cost:39.2},
+];
+const BLOOD_CAP=1250; // 每次验血建议上限（售价）
+const SST = 0.08;
+
+// ---- Catalogue: price = 单买价 (shown to customer as value), cost = 内部成本 ----
+const ITEMS=[
+ {id:'blood',cat:'检测',name:'深度验血（营养师勾选 marker）',unit:'次',price:0,cost:0,dyn:true,note:'前后用同一组 marker'},
+ {id:'doc',cat:'专业团队',name:'医生评估 Consult',unit:'次',price:300,cost:150,tbc:true},
+ {id:'nc',cat:'专业团队',name:'营养师深度咨询（60 分钟）',unit:'次',price:350,cost:60*NUTRI_PER_MIN},
+ {id:'fu',cat:'专业团队',name:'营养师 Follow Up（45 分钟）',unit:'次',price:200,cost:45*NUTRI_PER_MIN},
+ {id:'plan',cat:'专业团队',name:'客制化饮食计划 / 餐单',unit:'份',price:300,cost:60*NUTRI_PER_MIN},
+ {id:'course',cat:'营养教育',name:'预录营养课程',unit:'套',price:399,cost:0},
+ {id:'wa',cat:'营养教育',name:'营养师 WhatsApp 群支持',unit:'月',price:100,cost:10},
+ {id:'sb',cat:'智能追踪',name:'智能健康追踪 + 营养师每周看数据',unit:'月',price:150,cost:SB_COST},
+ {id:'ring',cat:'智能追踪',name:'智能健康戒指',unit:'个',price:1980,cost:1400,tbc:true},
+ {id:'sup',cat:'营养调理',name:'客制化营养补充',unit:'月',price:600,cost:240,tbc:true,note:'按 60% 毛利估'},
+ {id:'sauna',cat:'中心疗程',name:'FIR Sauna',unit:'次',price:80,cost:2},
+ {id:'eecpp',cat:'中心疗程',name:'EECP（疗程价）',unit:'次',price:250,cost:100,note:'配套内一律用疗程价'},
+ {id:'physio',cat:'中心疗程',name:'物理治疗',unit:'次',price:350,cost:200,tbc:true},
+ {id:'wellness',cat:'IV Drip',name:'Wellness Drip（Vit C）',unit:'次',price:350,cost:280},
+ {id:'myers',cat:'IV Drip',name:"Myers' Drip",unit:'次',price:688,cost:550.4},
+ {id:'glow',cat:'IV Drip',name:'Glow Drip（Glutathione）',unit:'次',price:588,cost:470.4},
+ {id:'nad100',cat:'IV Drip',name:'NAD+ 100mg',unit:'次',price:888,cost:710.4},
+ {id:'ex3',cat:'细胞疗法',name:'Exosome（3 次疗程）',unit:'套',price:7288,cost:5830.4},
+];
+
+// ---- Packages: req = 必含最少数量（营养师不能减），plan = 预设数量 ----
+const PKGS={
+ metab:{name:'CLINICAL 代谢',dur:'6 个月',price:11999,com:1000,lock:55,mult:1.2,
+   markers:['base','cardio','meta','liver','nutri'],
+   req:{blood:2,doc:2,nc:1,plan:1,fu:8,sb:6,sup:1,course:1,wa:6},
+   plan:{blood:2,doc:2,nc:1,plan:1,fu:8,sb:6,sup:5,course:1,wa:6,sauna:38,eecpp:5}},
+ cardio:{name:'CLINICAL 心血管',dur:'6 个月',price:17999,com:1500,lock:55,mult:1.05,
+   markers:['base','cardio','meta','liver','nutri'],
+   req:{eecpp:35,blood:2,doc:2,nc:1,plan:1,fu:8,sb:6,sup:1,course:1,wa:6},
+   plan:{eecpp:35,blood:2,doc:2,nc:1,plan:1,fu:8,sb:6,sup:1,course:1,wa:6,sauna:30}},
+ cell:{name:'CLINICAL 细胞调理',dur:'12 个月',price:59999,com:2000,lock:55,mult:0.85,
+   markers:['base','cardio','meta','liver','nutri'],
+   req:{ex3:1,myers:3,eecpp:35,blood:4,doc:4,nc:2,plan:2,fu:12,sb:12,ring:1,sup:6,course:1,wa:12},
+   plan:{ex3:1,myers:3,eecpp:35,blood:4,doc:8,nc:2,plan:2,fu:20,sb:12,ring:1,sup:11,course:1,wa:12,sauna:88,physio:6}},
+};
+const DEF_FEE=5;
+const $=s=>document.querySelector(s);
+const rm=n=>(n<0?'−':'')+'RM'+Math.round(Math.abs(n)).toLocaleString('en-MY');
+const KEY='rw-clinical-planner-v3';
+let S;
+function fresh(){return{mode:'nutri',pkg:'metab',fee:DEF_FEE,cap:BLOOD_CAP,pk:JSON.parse(JSON.stringify(PKGS)),items:JSON.parse(JSON.stringify(ITEMS)),markers:JSON.parse(JSON.stringify(MARKERS)),cname:''}}
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.pk||!S.items||!S.markers)S=fresh();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const P=()=>S.pk[S.pkg];
+const minOf=id=>(P().req[id]||0);
+// 验血每次的售价和成本 = 勾选的 marker 加总
+function bloodUnit(p){p=p||P();let price=0,cost=0;for(const m of S.markers){if(m.fixed||p.markers.includes(m.id)){price+=m.price;cost+=m.cost}}return{price,cost}}
+function unitOf(it){if(it.dyn){const b=bloodUnit();return{price:b.price,cost:b.cost}}return{price:it.price,cost:it.cost}}
+
+// ---- Core rule ----
+// 净额 = 售价 ÷ 1.08；可分配 = 净额 − 固定佣金 − 售价 × 手续费%；保底 = 可分配 × 保底%；疗程预算 = 可分配 − 保底
+function calc(){
+ const p=P(),net=p.price/(1+SST),fee=p.price*S.fee/100,av=net-p.com-fee;
+ const lock=av*p.lock/100,budget=av-lock;
+ let used=0,value=0,reqCost=0;
+ for(const it of S.items){const q=p.plan[it.id]||0,u=unitOf(it);used+=q*u.cost;value+=q*u.price;reqCost+=(p.req[it.id]||0)*u.cost}
+ return{net,fee,av,lock,budget,used,value,reqCost,target:p.price*p.mult,profit:av-used};
+}
+
+function renderPkgs(){
+ $('#pkgs').innerHTML=Object.entries(S.pk).map(([k,p])=>`<button type="button" class="pkg" data-k="${k}" aria-pressed="${k===S.pkg}"><b>${p.name}</b><span>${p.dur}</span><span class="p">${rm(p.price)}</span></button>`).join('');
+ document.querySelectorAll('.pkg').forEach(b=>b.onclick=()=>{S.pkg=b.dataset.k;save();renderAll()});
+}
+
+function markerPanel(){
+ const p=P(),mg=S.mode==='mgmt',b=bloodUnit(),over=b.price>S.cap;
+ return `<div class="mk"><div class="mk-h"><span>每次验血勾选的 marker</span><span class="${over?'mk-over':''}">${rm(b.price)} / 建议上限 ${rm(S.cap)}</span></div>${
+  S.markers.map(m=>`<label class="mk-r"><input type="checkbox" data-m="${m.id}" ${m.fixed||p.markers.includes(m.id)?'checked':''} ${m.fixed?'disabled':''}><span class="mk-n">${m.name}${m.fixed?'（必验）':''}<small>${m.desc}</small></span><span class="money">${mg?`<input type="number" min="0" data-mf="price" data-id="${m.id}" value="${m.price}" aria-label="${m.name} 售价"><span class="c"><input type="number" min="0" data-mf="cost" data-id="${m.id}" value="${m.cost}" aria-label="${m.name} 成本"></span>`:rm(m.price)}</span></label>`).join('')}${over?'<p class="mk-warn">超过建议上限，请减少 marker 或经管理层同意。</p>':''}${mg?'<p class="note" style="margin:6px 0 0">marker 成本先按售价 40% 估算，请换成较高地区的实际成本。</p>':''}</div>`;
+}
+function setQty(id,v){const p=P();p.plan[id]=Math.max(minOf(id),v|0);save();renderCatalog();renderLedger()}
+
+function renderCatalog(){
+ const p=P(),mg=S.mode==='mgmt',cats=[...new Set(S.items.map(i=>i.cat))];
+ $('#catalog').innerHTML=cats.map(c=>`<section class="cat"><h2>${c}</h2><div class="rows">${
+  S.items.filter(i=>i.cat===c).map(i=>{const q=p.plan[i.id]||0,mn=minOf(i.id),u=unitOf(i);return `<div class="row${q?' on':''}">
+   <div class="nm"><b>${i.name}</b>${mn?`<span class="tag req">必含 ≥${mn}</span>`:''}${i.tbc&&mg?'<span class="tag tbc">待确认</span>':''}<small>每${i.unit}${i.note?' · '+i.note:''}</small></div>
+   <div class="money">${i.dyn?`${rm(u.price)}${mg?`<span class="c">成本 ${rm(u.cost)}</span>`:''}`:mg?`<label>售价<input type="number" min="0" data-f="price" data-id="${i.id}" value="${i.price}" aria-label="${i.name} 售价"></label><span class="c"><label>成本<input type="number" min="0" data-f="cost" data-id="${i.id}" value="${Math.round(i.cost*100)/100}" aria-label="${i.name} 成本"></label></span>`:rm(i.price)}</div>
+   <div class="step"><button type="button" data-d="-1" data-id="${i.id}" aria-label="减少 ${i.name}" ${q<=mn?'disabled':''}>−</button><input id="q-${i.id}" type="number" min="${mn}" value="${q}" data-id="${i.id}" aria-label="${i.name} 数量"><button type="button" data-d="1" data-id="${i.id}" aria-label="增加 ${i.name}">+</button></div>
+  </div>${i.dyn?markerPanel():''}`}).join('')}</div></section>`).join('');
+ $('#catalog').querySelectorAll('.step button').forEach(b=>b.onclick=()=>setQty(b.dataset.id,(P().plan[b.dataset.id]||0)+ +b.dataset.d));
+ $('#catalog').querySelectorAll('.step input').forEach(inp=>inp.onchange=()=>setQty(inp.dataset.id,parseInt(inp.value)||0));
+ $('#catalog').querySelectorAll('.mk input[type=checkbox]').forEach(cb=>cb.onchange=()=>{const p=P();const id=cb.dataset.m;p.markers=cb.checked?[...new Set([...p.markers,id])]:p.markers.filter(x=>x!==id);save();renderCatalog();renderLedger()});
+ $('#catalog').querySelectorAll('.mk input[data-mf]').forEach(inp=>inp.onchange=()=>{const m=S.markers.find(x=>x.id===inp.dataset.id);m[inp.dataset.mf]=Math.max(0,parseFloat(inp.value)||0);save();renderCatalog();renderLedger()});
+ $('#catalog').querySelectorAll('.money input').forEach(inp=>inp.onchange=()=>{const it=S.items.find(x=>x.id===inp.dataset.id);it[inp.dataset.f]=Math.max(0,parseFloat(inp.value)||0);save();renderLedger()});
+}
+
+function renderLedger(){
+ const p=P(),c=calc();
+ $('#l-price').textContent=rm(p.price);
+ $('#l-net').textContent=rm(c.net);
+ $('#l-com').textContent=rm(-p.com);
+ $('#l-feelab').textContent=`− 付款手续费 ${S.fee}%`;
+ $('#l-fee').textContent=rm(-c.fee);
+ $('#l-av').textContent=rm(c.av);
+ $('#l-locklab').textContent=`保底 ${p.lock}%（不动）`;
+ $('#l-lock').textContent=rm(c.lock);
+ $('#l-budget').textContent=rm(c.budget);
+ const pct=c.budget>0?c.used/c.budget*100:0, rp=c.budget>0?c.reqCost/c.budget*100:0;
+ $('#l-usedpct').textContent=pct.toFixed(0)+'%';
+ $('#l-reqpct').textContent=rp.toFixed(0)+'%';
+ const mb=$('#m-budget');mb.classList.toggle('over',pct>100);mb.firstElementChild.style.width=Math.min(pct,100)+'%';
+ $('#l-used').textContent=rm(c.used)+' / '+rm(c.budget-c.used);
+ $('#l-value').textContent=rm(c.value);
+ $('#l-target').textContent=rm(c.target)+`（售价 × ${(+p.mult).toFixed(2)}）`;
+ const vp=c.target>0?c.value/c.target*100:0;
+ const mv=$('#m-value');mv.classList.toggle('short',vp<100);mv.firstElementChild.style.width=Math.min(vp,100)+'%';
+ const chips=[];
+ chips.push(pct>100?`<span class="chip bad">超出预算 ${(pct-100).toFixed(0)}%</span>`:'<span class="chip ok">预算之内</span>');
+ chips.push(vp<100?`<span class="chip warn">价值还差 ${rm(c.target-c.value)}</span>`:'<span class="chip ok">价值达标</span>');
+ $('#status').innerHTML=chips.join('');
+ $('#l-pf').textContent=rm(c.profit);
+ $('#l-pfp').textContent=(c.net?c.profit/c.net*100:0).toFixed(0)+'%';
+ $('#s-price').value=p.price;$('#s-com').value=p.com;$('#s-lock').value=p.lock;$('#s-mult').value=(+p.mult).toFixed(2);$('#s-fee').value=S.fee;$('#s-cap').value=S.cap;
+ const line=i=>`• ${i.dyn?'深度验血（'+S.markers.filter(m=>m.fixed||p.markers.includes(m.id)).map(m=>m.name).join('、')+'）':i.name} × ${p.plan[i.id]}${i.unit}（价值 ${rm(unitOf(i).price*p.plan[i.id])}）`;
+ const inc=S.items.filter(i=>p.plan[i.id]&&p.req[i.id]).map(line);
+ const opt=S.items.filter(i=>p.plan[i.id]&&!p.req[i.id]).map(line);
+ const who=S.cname.trim()?S.cname.trim()+' 的':'';
+ $('#out').textContent=`Restore ${p.name}（${p.dur}）\n${who}个人调理方案\n\n【配套包含】\n${inc.join('\n')}${opt.length?`\n\n【按你的情况加配】\n${opt.join('\n')}`:''}\n\n方案总价值：${rm(c.value)}\n配套价格：${rm(p.price)}`;
+}
+
+function renderMode(){
+ document.body.classList.toggle('nutri',S.mode==='nutri');
+ $('#m-nutri').setAttribute('aria-pressed',S.mode==='nutri');$('#m-mgmt').setAttribute('aria-pressed',S.mode==='mgmt');
+ $('#hint').textContent=S.mode==='nutri'?'「必含」项目不能减少。先按顾客情况勾选验血 marker（建议每次不超过 RM1,250），再用剩下的预算加配疗程：预算不超过 100%、价值达标，就可以把方案给顾客。':'管理层模式会显示成本、佣金、手续费和利润，营养师模式看不到这些。';
+}
+function renderAll(){renderMode();renderPkgs();renderCatalog();renderLedger()}
+
+$('#m-nutri').onclick=()=>{S.mode='nutri';save();renderAll()};
+$('#m-mgmt').onclick=()=>{S.mode='mgmt';save();renderAll()};
+$('#s-price').onchange=e=>{P().price=Math.max(0,+e.target.value||0);save();renderPkgs();renderLedger()};
+$('#s-com').onchange=e=>{P().com=Math.max(0,+e.target.value||0);save();renderLedger()};
+$('#s-lock').onchange=e=>{P().lock=Math.min(100,Math.max(0,+e.target.value||0));save();renderLedger()};
+$('#s-mult').onchange=e=>{P().mult=Math.max(0,+e.target.value||0);save();renderLedger()};
+$('#s-fee').onchange=e=>{S.fee=Math.max(0,+e.target.value||0);save();renderLedger()};
+$('#s-cap').onchange=e=>{S.cap=Math.max(0,+e.target.value||0);save();renderCatalog();renderLedger()};
+$('#cname').value=S.cname||'';
+$('#cname').oninput=e=>{S.cname=e.target.value;save();renderLedger()};
+$('#reset').onclick=()=>{S.pk[S.pkg]=JSON.parse(JSON.stringify(PKGS[S.pkg]));save();renderAll()};
+$('#copy').onclick=()=>{const t=$('#out').textContent;const done=()=>{$('#copied').hidden=false;setTimeout(()=>$('#copied').hidden=true,2500)};
+ const sel=()=>{const r=document.createRange();r.selectNodeContents($('#out'));const s=getSelection();s.removeAllRanges();s.addRange(r)};
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done).catch(sel)}else sel();};
+renderAll();
+</script>

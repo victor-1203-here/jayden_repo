@@ -1,0 +1,56 @@
+{
+  "_notes": "New Innoquest request form (same scan as Verdulife '3. Innoquest Form/Innoquest Form (New).pdf'). Coordinates in PDF points, origin TOP-left, y = text baseline (ported from fill_innoquest_form.py, verified 2026-06; fasting boxes measured 2026-11-02). Doctor code VRDU21 and Bill to VRLF2 are pre-printed.",
+  "blank_pdf": "assets/innoquest_form_blank.pdf",
+  "page_height": 792,
+  "fields": {
+    "name": [
+      50,
+      97
+    ],
+    "ic": [
+      50,
+      122
+    ],
+    "dob_dd": [
+      52,
+      153
+    ],
+    "dob_mm": [
+      100,
+      153
+    ],
+    "dob_yyyy": [
+      148,
+      153
+    ],
+    "age": [
+      218,
+      153
+    ],
+    "sex": [
+      292,
+      153
+    ]
+  },
+  "checkboxes": {
+    "fasting": [
+      163.4,
+      294.5
+    ],
+    "non_fasting": [
+      250.9,
+      294.5
+    ]
+  },
+  "checkbox_mark_half": 3.5,
+  "codes": {
+    "start": [
+      55,
+      618
+    ],
+    "line_height": 15,
+    "wrap_chars": 58,
+    "font_size": 9
+  },
+  "font_size": 10
+}

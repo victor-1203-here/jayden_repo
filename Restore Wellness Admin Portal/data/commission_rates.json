@@ -1,0 +1,30 @@
+{
+  "_notes": "Agent commission rules (page 10). Package commission = fixed RM in restore_packages.json (agent_commission_rm) + leader override there. Everything else uses the % below on the net amount.",
+  "_status": "TO CONFIRM: the % for non-package sales are copied from the old Restore Sales Desk (rates3.agent / trail / lead). Course and EECP/physio had no rate there.",
+  "sst_categories": [
+    "Package",
+    "Blood Test",
+    "Consultation"
+  ],
+  "agent_pct_by_category": {
+    "Blood Test": 10,
+    "Consultation": 10,
+    "Supplement": 5,
+    "Center Service": 10,
+    "Prepaid Package": 10,
+    "Course": 0
+  },
+  "agent_pct_by_product": {
+    "p-iv-drip-wellness-drip-vit-c": 5,
+    "p-iv-drip-myers-drip": 5,
+    "p-iv-drip-glow-drip-glutathione": 5,
+    "p-iv-drip-nad-100mg": 5,
+    "p-exosome-3-session-course": 5
+  },
+  "repeat_purchase": {
+    "blood_test_full_rate": true,
+    "other_pct": 2,
+    "note": "Customer stays with the original agent. Another person sells to that customer later: blood tests pay the agent's full rate, anything else pays 2% (old 'trail' rule). Packages always pay the fixed RM to the customer's agent."
+  },
+  "leader_override_pct_non_package": 2
+}

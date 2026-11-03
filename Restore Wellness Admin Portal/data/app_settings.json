@@ -1,0 +1,23 @@
+{
+  "_notes": "System-wide settings. Edited on page 12 (Management only).",
+  "amanda_blood_test_tool_url": null,
+  "discount_margin_floor": 0.5,
+  "phone_country_prefix": "60",
+  "customer_sources": [
+    "New Customer (Ads)",
+    "Referral",
+    "Existing Customer",
+    "Course Student",
+    "Heart Course Voucher",
+    "Agent",
+    "Other"
+  ],
+  "prepaid_expiry_warning_days": 30,
+  "payment_methods": [
+    "Payment Gateway",
+    "Bank Transfer",
+    "Cash",
+    "Card",
+    "Other"
+  ]
+}

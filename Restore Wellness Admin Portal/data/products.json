@@ -1,0 +1,489 @@
+{
+  "_notes": "Sales catalog (same list as Sales Tracker > Products). Rows with `source` take price/cost from restore_packages.json (package / item / marker) or cost_calc_data.json (fixed_package) so prices are kept in one place. Rows without `source` keep their own price and cost (cost is Management-only).",
+  "_version": 1,
+  "_updated": "2026-11-02",
+  "products": [
+    {
+      "id": "p-smart-30-30-day-starter",
+      "name": "SMART 30 · 30-Day Starter",
+      "category": "Package",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "Code SMART-30. Sessions tracked in the system",
+      "source": {
+        "type": "package",
+        "code": "SMART-30"
+      }
+    },
+    {
+      "id": "p-smart-90-90-day-program",
+      "name": "SMART 90 · 90-Day Program",
+      "category": "Package",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "Code SMART-90. Sessions tracked in the system",
+      "source": {
+        "type": "package",
+        "code": "SMART-90"
+      }
+    },
+    {
+      "id": "p-smart-365-1-year-partner",
+      "name": "SMART 365 · 1-Year Partner",
+      "category": "Package",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "Code SMART-365. Sessions tracked in the system",
+      "source": {
+        "type": "package",
+        "code": "SMART-365"
+      }
+    },
+    {
+      "id": "p-clinical-metabolic-program",
+      "name": "CLINICAL Metabolic Program",
+      "category": "Package",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "Code CLIN-METAB. Sessions tracked in the system",
+      "source": {
+        "type": "package",
+        "code": "CLIN-METAB"
+      }
+    },
+    {
+      "id": "p-clinical-cardiovascular-stroke-recovery-program",
+      "name": "CLINICAL Cardiovascular & Stroke Recovery Program",
+      "category": "Package",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "Code CLIN-CARDIO. Sessions tracked in the system",
+      "source": {
+        "type": "package",
+        "code": "CLIN-CARDIO"
+      }
+    },
+    {
+      "id": "p-clinical-cellular-restoration-program",
+      "name": "CLINICAL Cellular Restoration Program",
+      "category": "Package",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "Code CLIN-CELL. Sessions tracked in the system",
+      "source": {
+        "type": "package",
+        "code": "CLIN-CELL"
+      }
+    },
+    {
+      "id": "p-smart-upgrade-to-clinical-top-up",
+      "name": "SMART upgrade to CLINICAL (top-up)",
+      "category": "Package",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "Within 30 days of buying SMART: enter the balance paid",
+      "price": null,
+      "cost": null
+    },
+    {
+      "id": "p-blood-test-report-class-physical-1-pax",
+      "name": "Blood Test Report Class - Physical (1 pax)",
+      "category": "Course",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "price": 199,
+      "cost": null
+    },
+    {
+      "id": "p-blood-test-report-class-physical-2-pax",
+      "name": "Blood Test Report Class - Physical (2 pax)",
+      "category": "Course",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "price": 358,
+      "cost": null
+    },
+    {
+      "id": "p-blood-test-report-class-online",
+      "name": "Blood Test Report Class - Online",
+      "category": "Course",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "price": 139,
+      "cost": null
+    },
+    {
+      "id": "p-pre-recorded-nutrition-course",
+      "name": "Pre-recorded Nutrition Course",
+      "category": "Course",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "item",
+        "code": "course"
+      }
+    },
+    {
+      "id": "p-standard-health-screening",
+      "name": "Standard Health Screening",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "marker",
+        "code": "base"
+      }
+    },
+    {
+      "id": "p-men-s-health-screening-package",
+      "name": "Men's Health Screening Package",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "fixed_package",
+        "code": "男性健康"
+      }
+    },
+    {
+      "id": "p-women-s-health-screening-package",
+      "name": "Women's Health Screening Package",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "fixed_package",
+        "code": "女性健康"
+      }
+    },
+    {
+      "id": "p-general-blood-test-package",
+      "name": "General Blood Test Package",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "price": 1250,
+      "cost": null
+    },
+    {
+      "id": "p-add-on-cardiovascular-risk",
+      "name": "Add-on - Cardiovascular Risk",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "marker",
+        "code": "cardio"
+      }
+    },
+    {
+      "id": "p-add-on-metabolic",
+      "name": "Add-on - Metabolic",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "marker",
+        "code": "metabolic"
+      }
+    },
+    {
+      "id": "p-add-on-fatty-liver-risk",
+      "name": "Add-on - Fatty Liver Risk",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "marker",
+        "code": "fatty_liver"
+      }
+    },
+    {
+      "id": "p-add-on-nutrient-deficiency",
+      "name": "Add-on - Nutrient Deficiency",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "marker",
+        "code": "nutrient"
+      }
+    },
+    {
+      "id": "p-add-on-female-hormones",
+      "name": "Add-on - Female Hormones",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "marker",
+        "code": "female_hormone"
+      }
+    },
+    {
+      "id": "p-add-on-male-hormones",
+      "name": "Add-on - Male Hormones",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "marker",
+        "code": "male_hormone"
+      }
+    },
+    {
+      "id": "p-add-on-female-cancer-markers",
+      "name": "Add-on - Female Cancer Markers",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "marker",
+        "code": "female_cancer"
+      }
+    },
+    {
+      "id": "p-add-on-male-cancer-markers",
+      "name": "Add-on - Male Cancer Markers",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "marker",
+        "code": "male_cancer"
+      }
+    },
+    {
+      "id": "p-add-on-std-screening",
+      "name": "Add-on - STD Screening",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "price": 480,
+      "cost": null
+    },
+    {
+      "id": "p-customised-blood-test-per-quotation",
+      "name": "Customised Blood Test (per quotation)",
+      "category": "Blood Test",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "Price as per quotation",
+      "price": null,
+      "cost": null
+    },
+    {
+      "id": "p-blood-test-package-prepaid-use-later",
+      "name": "Blood Test Package - Prepaid (use later)",
+      "category": "Prepaid Package",
+      "prepaid": true,
+      "discount_allowed": true,
+      "remarks": "Customer pays now, tests later. Fill in Valid Until",
+      "price": null,
+      "cost": null
+    },
+    {
+      "id": "p-nutritionist-consultation-60-min",
+      "name": "Nutritionist Consultation (60 min)",
+      "category": "Consultation",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "item",
+        "code": "initial_consult"
+      }
+    },
+    {
+      "id": "p-nutritionist-follow-up-45-min",
+      "name": "Nutritionist Follow-up (45 min)",
+      "category": "Consultation",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "item",
+        "code": "follow_up"
+      }
+    },
+    {
+      "id": "p-personalized-meal-plan",
+      "name": "Personalized Meal Plan",
+      "category": "Consultation",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "item",
+        "code": "meal_plan"
+      }
+    },
+    {
+      "id": "p-doctor-review",
+      "name": "Doctor Review",
+      "category": "Consultation",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "Price to be confirmed",
+      "source": {
+        "type": "item",
+        "code": "doctor"
+      }
+    },
+    {
+      "id": "p-personalized-supplements-1-month",
+      "name": "Personalized Supplements (1 month)",
+      "category": "Supplement",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "Price to be confirmed",
+      "source": {
+        "type": "item",
+        "code": "supplement"
+      }
+    },
+    {
+      "id": "p-smart-health-ring",
+      "name": "Smart Health Ring",
+      "category": "Supplement",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "Price to be confirmed",
+      "source": {
+        "type": "item",
+        "code": "ring"
+      }
+    },
+    {
+      "id": "p-fir-sauna-single-session",
+      "name": "FIR Sauna - Single Session",
+      "category": "Center Service",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "source": {
+        "type": "item",
+        "code": "sauna"
+      }
+    },
+    {
+      "id": "p-fir-sauna-10-sessions",
+      "name": "FIR Sauna - 10 Sessions",
+      "category": "Prepaid Package",
+      "prepaid": true,
+      "discount_allowed": true,
+      "remarks": "Record RM50 in Package Usage per session",
+      "price": 500,
+      "cost": null
+    },
+    {
+      "id": "p-eecp-single-session",
+      "name": "EECP - Single Session",
+      "category": "Center Service",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "",
+      "price": 350,
+      "cost": null
+    },
+    {
+      "id": "p-physiotherapy-single-session",
+      "name": "Physiotherapy - Single Session",
+      "category": "Center Service",
+      "prepaid": false,
+      "discount_allowed": true,
+      "remarks": "Price to be confirmed",
+      "source": {
+        "type": "item",
+        "code": "physio"
+      }
+    },
+    {
+      "id": "p-iv-drip-wellness-drip-vit-c",
+      "name": "IV Drip - Wellness Drip (Vit C)",
+      "category": "Center Service",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "No discount",
+      "source": {
+        "type": "item",
+        "code": "iv_wellness"
+      }
+    },
+    {
+      "id": "p-iv-drip-myers-drip",
+      "name": "IV Drip - Myers' Drip",
+      "category": "Center Service",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "No discount",
+      "source": {
+        "type": "item",
+        "code": "iv_myers"
+      }
+    },
+    {
+      "id": "p-iv-drip-glow-drip-glutathione",
+      "name": "IV Drip - Glow Drip (Glutathione)",
+      "category": "Center Service",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "No discount",
+      "source": {
+        "type": "item",
+        "code": "iv_glow"
+      }
+    },
+    {
+      "id": "p-iv-drip-nad-100mg",
+      "name": "IV Drip - NAD+ 100mg",
+      "category": "Center Service",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "No discount",
+      "source": {
+        "type": "item",
+        "code": "iv_nad100"
+      }
+    },
+    {
+      "id": "p-exosome-3-session-course",
+      "name": "Exosome (3-session course)",
+      "category": "Center Service",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "Partner medical service",
+      "source": {
+        "type": "item",
+        "code": "exosome_3"
+      }
+    },
+    {
+      "id": "p-tcm-practitioner-service",
+      "name": "TCM Practitioner Service",
+      "category": "Center Service",
+      "prepaid": false,
+      "discount_allowed": false,
+      "remarks": "No discount",
+      "price": null,
+      "cost": null
+    }
+  ]
+}

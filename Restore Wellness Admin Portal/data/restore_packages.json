@@ -1,0 +1,935 @@
+{
+  "currency": "MYR",
+  "price_includes_sst": true,
+  "sst_rate": 0.08,
+  "payment_fee_rate_default": 0.05,
+  "clinical_budget_formula": "net=price/(1+sst); available=net-agent_commission-leader_override-price*payment_fee_rate; lock=available*lock_pct; treatment_budget=available-lock",
+  "blood_marker_cap_per_test": 1250,
+  "items": [
+    {
+      "code": "initial_consult",
+      "name_zh": "营养师深度咨询（60 分钟）",
+      "name_en": "Nutritionist consultation (60 min)",
+      "unit": "次",
+      "price": 350,
+      "cost": 55.56,
+      "note": "",
+      "group": "Professional team"
+    },
+    {
+      "code": "meal_plan",
+      "name_zh": "客制化饮食计划 / 餐单",
+      "name_en": "Personalized meal plan",
+      "unit": "份",
+      "price": 300,
+      "cost": 55.56,
+      "note": "",
+      "group": "Professional team"
+    },
+    {
+      "code": "follow_up",
+      "name_zh": "营养师 Follow Up（45 分钟）",
+      "name_en": "Nutritionist follow-up (45 min)",
+      "unit": "次",
+      "price": 200,
+      "cost": 41.67,
+      "note": "",
+      "group": "Professional team"
+    },
+    {
+      "code": "plan_adjust",
+      "name_zh": "调整饮食方案",
+      "name_en": "Meal plan update",
+      "unit": "次",
+      "price": 150,
+      "cost": 41.67,
+      "note": "SMART 用",
+      "group": "Professional team"
+    },
+    {
+      "code": "tracking",
+      "name_zh": "智能健康追踪 + 营养师每周看数据",
+      "name_en": "Smart health tracking + weekly nutritionist review",
+      "unit": "月",
+      "price": 150,
+      "cost": 101.76,
+      "note": "不显示供应商品牌",
+      "group": "Smart tracking"
+    },
+    {
+      "code": "ring",
+      "name_zh": "智能健康戒指",
+      "name_en": "Smart health ring",
+      "unit": "个",
+      "price": 1980,
+      "cost": 1400,
+      "note": "售价待确认",
+      "group": "Smart tracking"
+    },
+    {
+      "code": "course",
+      "name_zh": "预录营养课程",
+      "name_en": "Pre-recorded nutrition course",
+      "unit": "套",
+      "price": 399,
+      "cost": 0,
+      "note": "",
+      "group": "Nutrition education"
+    },
+    {
+      "code": "whatsapp",
+      "name_zh": "营养师 WhatsApp 群支持",
+      "name_en": "Nutritionist WhatsApp group",
+      "unit": "月",
+      "price": 100,
+      "cost": 10,
+      "note": "",
+      "group": "Nutrition education"
+    },
+    {
+      "code": "blood_test",
+      "name_zh": "深度验血（按勾选 marker）",
+      "name_en": "In-depth blood test (selected markers)",
+      "unit": "次",
+      "price": null,
+      "cost": null,
+      "note": "售价/成本 = 勾选 marker 加总；建议上限 RM1,250/次",
+      "group": "Testing"
+    },
+    {
+      "code": "doctor",
+      "name_zh": "医生评估 Consult",
+      "name_en": "Doctor review",
+      "unit": "次",
+      "price": 300,
+      "cost": 150,
+      "note": "待确认",
+      "group": "Professional team"
+    },
+    {
+      "code": "supplement",
+      "name_zh": "客制化营养补充",
+      "name_en": "Personalized supplements",
+      "unit": "月",
+      "price": 600,
+      "cost": 240,
+      "note": "按 60% 毛利估，待确认",
+      "group": "Nutrition support"
+    },
+    {
+      "code": "sauna",
+      "name_zh": "FIR Sauna",
+      "name_en": "FIR Sauna",
+      "unit": "次",
+      "price": 80,
+      "cost": 2,
+      "note": "",
+      "group": "Centre treatments"
+    },
+    {
+      "code": "eecp_course",
+      "name_zh": "EECP（疗程价）",
+      "name_en": "EECP (course rate)",
+      "unit": "次",
+      "price": 250,
+      "cost": 100,
+      "note": "配套内用疗程价；单买 RM350",
+      "group": "Centre treatments"
+    },
+    {
+      "code": "physio",
+      "name_zh": "物理治疗",
+      "name_en": "Physiotherapy",
+      "unit": "次",
+      "price": 350,
+      "cost": 200,
+      "note": "待确认",
+      "group": "Centre treatments"
+    },
+    {
+      "code": "iv_wellness",
+      "name_zh": "Wellness Drip（Vit C）",
+      "name_en": "Wellness Drip (Vit C)",
+      "unit": "次",
+      "price": 350,
+      "cost": 280,
+      "note": "",
+      "group": "IV drip"
+    },
+    {
+      "code": "iv_myers",
+      "name_zh": "Myers' Drip",
+      "name_en": "Myers' Drip",
+      "unit": "次",
+      "price": 688,
+      "cost": 550.4,
+      "note": "",
+      "group": "IV drip"
+    },
+    {
+      "code": "iv_glow",
+      "name_zh": "Glow Drip（Glutathione）",
+      "name_en": "Glow Drip (Glutathione)",
+      "unit": "次",
+      "price": 588,
+      "cost": 470.4,
+      "note": "",
+      "group": "IV drip"
+    },
+    {
+      "code": "iv_nad100",
+      "name_zh": "NAD+ 100mg",
+      "name_en": "NAD+ 100mg",
+      "unit": "次",
+      "price": 888,
+      "cost": 710.4,
+      "note": "",
+      "group": "IV drip"
+    },
+    {
+      "code": "exosome_3",
+      "name_zh": "Exosome（3 次疗程）",
+      "name_en": "Exosome (3-session course)",
+      "unit": "套",
+      "price": 7288,
+      "cost": 5830.4,
+      "note": "",
+      "group": "Cell therapy"
+    }
+  ],
+  "blood_markers": [
+    {
+      "code": "base",
+      "name_zh": "标准健康检查",
+      "name_en": "Standard Health Screening",
+      "includes": "血液、肾、尿酸、肝、血脂、血糖、HbA1c、尿液",
+      "price": 108,
+      "cost": null,
+      "required": true,
+      "lab_tests": [
+        "基础检查包 (含FBC/Liver/Lipid/Renal/Glucose/HbA1c/Urine FEME)"
+      ]
+    },
+    {
+      "code": "cardio",
+      "name_zh": "心血管风险",
+      "name_en": "Cardiovascular Risk",
+      "includes": "ApoA1、ApoB、CRP、Homocysteine",
+      "price": 250,
+      "cost": null,
+      "required": false,
+      "lab_tests": [
+        "Apolipo A1",
+        "Apolipo B",
+        "HsCRP, Inflammation Marker",
+        "Homocysteine"
+      ]
+    },
+    {
+      "code": "metabolic",
+      "name_zh": "新陈代谢",
+      "name_en": "Metabolic",
+      "includes": "TSH、FT3、FT4、Cortisol",
+      "price": 220,
+      "cost": null,
+      "required": false,
+      "lab_tests": [
+        "TSH",
+        "FT3",
+        "FT4",
+        "Cortisol"
+      ]
+    },
+    {
+      "code": "fatty_liver",
+      "name_zh": "脂肪肝风险",
+      "name_en": "Fatty Liver Risk",
+      "includes": "Ferritin、Fasting Insulin",
+      "price": 280,
+      "cost": null,
+      "required": false,
+      "lab_tests": [
+        "Ferritin",
+        "Fasting Insulin"
+      ]
+    },
+    {
+      "code": "nutrient",
+      "name_zh": "营养缺乏",
+      "name_en": "Nutrient Deficiency",
+      "includes": "Ferritin、Iron & TIBC、B12 & Folate、Vitamin D",
+      "price": 360,
+      "cost": null,
+      "required": false,
+      "lab_tests": [
+        "Iron Profile (含 Serum Iron/TIBC/Ferritin)",
+        "Vitamin B12",
+        "Folate",
+        "Vitamin D25"
+      ]
+    },
+    {
+      "code": "female_hormone",
+      "name_zh": "女性荷尔蒙",
+      "name_en": "Female Hormones",
+      "includes": "E2、Progesterone、LH、FSH、Prolactin",
+      "price": 250,
+      "cost": null,
+      "required": false,
+      "lab_tests": [
+        "E2, Estrogen",
+        "Progesterone",
+        "LH",
+        "FSH",
+        "Prolactin"
+      ]
+    },
+    {
+      "code": "male_hormone",
+      "name_zh": "男性荷尔蒙",
+      "name_en": "Male Hormones",
+      "includes": "Total Testosterone、SHBG",
+      "price": 250,
+      "cost": null,
+      "required": false,
+      "lab_tests": [
+        "Total Testosterone",
+        "SHBG"
+      ]
+    },
+    {
+      "code": "female_cancer",
+      "name_zh": "女性癌症指标",
+      "name_en": "Female Cancer Markers",
+      "includes": "CEA、AFP、CA199、CA125、CA153",
+      "price": 118,
+      "cost": null,
+      "required": false,
+      "lab_tests": [
+        "CEA, Colon Cancer Marker",
+        "AFP, Liver Cancer Marker",
+        "CA199, Pancreatic Cancer Marker",
+        "CA125, Ovary Cancer Marker",
+        "CA153, Breast Cancer Marker"
+      ]
+    },
+    {
+      "code": "male_cancer",
+      "name_zh": "男性癌症指标",
+      "name_en": "Male Cancer Markers",
+      "includes": "CEA、AFP、CA199、PSA",
+      "price": 98,
+      "cost": null,
+      "required": false,
+      "lab_tests": [
+        "CEA, Colon Cancer Marker",
+        "AFP, Liver Cancer Marker",
+        "CA199, Pancreatic Cancer Marker",
+        "PSA, Prostate Cancer Marker"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "code": "SMART-30",
+      "line": "SMART",
+      "name_zh": "SMART 30 · 30 天体验计划",
+      "name_en": "SMART 30 · 30-Day Starter",
+      "duration_days": 30,
+      "price_incl_sst": 899,
+      "agent_commission_rm": 80,
+      "included_items": [
+        {
+          "item": "initial_consult",
+          "qty": 1
+        },
+        {
+          "item": "meal_plan",
+          "qty": 1
+        },
+        {
+          "item": "follow_up",
+          "qty": 2
+        },
+        {
+          "item": "tracking",
+          "qty": 1
+        },
+        {
+          "item": "course",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "code": "SMART-90",
+      "line": "SMART",
+      "name_zh": "SMART 90 · 90 天深化改善",
+      "name_en": "SMART 90 · 90-Day Program",
+      "duration_days": 90,
+      "price_incl_sst": 2399,
+      "agent_commission_rm": 200,
+      "included_items": [
+        {
+          "item": "initial_consult",
+          "qty": 1
+        },
+        {
+          "item": "meal_plan",
+          "qty": 1
+        },
+        {
+          "item": "follow_up",
+          "qty": 4
+        },
+        {
+          "item": "plan_adjust",
+          "qty": 2
+        },
+        {
+          "item": "tracking",
+          "qty": 3
+        },
+        {
+          "item": "course",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "code": "SMART-365",
+      "line": "SMART",
+      "name_zh": "SMART 365 · 1 年长期健康伙伴",
+      "name_en": "SMART 365 · 1-Year Partner",
+      "duration_days": 365,
+      "price_incl_sst": 8999,
+      "agent_commission_rm": 600,
+      "included_items": [
+        {
+          "item": "initial_consult",
+          "qty": 1
+        },
+        {
+          "item": "meal_plan",
+          "qty": 1
+        },
+        {
+          "item": "follow_up",
+          "qty": 12
+        },
+        {
+          "item": "plan_adjust",
+          "qty": 4
+        },
+        {
+          "item": "tracking",
+          "qty": 12
+        },
+        {
+          "item": "ring",
+          "qty": 1
+        },
+        {
+          "item": "course",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "code": "CLIN-METAB",
+      "line": "CLINICAL",
+      "name_zh": "CLINICAL 代谢",
+      "name_en": "CLINICAL Metabolic Program",
+      "duration_days": 182,
+      "price_incl_sst": 11999,
+      "agent_commission_rm": 1000,
+      "included_items": [
+        {
+          "item": "blood_test",
+          "min_qty": 2,
+          "locked": false
+        },
+        {
+          "item": "doctor",
+          "min_qty": 2,
+          "locked": false
+        },
+        {
+          "item": "initial_consult",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "meal_plan",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "follow_up",
+          "min_qty": 8,
+          "locked": false
+        },
+        {
+          "item": "tracking",
+          "min_qty": 6,
+          "locked": false
+        },
+        {
+          "item": "supplement",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "course",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "whatsapp",
+          "min_qty": 6,
+          "locked": false
+        }
+      ],
+      "default_plan": [
+        {
+          "item": "blood_test",
+          "qty": 2
+        },
+        {
+          "item": "doctor",
+          "qty": 2
+        },
+        {
+          "item": "initial_consult",
+          "qty": 1
+        },
+        {
+          "item": "meal_plan",
+          "qty": 1
+        },
+        {
+          "item": "follow_up",
+          "qty": 8
+        },
+        {
+          "item": "tracking",
+          "qty": 6
+        },
+        {
+          "item": "supplement",
+          "qty": 5
+        },
+        {
+          "item": "course",
+          "qty": 1
+        },
+        {
+          "item": "whatsapp",
+          "qty": 6
+        },
+        {
+          "item": "sauna",
+          "qty": 47
+        },
+        {
+          "item": "eecp_course",
+          "qty": 2
+        }
+      ],
+      "lock_pct": 0.55,
+      "value_multiple": 1.2,
+      "default_blood_markers": [
+        "base",
+        "cardio",
+        "metabolic",
+        "fatty_liver",
+        "nutrient"
+      ],
+      "optional_pool": [
+        "sauna",
+        "eecp_course",
+        "iv_wellness",
+        "iv_myers",
+        "iv_glow",
+        "iv_nad100",
+        "physio",
+        "supplement",
+        "doctor",
+        "follow_up"
+      ]
+    },
+    {
+      "code": "CLIN-CARDIO",
+      "line": "CLINICAL",
+      "name_zh": "CLINICAL 心血管",
+      "name_en": "CLINICAL Cardiovascular & Stroke Recovery Program",
+      "duration_days": 182,
+      "price_incl_sst": 17999,
+      "agent_commission_rm": 1500,
+      "included_items": [
+        {
+          "item": "eecp_course",
+          "min_qty": 35,
+          "locked": false
+        },
+        {
+          "item": "blood_test",
+          "min_qty": 2,
+          "locked": false
+        },
+        {
+          "item": "doctor",
+          "min_qty": 2,
+          "locked": false
+        },
+        {
+          "item": "initial_consult",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "meal_plan",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "follow_up",
+          "min_qty": 8,
+          "locked": false
+        },
+        {
+          "item": "tracking",
+          "min_qty": 6,
+          "locked": false
+        },
+        {
+          "item": "supplement",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "course",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "whatsapp",
+          "min_qty": 6,
+          "locked": false
+        }
+      ],
+      "default_plan": [
+        {
+          "item": "eecp_course",
+          "qty": 32
+        },
+        {
+          "item": "blood_test",
+          "qty": 2
+        },
+        {
+          "item": "doctor",
+          "qty": 2
+        },
+        {
+          "item": "initial_consult",
+          "qty": 1
+        },
+        {
+          "item": "meal_plan",
+          "qty": 1
+        },
+        {
+          "item": "follow_up",
+          "qty": 8
+        },
+        {
+          "item": "tracking",
+          "qty": 6
+        },
+        {
+          "item": "supplement",
+          "qty": 1
+        },
+        {
+          "item": "course",
+          "qty": 1
+        },
+        {
+          "item": "whatsapp",
+          "qty": 6
+        },
+        {
+          "item": "sauna",
+          "qty": 40
+        }
+      ],
+      "lock_pct": 0.55,
+      "value_multiple": 1.05,
+      "default_blood_markers": [
+        "base",
+        "cardio",
+        "metabolic",
+        "fatty_liver",
+        "nutrient"
+      ],
+      "optional_pool": [
+        "sauna",
+        "physio",
+        "iv_wellness",
+        "iv_myers",
+        "iv_glow",
+        "iv_nad100",
+        "supplement",
+        "doctor",
+        "follow_up"
+      ]
+    },
+    {
+      "code": "CLIN-CELL",
+      "line": "CLINICAL",
+      "name_zh": "CLINICAL 细胞调理",
+      "name_en": "CLINICAL Cellular Restoration Program",
+      "duration_days": 365,
+      "price_incl_sst": 59999,
+      "agent_commission_rm": 2000,
+      "included_items": [
+        {
+          "item": "exosome_3",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "iv_myers",
+          "min_qty": 3,
+          "locked": false
+        },
+        {
+          "item": "eecp_course",
+          "min_qty": 35,
+          "locked": false
+        },
+        {
+          "item": "blood_test",
+          "min_qty": 4,
+          "locked": false
+        },
+        {
+          "item": "doctor",
+          "min_qty": 4,
+          "locked": false
+        },
+        {
+          "item": "initial_consult",
+          "min_qty": 2,
+          "locked": false
+        },
+        {
+          "item": "meal_plan",
+          "min_qty": 2,
+          "locked": false
+        },
+        {
+          "item": "follow_up",
+          "min_qty": 12,
+          "locked": false
+        },
+        {
+          "item": "tracking",
+          "min_qty": 12,
+          "locked": false
+        },
+        {
+          "item": "ring",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "supplement",
+          "min_qty": 6,
+          "locked": false
+        },
+        {
+          "item": "course",
+          "min_qty": 1,
+          "locked": false
+        },
+        {
+          "item": "whatsapp",
+          "min_qty": 12,
+          "locked": false
+        }
+      ],
+      "default_plan": [
+        {
+          "item": "exosome_3",
+          "qty": 1
+        },
+        {
+          "item": "iv_myers",
+          "qty": 3
+        },
+        {
+          "item": "eecp_course",
+          "qty": 35
+        },
+        {
+          "item": "blood_test",
+          "qty": 4
+        },
+        {
+          "item": "doctor",
+          "qty": 8
+        },
+        {
+          "item": "initial_consult",
+          "qty": 2
+        },
+        {
+          "item": "meal_plan",
+          "qty": 2
+        },
+        {
+          "item": "follow_up",
+          "qty": 20
+        },
+        {
+          "item": "tracking",
+          "qty": 12
+        },
+        {
+          "item": "ring",
+          "qty": 1
+        },
+        {
+          "item": "supplement",
+          "qty": 11
+        },
+        {
+          "item": "course",
+          "qty": 1
+        },
+        {
+          "item": "whatsapp",
+          "qty": 12
+        },
+        {
+          "item": "sauna",
+          "qty": 88
+        },
+        {
+          "item": "physio",
+          "qty": 4
+        }
+      ],
+      "lock_pct": 0.55,
+      "value_multiple": 0.85,
+      "default_blood_markers": [
+        "base",
+        "cardio",
+        "metabolic",
+        "fatty_liver",
+        "nutrient"
+      ],
+      "optional_pool": [
+        "sauna",
+        "physio",
+        "iv_wellness",
+        "iv_myers",
+        "iv_glow",
+        "iv_nad100",
+        "supplement",
+        "doctor",
+        "follow_up"
+      ]
+    }
+  ],
+  "commission_rules": {
+    "agent_commission": "fixed RM per package (packages[].agent_commission_rm)",
+    "leader_override": {
+      "rate": 0.02,
+      "base": "net (price/1.08)",
+      "applies_when": "the selling agent was recruited by a leader",
+      "deducted": "before lock/budget split, same as agent commission"
+    },
+    "payout_trigger": "customer has paid the package in full",
+    "upgrade": {
+      "window_days": 30,
+      "from_lines": [
+        "SMART"
+      ],
+      "to_lines": [
+        "CLINICAL"
+      ],
+      "customer_credit": "100% of amount paid for the SMART package",
+      "agent_commission": "CLINICAL commission minus SMART commission already paid",
+      "leader_override": "computed on the CLINICAL net, minus override already paid on the SMART sale",
+      "after_window": "no credit"
+    },
+    "customer_binding": "customer stays bound to the original referring agent"
+  },
+  "blood_marker_cost_rule": "cost = sum of lab_tests, each at the HIGHER of eurofins_cost / innoquest_cost (cost_calc_data.json). Not stored here.",
+  "cost_assumptions": {
+    "nutritionist_daily_wage": 250,
+    "consults_per_day": 4.5,
+    "tracking_platform_per_user": 40,
+    "tracking_platform_fixed_monthly": 650,
+    "tracking_active_users": 30,
+    "tracking_review_minutes_per_week": 10,
+    "weeks_per_month": 4.33,
+    "derived_costs": {
+      "initial_consult": {
+        "minutes": 60
+      },
+      "meal_plan": {
+        "minutes": 60
+      },
+      "follow_up": {
+        "minutes": 45
+      },
+      "plan_adjust": {
+        "minutes": 45
+      },
+      "tracking": {
+        "formula": "tracking"
+      }
+    }
+  },
+  "_version": 3,
+  "_updated": "2026-11-02",
+  "clinical_items_rule": "CLINICAL included_items = poster / suggested quantities only. Not locked (decision 2026-11-02): nutritionist may add or reduce any item; the planner only enforces the treatment budget (over budget = needs Management approval) and warns when plan value < value target.",
+  "item_groups": [
+    {
+      "name_en": "Testing",
+      "name_zh": "检测"
+    },
+    {
+      "name_en": "Professional team",
+      "name_zh": "专业团队"
+    },
+    {
+      "name_en": "Nutrition education",
+      "name_zh": "营养教育"
+    },
+    {
+      "name_en": "Smart tracking",
+      "name_zh": "智能追踪"
+    },
+    {
+      "name_en": "Nutrition support",
+      "name_zh": "营养调理"
+    },
+    {
+      "name_en": "Centre treatments",
+      "name_zh": "中心疗程"
+    },
+    {
+      "name_en": "IV drip",
+      "name_zh": "IV Drip"
+    },
+    {
+      "name_en": "Cell therapy",
+      "name_zh": "细胞疗法"
+    }
+  ]
+}

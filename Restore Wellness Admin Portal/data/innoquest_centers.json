@@ -1,0 +1,329 @@
+{
+  "innoquest_centers": [
+    {
+      "branch": "CORE LABORATORY (HQ)",
+      "state": "Selangor",
+      "address": "2nd Floor, Wisma Tecna, 18A, Jalan 51A/223, 46100 Petaling Jaya, Selangor",
+      "type": "HQ",
+      "hours": "Mon-Fri: 7.30am- 4:30pm Sat: 8.00am- 12.00pm Sun/PH: Closed",
+      "phone": "1300–88–0234",
+      "lab_pic": "Saravanan",
+      "lab_email": "patientcentre@innoquest.com.my"
+    },
+    {
+      "branch": "CHERAS",
+      "state": "Kuala Lumpur",
+      "address": "89, Ground Floor, Jalan 1/91 Taman Shamelin Perkasa, 56100 Cheras, Kuala Lumpur",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 9.00am-5.00pm  Sat: 9.00am-1.00pm  Sun/PH: Closed",
+      "phone": "03 - 9284 4689",
+      "lab_pic": "Thanaletchumy",
+      "lab_email": "chework1@innoquest.com.my"
+    },
+    {
+      "branch": "SERI KEMBANGAN",
+      "state": "Selangor",
+      "address": "No. 10G, Jalan Utama Suria Tropika 1,  Taman Suria Tropika,  43300 Seri Kembangan, Selangor",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 9.00am-5.00pm  Sat: 9.00am-1.00pm  Sun/PH: Closed",
+      "phone": "03 - 8957 4046",
+      "lab_pic": "Kogila",
+      "lab_email": "kajwork1@innoquest.com.my; yenfen.tan@innoquest.com.my; kogilavani.krishnan@innoquest.com.my"
+    },
+    {
+      "branch": "RAWANG",
+      "state": "Selangor",
+      "address": "Quantum Diagnostics 2A-1-6, Jalan Rawang Mutiara 3, Rawang Mutiara Business Centre 2,  48000 Rawang, Selangor",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 9.00am-5.00pm  Sat: 9.00am-1.00pm  Sun/PH: Closed",
+      "phone": "03 – 6094 4585",
+      "lab_pic": "Sangarie",
+      "lab_email": "rawang@innoquest.com.my"
+    },
+    {
+      "branch": "KLANG",
+      "state": "Selangor",
+      "address": "No 19, 2nd Floor, Galeri Empire, Jalan Empayar, Off Persiaran Sultan Ibrahim/KU1,  41150 Klang, Selangor",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 8.00am - 5.00pm  Sat: 8.00am - 12.30pm  Sun/PH: Closed",
+      "phone": "03 - 3342 2828",
+      "lab_pic": "Sugu",
+      "lab_email": "sugu@innoquest.com.my, klgwork1@innoquest.com.my"
+    },
+    {
+      "branch": "SEREMBAN",
+      "state": "Negeri Sembilan",
+      "address": "Prima 3, Pusat Komersial, No. 50, Jalan Rasah, Rasah Prima, 70300 Seremban, Negeri Sembilan",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 8.30am - 5.30pm  Sat: 8.30am - 12.30pm  Sun/PH: Closed",
+      "phone": "06-6303858",
+      "lab_pic": "Kulasundari",
+      "lab_email": "sbnwork1@innoquest.com.my"
+    },
+    {
+      "branch": "Melaka",
+      "state": "Melaka",
+      "address": "Melaka-Regional Lab No. 174A & 176A (Ground Floor) Jalan Bunga Raya, 75100, Melaka",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 9.00am-4.00pm Sat: 9.00am - 12.00pm  Sun/PH: Closed",
+      "phone": "06 – 283 5716",
+      "lab_pic": "Jassintha",
+      "lab_email": "mlklab@innoquest.com.my, kumar@innoquest.com.my\njasintha@innoquest.com.my"
+    },
+    {
+      "branch": "PENANG (JALAN BURMA)",
+      "state": "Penang",
+      "address": "233-E, Ground Floor, Jalan Burma, 10050 Penang",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 8.30am-5.00pm Sat/ Sun/ PH: 9.00am-1.00pm",
+      "phone": "04-227 7526",
+      "lab_pic": "Presela Ravinderan",
+      "lab_email": "presela@innoquest.com.my, penlab@innoquest.com.my"
+    },
+    {
+      "branch": "BUKIT MERTAJAM",
+      "state": "Penang",
+      "address": "1st Floor, No 1-18, Medan Perniagaan Pauh Jaya,  Jalan Baru, 13700 Perai, Pulau Pinang.",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 9.00am-5.00pm Sat: 9.00am-1.00pm  Sun/ PH: Closed",
+      "phone": "04 – 383 0410",
+      "lab_pic": "Puganeswari Selvaraj",
+      "lab_email": "bmtwork1@innoquest.com.my, s.puganeswari@innoquest.com.my"
+    },
+    {
+      "branch": "SUNGAI PETANI",
+      "state": "Kedah",
+      "address": "No. 10, Lorong 17, Taman Patani Jaya, 08000 Sungai Petani, Kedah",
+      "type": "Collection Centre",
+      "hours": "Sun-Fri: 9:00am-5:30pm  Sat/ PH: Closed",
+      "phone": "04 – 441 1370",
+      "lab_pic": "Noraswaheeda Binti Nor Faiz",
+      "lab_email": "sptwork1@innoquest.com.my, mychooi@quantumdxs.com, waheeda@innoquest.com.my, sharmila@innoquest.com.my"
+    },
+    {
+      "branch": "ALOR SETAR",
+      "state": "Kedah",
+      "address": "26-A, Ground Floor, Jalan Putra, 05100 Alor Setar, Kedah",
+      "type": "Collection Centre",
+      "hours": "Sun-Fri: 9:00am-5:30pm  Sat: 9.00am-1.00pm  PH: Closed",
+      "phone": "04 – 731 3290",
+      "lab_pic": "Masitah Din",
+      "lab_email": "alswork1@innoquest.com.my, masitah@innoquest.com.my"
+    },
+    {
+      "branch": "KANGAR",
+      "state": "Perlis",
+      "address": "No 277 Mezzanine Floor,  Jalan Baru Kangar- Alor Setar,  Taman Pengkalan Asam,  01000 Kangar, Perlis",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 9.00am - 5.00pm  Sat: 9.00am - 1.00pm  Sun/PH: Closed",
+      "phone": "04 – 977 7022",
+      "lab_pic": "Masitah Din",
+      "lab_email": "sp@quantumdxs.com.my, masitah@innoquest.com.my"
+    },
+    {
+      "branch": "IPOH",
+      "state": "Perak",
+      "address": "Hospital Fatimah (Gribbles Pathology), Basement Floor, 1, Leboh Chew Peng Loon,  Off Jln Dato Lau Pak Khuan, Ipoh Garden,  31400 Ipoh, Perak",
+      "type": "Hospital Lab",
+      "hours": "Mon-Fri: 8.00am-5.00pm (better after 10am)  Sat/ Sun/PH : 9.00am-1.00pm",
+      "phone": "05 – 545 7602",
+      "lab_pic": "Humah a/p Munisamy",
+      "lab_email": "ipohlab@innoquest.com.my, humah@innoquest.com.my"
+    },
+    {
+      "branch": "TAIPING",
+      "state": "Perak",
+      "address": "5 Ground Floor, Jalan Raja Sulong, Taman Medan Taiping,  34000 Taiping, Perak",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 9.00am-4.00pm  Sat: 9:00am - 12:00pm  Sun/PH: Closed",
+      "phone": "05 – 805 2590",
+      "lab_pic": "Priveena",
+      "lab_email": "tpgwork1@innoquest.com.my"
+    },
+    {
+      "branch": "KUANTAN (PATIENT CENTRE)",
+      "state": "Pahang",
+      "address": "B20, Ground Floor, Sri Pahang Business Center, Jalan Haji Ahmad 3,  25300 Kuantan, Pahang",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 8.30am-4.00pm  Sat: 8.30am-12.00pm  Sun/PH: Closed",
+      "phone": "09 - 513 2197",
+      "lab_pic": "Suhainifitri Ahmad",
+      "lab_email": "ktnwork1@innoquest.com.my, sivagami@innoquest.com.my"
+    },
+    {
+      "branch": "MENTAKAB",
+      "state": "Pahang",
+      "address": "25, 1st. Floor, Jalan Bunga Raya, 28400 Mentakab, Pahang",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 8.45am-5.45pm  Sat: 8.45am-1.45pm (By Appointment)  Sun/PH: Closed",
+      "phone": "014-966 4842",
+      "lab_pic": "Wong Yit wah",
+      "lab_email": "mtbwork1@innoquest.com.my, sivagami@innoquest.com.my"
+    },
+    {
+      "branch": "KOTA BHARU MEDICAL CENTRE- OUTSIDE HOSPITAL",
+      "state": "Kelantan",
+      "address": "No.1, Lot 197A,Tingkat Bawah, Seksyen 24,  Jalan Sultan Yahya Petra,  15200 Kota Bharu, Kelantan",
+      "type": "Stat Lab",
+      "hours": "Sun-Thur: 8.30am-5.00pm  Sat: 9.00am-12.00pm Fri & PH: Closed",
+      "phone": "09 – 744 0678",
+      "lab_pic": "Nurul Adawiyah",
+      "lab_email": "nuruladawiyah@innoquest.com.my, kbrwork1@innoquest.com.my, sivagami@innoquest.com.my"
+    },
+    {
+      "branch": "KUALA TERENGGANU",
+      "state": "Terengganu",
+      "address": "Salam Specialist Hospital Kuala Terengganu,  3rd Floor, Lot 40075, Jalan Engku Sar,  20300 Kuala Terengganu, Terengganu",
+      "type": "Hospital Lab",
+      "hours": "Sat: 9.00am-12.00pm Sun-Thur: 9.00am-4.00pm  Fri & PH: Closed",
+      "phone": "09 – 631 1084",
+      "lab_pic": "Masliana Binti Abdullah",
+      "lab_email": "trgwork1@innoquest.com.my, sivagami@innoquest.com.my"
+    },
+    {
+      "branch": "BATU PAHAT",
+      "state": "Johor",
+      "address": "Ground Floor, No. 21, Jalan Flora Utama 5, Taman Flora Utama,  83000 Batu Pahat, Johor",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 8.30am-4.00pm  Sat: 8.30am-12.00pm  Sun & PH: Closed",
+      "phone": "07 – 431 1900",
+      "lab_pic": "Abu Amir",
+      "lab_email": "bphlab@innoquest.com.my, amir@innoquest.com.my"
+    },
+    {
+      "branch": "KLUANG",
+      "state": "Johor",
+      "address": "No. 15, 1st. Floor, Jalan Tasik 1, Pusat Perniagaan Tasik,  86000 Kluang, Johor",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 9.00am-4.00pm  Sat: 9.00am-12.00pm  Sun/PH: Closed",
+      "phone": "07 – 776 0772",
+      "lab_pic": "Abu Amir",
+      "lab_email": "kluwork1@innoquest.com.my, amir@innoquest.com.my"
+    },
+    {
+      "branch": "JOHOR BAHRU",
+      "state": "Johor",
+      "address": "B-01-12 & B-02-12, Block B, 1 Tebrau, Jalan Setanggi Utama (Off Jalan Tebrau),  80250 Johor Bahru, Johor",
+      "type": "Stat & COVID-19\n Lab",
+      "hours": "Mon-Fri: 9.00am-5.00pm  Sat/ Sun /PH: 9.00am-1.00pm",
+      "phone": "07 – 276 5869",
+      "lab_pic": "Husna",
+      "lab_email": "johlab@innoquest.com.my, husna@innoquest.com.my"
+    },
+    {
+      "branch": "KOTA KINABALU (JALAN MAT SALLEH)",
+      "state": "Sabah",
+      "address": "Business Suite C-2-6 to C-2-8, 2nd Floor, Block C, Tanjung Aru Plaza, Jalan Mat Salleh, Pekan Tanjung Aru, 88100 Kota Kinabalu, Sabah",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 8.00am-5.00pm  Sat: 8.00am-1.00pm  Sun/PH: Closed",
+      "phone": "088-243732",
+      "lab_pic": "Fui Yuen",
+      "lab_email": "fuiyuen@innoquest.com.my, kkblab@innoquest.com.my"
+    },
+    {
+      "branch": "KOTA KINABALU (JALAN KEBAJIKAN) (PATIENT CENTRE)",
+      "state": "Sabah",
+      "address": "Lot 6, Ground Floor, Bangunan Daya,  Jln Kebajikan (Off Jln Penampang),  88300 Kota Kinabalu, Sabah",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 8.00am-5.00pm  Sat: 8.00am-1.00pm  Sun/PH: Closed",
+      "phone": "088 - 230 149",
+      "lab_pic": "Fui Yuen",
+      "lab_email": "fuiyuen@innoquest.com.my, kkblab@innoquest.com.my"
+    },
+    {
+      "branch": "KENINGAU",
+      "state": "Sabah",
+      "address": "1st Floor, Lot 5, Keningau Plaza,  PO Box 2035,  89008 Keningau, Sabah",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 8.00am-5.00pm  Sat: 8.00am-1.00pm  Sun/PH: Closed",
+      "phone": "087 - 334 251",
+      "lab_pic": "Lena Edwin",
+      "lab_email": "kenwork1@innoquest.com.my, lena.edwin@innoquest.com.my"
+    },
+    {
+      "branch": "TAWAU (PATIENT CENTRE)",
+      "state": "Sabah",
+      "address": "1st Floor, Shoplot 3475 Off Jalan Masjid 91000 Tawau, Sabah",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 8.00am-5.00pm  Sat: 8.00am-1.00pm Sun/PH: Closed",
+      "phone": "089 - 766 211",
+      "lab_pic": "John Wong",
+      "lab_email": "tawwork1@innoquest.com.my, johnwong@innoquest.com.my"
+    },
+    {
+      "branch": "SANDAKAN",
+      "state": "Sabah",
+      "address": "Lot 22, Ground Floor, Block B2,  Utama Place, Mile 6, North Road 90000 Sandakan, Sabah",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 8.00am-5.00pm  Sat: 8.00am-1.00pm  Sun/PH: Closed",
+      "phone": "089 - 220 719",
+      "lab_pic": "Chin Sie Vai",
+      "lab_email": "sanwork1@innoquest.com.my, sievai@innoquest.com.my"
+    },
+    {
+      "branch": "LAHAD DATU",
+      "state": "Sabah",
+      "address": "MDLD No. 3823, Lot 85, 1st Floor,  Fajar Centre, Jalan Segama 91100 Lahad Datu, Sabah",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 8.00am-5.00pm  Sat: 8.00am-1.00pm  Sun/PH: Closed",
+      "phone": "089 - 889 331",
+      "lab_pic": "Martini Haron",
+      "lab_email": "lhdwork1@innoquest.com.my, martini@innoquest.com.my,\nsievai@innoquest.com.my"
+    },
+    {
+      "branch": "LABUAN",
+      "state": "Labuan",
+      "address": "1st Floor, Lot 16, Lusu Plaza,  Kampung Lajau, Jalan Pohon Batu  87000 WP Labuan",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 8.00am-5.00pm  Sat: 8.00am-1.00pm  Sun/PH: Closed",
+      "phone": "013-8416730 , 087-462254",
+      "lab_pic": "Florence Ding",
+      "lab_email": "florenceding@innoquest.com.my"
+    },
+    {
+      "branch": "MIRI (PATIENT CENTRE)",
+      "state": "Sarawak",
+      "address": "Lot 1044, Ground Floor, Shang Garden Shophouse, 98000 Miri, Sarawak",
+      "type": "Collection Centre",
+      "hours": "Mon- Fri: 7.15am – 5.00pm  Sat: 8.00am – 1.00pm  Sun/ PH: Closed",
+      "phone": "085- 426 714",
+      "lab_pic": "Soh Yee Lim",
+      "lab_email": "micwork1@innoquest.com.my, liza@innoquest.com.my, \nelainesoh@innoquest.com.my"
+    },
+    {
+      "branch": "KUCHING",
+      "state": "Sarawak",
+      "address": "Grd Floor, Lot 3285, Block 10 KCLD,  Jalan Tun Ahmad Zaidi Adruce, 93150 Kuching, Sarawak",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 8.15am-5.00pm  Sat: 8.15am-12.00pm  Sun/PH: Closed",
+      "phone": "082 – 418 455",
+      "lab_pic": "Rufina",
+      "lab_email": "kuclab@innoquest.com.my, rufina@innoquest.com.my"
+    },
+    {
+      "branch": "BINTULU",
+      "state": "Sarawak",
+      "address": "No 38, 1st Floor Medan Jaya Commercial Centre, 97000 Bintulu, Sarawak",
+      "type": "Collection Centre",
+      "hours": "Mon-Fri: 8.00am-5.00pm  Sat: 8.00am- 12.00pm Sun/ PH: Closed",
+      "phone": "086 – 338 780",
+      "lab_pic": "Elizabeth Toung",
+      "lab_email": "bintulu@innoquest.com.my\nupdated by 28/6/24: bintulu@quantumdxs.com.my"
+    },
+    {
+      "branch": "SIBU",
+      "state": "Sarawak",
+      "address": "No 10-12, Ground Floor,  Jalan Bako,  96000 Sibu, Sarawak",
+      "type": "Stat Lab",
+      "hours": "Mon-Fri: 8am-4.45pm  Sat: 8.00am – 12.00pm Sunday/ PH: Closed",
+      "phone": "084 – 342 027, 084 – 338 681",
+      "lab_pic": "Hannah Hoo Chai Huong",
+      "lab_email": "sibwork1@innoquest.com.my, hannah@innoquest.com.my"
+    }
+  ],
+  "_internal_fields": [
+    "lab_pic",
+    "lab_email"
+  ],
+  "_notes": "lab_pic / lab_email: internal only (Admin + Management). Source: Innoquest Walk In Centers (updated 06.10.23).xlsx"
+}

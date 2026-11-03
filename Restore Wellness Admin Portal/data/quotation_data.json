@@ -1,0 +1,321 @@
+{
+  "base": [
+    {
+      "name": "Standard Package (FBC+Liver+Renal+Lipid+Glucose/HbA1c+Uric Acid+Urine FEME)",
+      "eurofins": 25.0,
+      "innoquest": 28.0
+    },
+    {
+      "name": "TSH",
+      "eurofins": 10.0,
+      "innoquest": 12.0
+    },
+    {
+      "name": "FT3",
+      "eurofins": 10.0,
+      "innoquest": 12.0
+    },
+    {
+      "name": "FT4",
+      "eurofins": 10.0,
+      "innoquest": 12.0
+    },
+    {
+      "name": "Vitamin D",
+      "eurofins": 50.0,
+      "innoquest": 45.0
+    },
+    {
+      "name": "CRP (发炎指标)",
+      "eurofins": 10.0,
+      "innoquest": 10.0
+    },
+    {
+      "name": "Homocysteine",
+      "eurofins": 40.0,
+      "innoquest": 25.0
+    }
+  ],
+  "base_price": 387.5,
+  "extra": {
+    "Vitamin B12": {
+      "eurofins": 40.0,
+      "innoquest": 25.0,
+      "note": "可能与Folate组合",
+      "conditional": false
+    },
+    "Folate": {
+      "eurofins": 65.0,
+      "innoquest": 24.0,
+      "note": "可能与B12组合",
+      "conditional": false
+    },
+    "Cortisol": {
+      "eurofins": 65.0,
+      "innoquest": 45.0,
+      "note": "AM, 7-9am抽血",
+      "conditional": false
+    },
+    "DHEA-s": {
+      "eurofins": 50.0,
+      "innoquest": 66.0,
+      "note": "",
+      "conditional": false
+    },
+    "SHBG": {
+      "eurofins": 120.0,
+      "innoquest": 30.0,
+      "note": "",
+      "conditional": false
+    },
+    "Total Testosterone": {
+      "eurofins": 18.0,
+      "innoquest": 18.0,
+      "note": "常与SHBG+DHEA-S一组",
+      "conditional": false
+    },
+    "EBV IgG": {
+      "eurofins": 75.0,
+      "innoquest": 83.0,
+      "note": "",
+      "conditional": false
+    },
+    "Iron Studies": {
+      "eurofins": 45.0,
+      "innoquest": 60.0,
+      "note": "组合(含Serum Iron/Ferritin/TIBC等)一个价",
+      "conditional": false
+    },
+    "TPO antibodies": {
+      "eurofins": 15.0,
+      "innoquest": 36.0,
+      "note": "常与Thyroglobulin一组",
+      "conditional": false
+    },
+    "Thyroglobulin antibodies": {
+      "eurofins": 15.0,
+      "innoquest": 36.0,
+      "note": "常与TPO一组",
+      "conditional": false
+    },
+    "Estradiol (E2)": {
+      "eurofins": 18.0,
+      "innoquest": 14.0,
+      "note": "cycle-timed 经期时机",
+      "conditional": false
+    },
+    "Progesterone": {
+      "eurofins": 18.0,
+      "innoquest": 33.0,
+      "note": "",
+      "conditional": false
+    },
+    "Prolactin": {
+      "eurofins": 18.0,
+      "innoquest": 14.0,
+      "note": "",
+      "conditional": false
+    },
+    "Insulin (Fasting)": {
+      "eurofins": 35.0,
+      "innoquest": 88.0,
+      "note": "",
+      "conditional": false
+    },
+    "IgG": {
+      "eurofins": 70.0,
+      "innoquest": 50.0,
+      "note": "过敏/食物 组合?",
+      "conditional": false
+    },
+    "IgA": {
+      "eurofins": 70.0,
+      "innoquest": 50.0,
+      "note": "",
+      "conditional": false
+    },
+    "IgE": {
+      "eurofins": 70.0,
+      "innoquest": 50.0,
+      "note": "",
+      "conditional": false
+    },
+    "IgM": {
+      "eurofins": 70.0,
+      "innoquest": 50.0,
+      "note": "",
+      "conditional": false
+    },
+    "H.pylori": {
+      "eurofins": 10.0,
+      "innoquest": 14.0,
+      "note": "",
+      "conditional": false
+    },
+    "Haemoglobin analysis": {
+      "eurofins": 160.0,
+      "innoquest": 130.0,
+      "note": "地贫筛查 Hb electrophoresis",
+      "conditional": false
+    },
+    "ANA": {
+      "eurofins": 60.0,
+      "innoquest": 36.0,
+      "note": "仅Raynaud(手指遇冷变色)才加",
+      "conditional": true
+    },
+    "FSH": {
+      "eurofins": 18.0,
+      "innoquest": 14.0,
+      "note": "常与LH一组",
+      "conditional": false
+    },
+    "LH": {
+      "eurofins": 18.0,
+      "innoquest": 14.0,
+      "note": "常与FSH一组",
+      "conditional": false
+    },
+    "AMH": {
+      "eurofins": 120.0,
+      "innoquest": 190.0,
+      "note": "仅生育问题才加",
+      "conditional": true
+    }
+  },
+  "symptom_extra": {
+    "累、没精神、睡不好": [
+      "Vitamin B12",
+      "Folate",
+      "Cortisol",
+      "DHEA-s",
+      "SHBG",
+      "Total Testosterone",
+      "EBV IgG",
+      "Iron Studies"
+    ],
+    "脑雾、记性变差、注意力不集中": [
+      "Vitamin B12",
+      "Folate",
+      "TPO antibodies",
+      "Thyroglobulin antibodies",
+      "Estradiol (E2)",
+      "Cortisol"
+    ],
+    "情绪起伏、烦躁、提不起劲": [
+      "Estradiol (E2)",
+      "Progesterone",
+      "TPO antibodies",
+      "Thyroglobulin antibodies",
+      "Total Testosterone",
+      "SHBG",
+      "DHEA-s",
+      "Prolactin",
+      "Vitamin B12",
+      "Folate"
+    ],
+    "体重减不动 / 肚腩": [
+      "Insulin (Fasting)",
+      "TPO antibodies",
+      "Thyroglobulin antibodies",
+      "Total Testosterone",
+      "SHBG",
+      "DHEA-s",
+      "Cortisol",
+      "Estradiol (E2)",
+      "Prolactin"
+    ],
+    "掉发、皮肤差、指甲脆": [
+      "TPO antibodies",
+      "Thyroglobulin antibodies",
+      "Zinc",
+      "Total Testosterone",
+      "SHBG",
+      "DHEA-s",
+      "Estradiol (E2)",
+      "Progesterone",
+      "Prolactin"
+    ],
+    "肠胃问题(胀气、便秘、拉肚子)": [
+      "IgG",
+      "IgA",
+      "IgE",
+      "IgM",
+      "H.pylori"
+    ],
+    "走路会喘、容易累": [
+      "Haemoglobin analysis",
+      "Electrolytes",
+      "EBV IgG"
+    ],
+    "手脚麻痹 / 手脚冰冷": [
+      "Vitamin B6",
+      "Vitamin B12",
+      "Folate",
+      "ANA"
+    ],
+    "经常头晕": [
+      "Iron Studies",
+      "Cortisol",
+      "Vitamin B12",
+      "Folate"
+    ],
+    "月经 / 荷尔蒙相关(经期乱、更年期)": [
+      "TPO antibodies",
+      "Thyroglobulin antibodies",
+      "Prolactin",
+      "Estradiol (E2)",
+      "Progesterone",
+      "Total Testosterone",
+      "SHBG",
+      "DHEA-s",
+      "Pregnenolone",
+      "FSH",
+      "LH",
+      "AMH"
+    ]
+  },
+  "why": {
+    "累、没精神、睡不好": "长期疲惫和睡不好，背后常常不只一个原因——可能是甲状腺代谢、铁与B12带氧不足、维生素D偏低、或压力荷尔蒙(皮质醇)长期偏高，甚至性荷尔蒙也会影响精力。把这几个方向一起看，才能找出真正拖住你的那一个。",
+    "脑雾、记性变差、注意力不集中": "脑雾和专注力下降，往往和身体的供能与运输有关——血糖是否稳定、B12和铁够不够供氧、甲状腺(含抗体)有没有拖慢代谢、荷尔蒙变化。看清这几项，才知道大脑缺的是哪一块。",
+    "情绪起伏、烦躁、提不起劲": "情绪波动，身体层面常和荷尔蒙有关——雌激素、黄体素、甲状腺(含抗体)、压力与性荷尔蒙、泌乳素，都会影响情绪稳定度。先看数据，比一味调整心态更有方向。",
+    "体重减不动 / 肚腩": "体重卡住，很多时候不是不够努力，而是代谢与荷尔蒙的状况——胰岛素、甲状腺、性荷尔蒙、压力荷尔蒙都会让身体进入囤积模式。验清楚，才知道从哪里松开。",
+    "掉发、皮肤差、指甲脆": "头发皮肤指甲是营养与荷尔蒙的窗口——甲状腺、锌、性荷尔蒙、泌乳素的变化都会先反映在这里。看清楚，才知道该补什么、调什么。",
+    "肠胃问题(胀气、便秘、拉肚子)": "长期肠胃不适，除了消化本身，也值得看免疫球蛋白(IgG/IgA/IgE/IgM)反映的食物与免疫反应，以及有没有幽门螺旋杆菌(H.pylori)。找到根源，才不会一直靠症状缓解。",
+    "走路会喘、容易累": "容易喘、稍动就累，最常见和带氧能力有关——血红蛋白分析可看有无地贫或贫血倾向，电解质与EBV病毒史也会影响体力。一起看能分辨原因。",
+    "手脚麻痹 / 手脚冰冷": "手脚麻或冰冷，常和神经营养有关——B6、B12、Folate不足都可能影响神经；若手指遇冷变色，则会进一步看自体免疫(ANA)。验清楚才能对症。",
+    "经常头晕": "经常头晕，需先排查最常见方向——铁质状态(Iron Studies)、压力荷尔蒙、B12与Folate。看清数据，才知道是营养、代谢还是需进一步检查。",
+    "月经 / 荷尔蒙相关(经期乱、更年期)": "经期不顺或更年期不适，核心是荷尔蒙平衡——雌激素、黄体素、FSH/LH、泌乳素、甲状腺(含抗体)、性荷尔蒙，一起看才能了解你处在哪个阶段、身体需要什么支持。"
+  },
+  "after_service": [
+    {
+      "step": "1. I come prepared 我提前准备",
+      "desc": "在见你之前，我们已仔细看过你填写的健康状况与目标，为你量身准备，不是套用模板。"
+    },
+    {
+      "step": "2. I listen first 先倾听您",
+      "desc": "咨询从倾听开始。先了解你的生活、作息、困扰，而不是急着给答案。"
+    },
+    {
+      "step": "3. Your goals, honestly 诚实评估目标",
+      "desc": "根据你的验血数据与生活现状，诚实地与你评估目标——可行、可持续，不夸大。"
+    },
+    {
+      "step": "4. Read your body's story 解读身体故事",
+      "desc": "由营养师逐项为你解读验血报告，用你听得懂的方式，让你真正看懂身体在说什么。"
+    },
+    {
+      "step": "5. A plan for your life 为生活定制",
+      "desc": "为你的生活节奏量身定制方案——饮食、作息、补充建议，融入日常，不是难以执行的清单。"
+    },
+    {
+      "step": "6. 4-6 months together 4-6个月同行",
+      "desc": "改变需要时间。我们会在4-6个月里持续跟进、调整，陪你走下去。"
+    },
+    {
+      "step": "7. You take the lead 您掌握主导",
+      "desc": "最终目标是你能独立掌握自己的健康——懂得看、懂得选、懂得照顾自己。"
+    }
+  ],
+  "note_hb": "Haemoglobin analysis 已包含 Iron Studies。顾客同时需要两个时，不论哪家 Lab，都不重复计费。"
+}

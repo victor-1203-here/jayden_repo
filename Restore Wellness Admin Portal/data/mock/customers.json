@@ -1,0 +1,163 @@
+{
+  "_notes": "FAKE test data. phone = customer ID, always stored as 60XXXXXXXXX. health_notes: nutritionist + mgmt only (server must filter).",
+  "customers": [
+    {
+      "phone": "60123456781",
+      "name": "Tan Mei Ling",
+      "gender": "F",
+      "dob": "1968-03-12",
+      "ic": null,
+      "source": "Agent",
+      "agent_id": "u-sam",
+      "nutritionist_id": "u-jialing",
+      "pdpa_signed": true,
+      "created": "2026-09-03",
+      "follow_up": {
+        "date": "2026-11-03",
+        "todo": "Check blood test result"
+      },
+      "health_notes": [
+        {
+          "date": "2026-10-06",
+          "by": "u-jialing",
+          "text": "FAKE note: main concern blood sugar / cholesterol."
+        }
+      ],
+      "prepaid": []
+    },
+    {
+      "phone": "60167788990",
+      "name": "Lim Ah Kow",
+      "gender": "M",
+      "dob": "1959-08-02",
+      "ic": null,
+      "source": "Agent",
+      "agent_id": "u-benne",
+      "nutritionist_id": "u-jialing",
+      "pdpa_signed": false,
+      "created": "2026-09-06",
+      "follow_up": {
+        "date": "2026-11-05",
+        "todo": "Check blood test result"
+      },
+      "health_notes": [
+        {
+          "date": "2026-10-07",
+          "by": "u-jialing",
+          "text": "FAKE note: main concern blood sugar / cholesterol."
+        }
+      ],
+      "prepaid": []
+    },
+    {
+      "phone": "60192233445",
+      "name": "Wong Siew Fun",
+      "gender": "F",
+      "dob": "1972-11-20",
+      "ic": null,
+      "source": "New Customer (Ads)",
+      "agent_id": null,
+      "nutritionist_id": "u-mslee",
+      "pdpa_signed": true,
+      "created": "2026-09-09",
+      "follow_up": {
+        "date": "2026-11-02",
+        "todo": "Check blood test result"
+      },
+      "health_notes": [
+        {
+          "date": "2026-10-08",
+          "by": "u-mslee",
+          "text": "FAKE note: main concern blood sugar / cholesterol."
+        }
+      ],
+      "prepaid": [
+        {
+          "product": "FIR Sauna - 10 Sessions",
+          "total_rm": 500,
+          "used_rm": 300,
+          "valid_until": "2026-12-12"
+        }
+      ]
+    },
+    {
+      "phone": "60125566778",
+      "name": "Chong Kar Wai",
+      "gender": "M",
+      "dob": "1980-01-15",
+      "ic": null,
+      "source": "Referral",
+      "agent_id": "u-sam",
+      "nutritionist_id": "u-mslee",
+      "pdpa_signed": false,
+      "created": "2026-09-12",
+      "follow_up": {
+        "date": "2026-11-10",
+        "todo": "Check blood test result"
+      },
+      "health_notes": [
+        {
+          "date": "2026-10-09",
+          "by": "u-mslee",
+          "text": "FAKE note: main concern blood sugar / cholesterol."
+        }
+      ],
+      "prepaid": []
+    },
+    {
+      "phone": "60178899001",
+      "name": "Lee Bee Hoon",
+      "gender": "F",
+      "dob": "1965-06-30",
+      "ic": null,
+      "source": "Existing Customer",
+      "agent_id": null,
+      "nutritionist_id": "u-jialing",
+      "pdpa_signed": true,
+      "created": "2026-09-15",
+      "follow_up": {
+        "date": null,
+        "todo": ""
+      },
+      "health_notes": [
+        {
+          "date": "2026-10-10",
+          "by": "u-jialing",
+          "text": "FAKE note: main concern blood sugar / cholesterol."
+        }
+      ],
+      "prepaid": []
+    },
+    {
+      "phone": "60134455667",
+      "name": "Ng Choon Huat",
+      "gender": "M",
+      "dob": "1955-12-08",
+      "ic": null,
+      "source": "Agent",
+      "agent_id": "u-benne",
+      "nutritionist_id": "u-mslee",
+      "pdpa_signed": false,
+      "created": "2026-09-18",
+      "follow_up": {
+        "date": "2026-11-04",
+        "todo": "Check blood test result"
+      },
+      "health_notes": [
+        {
+          "date": "2026-10-11",
+          "by": "u-mslee",
+          "text": "FAKE note: main concern blood sugar / cholesterol."
+        }
+      ],
+      "prepaid": [
+        {
+          "product": "FIR Sauna - 10 Sessions",
+          "total_rm": 500,
+          "used_rm": 100,
+          "valid_until": "2026-12-24"
+        }
+      ]
+    }
+  ]
+}

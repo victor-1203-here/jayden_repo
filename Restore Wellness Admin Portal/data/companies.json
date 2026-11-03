@@ -1,0 +1,31 @@
+{
+  "_notes": "Companies that can issue PO / quotation / report. Add a company = add one entry. Only companies with writes_to_sales_tracker=true are written to the Google Sheet.",
+  "default_for_po": "verdulife",
+  "default": "restore",
+  "companies": [
+    {
+      "id": "restore",
+      "name": "Restore Wellness",
+      "legal_name": null,
+      "reg_no": null,
+      "sst_no": null,
+      "address": null,
+      "phone": null,
+      "email": null,
+      "logo": null,
+      "writes_to_sales_tracker": true
+    },
+    {
+      "id": "verdulife",
+      "name": "Verdulife Sdn Bhd",
+      "legal_name": "Verdulife Sdn Bhd",
+      "reg_no": null,
+      "sst_no": null,
+      "address": null,
+      "phone": null,
+      "email": null,
+      "logo": "assets/verdulife-logo.png",
+      "writes_to_sales_tracker": false
+    }
+  ]
+}

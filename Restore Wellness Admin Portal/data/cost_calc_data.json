@@ -1,0 +1,1031 @@
+{
+  "_notes": "Verdulife Cost Calculator master data. 卖价用 master_tests[].selling（营养师手定，非 cost/0.4）。此文件为主数据单一源头，改后需(1)同步 Admin/CS Portal HTML 的内嵌副本 (2)跑 export_cs.js 重导 CS 版。",
+  "master_tests": [
+    {
+      "name": "基础检查包 (含FBC/Liver/Lipid/Renal/Glucose/HbA1c/Urine FEME)",
+      "eurofins_cost": 25,
+      "eurofins_code": "VER1",
+      "innoquest_cost": 28,
+      "innoquest_code": "IQMY1",
+      "selling": 86,
+      "discount_allowed": true
+    },
+    {
+      "name": "HsCRP, Inflammation Marker",
+      "eurofins_cost": 20,
+      "eurofins_code": "T-HSCRP",
+      "innoquest_cost": 10,
+      "innoquest_code": "QRX",
+      "selling": 40,
+      "discount_allowed": true
+    },
+    {
+      "name": "Homocysteine",
+      "eurofins_cost": 40,
+      "eurofins_code": "T-Homo",
+      "innoquest_cost": 30,
+      "innoquest_code": "HOX",
+      "selling": 80,
+      "discount_allowed": true
+    },
+    {
+      "name": "Cortisol",
+      "eurofins_cost": 65,
+      "eurofins_code": "COR",
+      "innoquest_cost": 45,
+      "innoquest_code": "ACO",
+      "selling": 130,
+      "discount_allowed": true
+    },
+    {
+      "name": "Vitamin D25",
+      "eurofins_cost": 50,
+      "eurofins_code": "T-VD25",
+      "innoquest_cost": 45,
+      "innoquest_code": "OXD",
+      "selling": 100,
+      "discount_allowed": true
+    },
+    {
+      "name": "Fasting Insulin",
+      "eurofins_cost": 35,
+      "eurofins_code": "Homa-IR",
+      "innoquest_cost": 88,
+      "innoquest_code": "INS",
+      "selling": 176,
+      "discount_allowed": true
+    },
+    {
+      "name": "C-Peptide",
+      "eurofins_cost": 150,
+      "eurofins_code": "CPEP",
+      "innoquest_cost": 114,
+      "innoquest_code": "CPP",
+      "selling": 300,
+      "discount_allowed": true
+    },
+    {
+      "name": "AFP, Liver Cancer Marker",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-AFP",
+      "innoquest_cost": 10,
+      "innoquest_code": "QFX",
+      "selling": 35,
+      "discount_allowed": true
+    },
+    {
+      "name": "CA125, Ovary Cancer Marker",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-CA125",
+      "innoquest_cost": 10,
+      "innoquest_code": "Q1X",
+      "selling": 35,
+      "discount_allowed": true
+    },
+    {
+      "name": "CA153, Breast Cancer Marker",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-CA153",
+      "innoquest_cost": 10,
+      "innoquest_code": "Q5X",
+      "selling": 35,
+      "discount_allowed": true
+    },
+    {
+      "name": "CA199, Pancreatic Cancer Marker",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-CA199",
+      "innoquest_cost": 10,
+      "innoquest_code": "Q9X",
+      "selling": 35,
+      "discount_allowed": true
+    },
+    {
+      "name": "PSA, Prostate Cancer Marker",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-PSA",
+      "innoquest_cost": 10,
+      "innoquest_code": "QSX",
+      "selling": 35,
+      "discount_allowed": true
+    },
+    {
+      "name": "CEA, Colon Cancer Marker",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-CEA",
+      "innoquest_cost": 10,
+      "innoquest_code": "QEX",
+      "selling": 35,
+      "discount_allowed": true
+    },
+    {
+      "name": "EBV IgA",
+      "eurofins_cost": 20,
+      "eurofins_code": "T-EBV",
+      "innoquest_cost": 27,
+      "innoquest_code": "VCX",
+      "selling": 54,
+      "discount_allowed": true
+    },
+    {
+      "name": "EBV IgG",
+      "eurofins_cost": 75,
+      "eurofins_code": "EBVG",
+      "innoquest_cost": 83,
+      "innoquest_code": "EBG",
+      "selling": 166,
+      "discount_allowed": true
+    },
+    {
+      "name": "ESR",
+      "eurofins_cost": 3,
+      "eurofins_code": "T-ESR",
+      "innoquest_cost": 7,
+      "innoquest_code": "ESR",
+      "selling": 14,
+      "discount_allowed": true
+    },
+    {
+      "name": "E2, Estrogen",
+      "eurofins_cost": 18,
+      "eurofins_code": "T-E2",
+      "innoquest_cost": 14,
+      "innoquest_code": "OSX",
+      "selling": 45,
+      "discount_allowed": true
+    },
+    {
+      "name": "FSH",
+      "eurofins_cost": 18,
+      "eurofins_code": "T-FSH",
+      "innoquest_cost": 14,
+      "innoquest_code": "FSX",
+      "selling": 45,
+      "discount_allowed": true
+    },
+    {
+      "name": "LDH Hormone",
+      "eurofins_cost": 12,
+      "eurofins_code": "T-LDH",
+      "innoquest_cost": 12,
+      "innoquest_code": "LD",
+      "selling": 30,
+      "discount_allowed": true
+    },
+    {
+      "name": "LH",
+      "eurofins_cost": 18,
+      "eurofins_code": "T-LH",
+      "innoquest_cost": 14,
+      "innoquest_code": "LX",
+      "selling": 45,
+      "discount_allowed": true
+    },
+    {
+      "name": "Progesterone",
+      "eurofins_cost": 18,
+      "eurofins_code": "T-PRG",
+      "innoquest_cost": 33,
+      "innoquest_code": "PRG",
+      "selling": 75,
+      "discount_allowed": true
+    },
+    {
+      "name": "Prolactin",
+      "eurofins_cost": 18,
+      "eurofins_code": "T-PRL",
+      "innoquest_cost": 14,
+      "innoquest_code": "PRX",
+      "selling": 45,
+      "discount_allowed": true
+    },
+    {
+      "name": "Total Testosterone",
+      "eurofins_cost": 18,
+      "eurofins_code": "T-TESTO",
+      "innoquest_cost": 18,
+      "innoquest_code": "TEX",
+      "selling": 45,
+      "discount_allowed": true
+    },
+    {
+      "name": "SHBG",
+      "eurofins_cost": 120,
+      "eurofins_code": "SHBG",
+      "innoquest_cost": 30,
+      "innoquest_code": "SHX",
+      "selling": 240,
+      "discount_allowed": true
+    },
+    {
+      "name": "DHEAS",
+      "eurofins_cost": 50,
+      "eurofins_code": "DHEAS",
+      "innoquest_cost": 66,
+      "innoquest_code": "DHE",
+      "selling": 135,
+      "discount_allowed": true
+    },
+    {
+      "name": "TSH",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-TSH",
+      "innoquest_cost": 12,
+      "innoquest_code": "TSX",
+      "selling": 30,
+      "discount_allowed": true
+    },
+    {
+      "name": "FT3",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-FT3",
+      "innoquest_cost": 12,
+      "innoquest_code": "F3X",
+      "selling": 30,
+      "discount_allowed": true
+    },
+    {
+      "name": "FT4",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-FT4",
+      "innoquest_cost": 12,
+      "innoquest_code": "F4X",
+      "selling": 30,
+      "discount_allowed": true
+    },
+    {
+      "name": "Thyroglobulin Antibody (TA)",
+      "eurofins_cost": 15,
+      "eurofins_code": "T-TGA",
+      "innoquest_cost": 36,
+      "innoquest_code": "TX",
+      "selling": 72,
+      "discount_allowed": true
+    },
+    {
+      "name": "Anti - thyroid peroxidase",
+      "eurofins_cost": 15,
+      "eurofins_code": "T-TGM",
+      "innoquest_cost": 36,
+      "innoquest_code": "MX",
+      "selling": 72,
+      "discount_allowed": true
+    },
+    {
+      "name": "Hepatitis A IgG",
+      "eurofins_cost": 15,
+      "eurofins_code": "T-HAVG",
+      "innoquest_cost": 17,
+      "innoquest_code": "HAX",
+      "selling": 35,
+      "discount_allowed": true
+    },
+    {
+      "name": "Hepatitis A IgM",
+      "eurofins_cost": 40,
+      "eurofins_code": "T-HAVM",
+      "innoquest_cost": 50,
+      "innoquest_code": "HAM",
+      "selling": 100,
+      "discount_allowed": true
+    },
+    {
+      "name": "Hepatitis B Antigen & Aitibody",
+      "eurofins_cost": 13,
+      "eurofins_code": "HEPBS",
+      "innoquest_cost": 12,
+      "innoquest_code": "H3X",
+      "selling": 30,
+      "discount_allowed": true
+    },
+    {
+      "name": "Hepatitis C Antibody",
+      "eurofins_cost": 20,
+      "eurofins_code": "T-HCVG",
+      "innoquest_cost": 25,
+      "innoquest_code": "HCX",
+      "selling": 50,
+      "discount_allowed": true
+    },
+    {
+      "name": "High Sensitivity Troponin I",
+      "eurofins_cost": 50,
+      "eurofins_code": "T-HSTROPI",
+      "innoquest_cost": 40,
+      "innoquest_code": "HSX",
+      "selling": 100,
+      "discount_allowed": true
+    },
+    {
+      "name": "Apolipo B",
+      "eurofins_cost": 50,
+      "eurofins_code": "APOB",
+      "innoquest_cost": 50,
+      "innoquest_code": "ABX",
+      "selling": 100,
+      "discount_allowed": true
+    },
+    {
+      "name": "Apolipo A1",
+      "eurofins_cost": 50,
+      "eurofins_code": "APOA1",
+      "innoquest_cost": 50,
+      "innoquest_code": "AAX",
+      "selling": 100,
+      "discount_allowed": true
+    },
+    {
+      "name": "Lipoprotein a",
+      "eurofins_cost": 85,
+      "eurofins_code": "LPA",
+      "innoquest_cost": 70,
+      "innoquest_code": "LPX",
+      "selling": 170,
+      "discount_allowed": true
+    },
+    {
+      "name": "Immunoglobulin IgE (Total)",
+      "eurofins_cost": 71,
+      "eurofins_code": "IGE",
+      "innoquest_cost": 51,
+      "innoquest_code": "IGE",
+      "selling": 150,
+      "discount_allowed": true
+    },
+    {
+      "name": "Immunoglobulin IgG",
+      "eurofins_cost": 69,
+      "eurofins_code": "IGG",
+      "innoquest_cost": 49,
+      "innoquest_code": "IGG",
+      "selling": 150,
+      "discount_allowed": true
+    },
+    {
+      "name": "Immunoglobulin IgA",
+      "eurofins_cost": 67,
+      "eurofins_code": "IGA",
+      "innoquest_cost": 47,
+      "innoquest_code": "IGA",
+      "selling": 150,
+      "discount_allowed": true
+    },
+    {
+      "name": "Immunoglobulin IgM",
+      "eurofins_cost": 70,
+      "eurofins_code": "IGM",
+      "innoquest_cost": 50,
+      "innoquest_code": "IGM",
+      "selling": 150,
+      "discount_allowed": true
+    },
+    {
+      "name": "H.Pylori",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-HPLY",
+      "innoquest_cost": 24,
+      "innoquest_code": "HEX",
+      "selling": 48,
+      "discount_allowed": true
+    },
+    {
+      "name": "HIV I & II Antibody",
+      "eurofins_cost": 10,
+      "eurofins_code": "T-HIV",
+      "innoquest_cost": 12,
+      "innoquest_code": "HIX",
+      "selling": 30,
+      "discount_allowed": true
+    },
+    {
+      "name": "VDRL (RPR)",
+      "eurofins_cost": 7,
+      "eurofins_code": "VDRL",
+      "innoquest_cost": 8,
+      "innoquest_code": "RXR",
+      "selling": 20,
+      "discount_allowed": true
+    },
+    {
+      "name": "Rubella IgG",
+      "eurofins_cost": 20,
+      "eurofins_code": "RUBG",
+      "innoquest_cost": 32,
+      "innoquest_code": "RUG",
+      "selling": 64,
+      "discount_allowed": true
+    },
+    {
+      "name": "Rubella IgM",
+      "eurofins_cost": 100,
+      "eurofins_code": "RUBM",
+      "innoquest_cost": 65,
+      "innoquest_code": "RUM",
+      "selling": 200,
+      "discount_allowed": true
+    },
+    {
+      "name": "Thalassemia",
+      "eurofins_cost": 115,
+      "eurofins_code": "THALA",
+      "innoquest_cost": 130,
+      "innoquest_code": "THL",
+      "selling": 260,
+      "discount_allowed": true
+    },
+    {
+      "name": "Blood Group",
+      "eurofins_cost": 5,
+      "eurofins_code": "ABO",
+      "innoquest_cost": 12,
+      "innoquest_code": "BX",
+      "selling": 24,
+      "discount_allowed": true
+    },
+    {
+      "name": "Folate",
+      "eurofins_cost": 65,
+      "eurofins_code": "FOL",
+      "innoquest_cost": 24,
+      "innoquest_code": "FOX",
+      "selling": 130,
+      "discount_allowed": true
+    },
+    {
+      "name": "Vitamin B12",
+      "eurofins_cost": 40,
+      "eurofins_code": "B12",
+      "innoquest_cost": 25,
+      "innoquest_code": "B1X",
+      "selling": 80,
+      "discount_allowed": true
+    },
+    {
+      "name": "Serum Iron",
+      "eurofins_cost": 5,
+      "eurofins_code": "FE",
+      "innoquest_cost": 13,
+      "innoquest_code": "FE",
+      "selling": 26,
+      "discount_allowed": true
+    },
+    {
+      "name": "Magnesium",
+      "eurofins_cost": 11,
+      "eurofins_code": "MAG",
+      "innoquest_cost": 6,
+      "innoquest_code": "MG",
+      "selling": 22,
+      "discount_allowed": true
+    },
+    {
+      "name": "Ferritin",
+      "eurofins_cost": 25,
+      "eurofins_code": "FERR",
+      "innoquest_cost": 14,
+      "innoquest_code": "FEX",
+      "selling": 50,
+      "discount_allowed": true
+    },
+    {
+      "name": "Iron Profile (含 Serum Iron/TIBC/Ferritin)",
+      "eurofins_cost": 45,
+      "eurofins_code": "IRON_P",
+      "innoquest_cost": 60,
+      "innoquest_code": "IS",
+      "selling": 120,
+      "discount_allowed": true
+    },
+    {
+      "name": "Urea Breath Test",
+      "eurofins_cost": 130,
+      "eurofins_code": "UBT",
+      "innoquest_cost": 85,
+      "innoquest_code": "UBA",
+      "selling": 260,
+      "discount_allowed": true
+    },
+    {
+      "name": "RA Factor",
+      "eurofins_cost": 8,
+      "eurofins_code": "RF",
+      "innoquest_cost": 12,
+      "innoquest_code": "RHX",
+      "selling": 30,
+      "discount_allowed": true
+    },
+    {
+      "name": "ANA",
+      "eurofins_cost": 60,
+      "eurofins_code": "ANA",
+      "innoquest_cost": 36,
+      "innoquest_code": "ANX",
+      "selling": 120,
+      "discount_allowed": true
+    },
+    {
+      "name": "Urine Microalbumin",
+      "eurofins_cost": 30,
+      "eurofins_code": "MALB-Q",
+      "innoquest_cost": 14,
+      "innoquest_code": "MAX",
+      "selling": 60,
+      "discount_allowed": true
+    },
+    {
+      "name": "Interleukin 6 (IL-6)",
+      "eurofins_cost": 120,
+      "eurofins_code": "IL6",
+      "innoquest_cost": 220,
+      "innoquest_code": "IL6",
+      "selling": 440,
+      "discount_allowed": true
+    },
+    {
+      "name": "Fibrinogen",
+      "eurofins_cost": 65,
+      "eurofins_code": "FBRG",
+      "innoquest_cost": 45,
+      "innoquest_code": "FIB",
+      "selling": 130,
+      "discount_allowed": true
+    }
+  ],
+  "eurofins_promo": {
+    "packages": {
+      "X3T": {
+        "quota": 3,
+        "cost": 45
+      },
+      "X8T": {
+        "quota": 8,
+        "cost": 96
+      },
+      "X12T": {
+        "quota": 12,
+        "cost": 188
+      }
+    },
+    "base_items": [
+      "Full Blood Count",
+      "Liver Function Test",
+      "Lipid Profile",
+      "Renal Function Test",
+      "Glucose",
+      "HbA1c",
+      "Urine FEME"
+    ],
+    "additional": [
+      {
+        "name": "① 套餐总览",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "套餐名",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "X3T",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "X8T",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "X12T",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "② 基础固定项目 (三个套餐都含，列一次即可)",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "Full Blood Count",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "Liver Function Test",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "Lipid Profile",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "Renal Function Test",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "Glucose",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "HbA1c",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "Urine FEME",
+        "X3T": false,
+        "X8T": false,
+        "X12T": false,
+        "or_group": null
+      },
+      {
+        "name": "Hepatitis A IgG",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "Hepatitis B Antigen & Aitibody",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "HIV I & II Antibody",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "VDRL",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "TSH",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "FT3",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "FT4",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "H.Pylori",
+        "X3T": false,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "CEA",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "AFP",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "CA199",
+        "X3T": false,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "PSA",
+        "X3T": false,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "CA125",
+        "X3T": false,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "CA153",
+        "X3T": false,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "RA Factor",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "CRP",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "Urine Microalbumin",
+        "X3T": true,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "Vitamin B12",
+        "X3T": false,
+        "X8T": false,
+        "X12T": true,
+        "or_group": null
+      },
+      {
+        "name": "Vitamin D",
+        "X3T": false,
+        "X8T": true,
+        "X12T": true,
+        "or_group": "X8T:组1"
+      },
+      {
+        "name": "HS Troponin",
+        "X3T": false,
+        "X8T": true,
+        "X12T": true,
+        "or_group": "X8T:组1 / X12T:组1"
+      },
+      {
+        "name": "Homocysteine",
+        "X3T": false,
+        "X8T": true,
+        "X12T": true,
+        "or_group": "X8T:组1 / X12T:组1"
+      },
+      {
+        "name": "Apolipoprotein A1 & B",
+        "X3T": false,
+        "X8T": true,
+        "X12T": true,
+        "or_group": null
+      }
+    ],
+    "bundles": [
+      {
+        "name": "Apolipoprotein A1 & B",
+        "occupies_quota": 1,
+        "components": [
+          "Apolipo A1",
+          "Apolipo B"
+        ],
+        "note": "In promo: bundled, occupies 1 quota. As standalone add-on: A1 and B charged separately RM50 each."
+      }
+    ],
+    "or_groups_explained": "or_group like 'X8T:组1' means mutually exclusive within that package only; pick 1 counts toward quota, others become add-on (auto-pick lower cost to keep in-quota)."
+  },
+  "innoquest_combo": [
+    {
+      "name": "心血管组合",
+      "tests": [
+        "Apolipo A1",
+        "Apolipo B",
+        "Lipoprotein a"
+      ],
+      "code": "3AP",
+      "cost": 130
+    }
+  ],
+  "fixed_packages": {
+    "男性健康": {
+      "price": 268,
+      "ask_gender": false,
+      "special_note": "male markers (PSA)",
+      "items": [
+        "基础检查包 (含FBC/Liver/Lipid/Renal/Glucose/HbA1c/Urine FEME)",
+        "AFP, Liver Cancer Marker",
+        "CA199, Pancreatic Cancer Marker",
+        "PSA, Prostate Cancer Marker (Only Male)",
+        "CEA, Colon Cancer Marker",
+        "FT4",
+        "Hepatitis B Antigen & Aitibody",
+        "TSH"
+      ]
+    },
+    "女性健康": {
+      "price": 268,
+      "ask_gender": false,
+      "special_note": "female markers (CA125/CA153)",
+      "items": [
+        "基础检查包 (含FBC/Liver/Lipid/Renal/Glucose/HbA1c/Urine FEME)",
+        "AFP, Liver Cancer Marker",
+        "CA125, Ovary Cancer Marker (Only Female)",
+        "CA153, Breast Cancer Marker (Only Female)",
+        "CA199, Pancreatic Cancer Marker",
+        "CEA, Colon Cancer Marker",
+        "FT4",
+        "Hepatitis B Antigen & Aitibody",
+        "TSH"
+      ]
+    },
+    "乐龄健康": {
+      "price": 899,
+      "ask_gender": true,
+      "items": [
+        "基础检查包 (含FBC/Liver/Lipid/Renal/Glucose/HbA1c/Urine FEME)",
+        "CRP, Inflammation Marker",
+        "Homocysteine",
+        "Vitamin D25",
+        "FT4",
+        "Hepatitis B Antigen & Aitibody",
+        "TSH",
+        "Apolipo B",
+        "Apolipo A1",
+        "Serum Iron",
+        "RA Factor",
+        "Magnesium",
+        "Ferritin",
+        "Urine Microalbumin"
+      ]
+    },
+    "五高风险": {
+      "price": 850,
+      "ask_gender": true,
+      "note": "原体重管理改为五高风险, 售价RM850",
+      "items": [
+        "基础检查包 (含FBC/Liver/Lipid/Renal/Glucose/HbA1c/Urine FEME)",
+        "CRP, Inflammation Marker",
+        "Homocysteine",
+        "Cortisol",
+        "Vitamin D25",
+        "Fasting Insulin",
+        "AFP, Liver Cancer Marker",
+        "CA125, Ovary Cancer Marker (Only Female)",
+        "CA153, Breast Cancer Marker (Only Female)",
+        "CA199, Pancreatic Cancer Marker",
+        "PSA, Prostate Cancer Marker (Only Male)",
+        "CEA, Colon Cancer Marker",
+        "FT4",
+        "H.Pylori",
+        "Hepatitis B Antigen & Aitibody",
+        "TSH",
+        "Ferritin"
+      ]
+    },
+    "全面代谢": {
+      "price": 1599,
+      "ask_gender": true,
+      "items": [
+        "基础检查包 (含FBC/Liver/Lipid/Renal/Glucose/HbA1c/Urine FEME)",
+        "CRP, Inflammation Marker",
+        "Homocysteine",
+        "Cortisol",
+        "Vitamin D25",
+        "Fasting Insulin",
+        "AFP, Liver Cancer Marker",
+        "CA125, Ovary Cancer Marker (Only Female)",
+        "CA153, Breast Cancer Marker (Only Female)",
+        "CA199, Pancreatic Cancer Marker",
+        "PSA, Prostate Cancer Marker (Only Male)",
+        "CEA, Colon Cancer Marker",
+        "EBV",
+        "ESR",
+        "E2, Estrogen",
+        "FSH",
+        "FT3",
+        "FT4",
+        "H.Pylori",
+        "Hepatitis B Antigen & Aitibody",
+        "LH",
+        "Progesterone",
+        "Testosterone",
+        "TSH",
+        "Apolipo B",
+        "Apolipo A1",
+        "Vitamin B12",
+        "SHBG",
+        "Magnesium",
+        "DHEAs",
+        "Urine Microalbumin"
+      ]
+    },
+    "营养缺乏": {
+      "price": 489,
+      "ask_gender": false,
+      "special_code": {
+        "eurofins": "VNP (cost RM188)",
+        "innoquest": "no special code: use IQMY1 base + itemized add-on"
+      },
+      "items": [
+        "基础检查包 (含FBC/Liver/Lipid/Renal/Glucose/HbA1c/Urine FEME)",
+        "Vitamin D25",
+        "Vitamin B12",
+        "Serum Iron",
+        "Magnesium",
+        "Ferritin",
+        "Folate"
+      ]
+    }
+  },
+  "pwp_addons": [
+    {
+      "name": "心血管疾病风险",
+      "belongs_to": "男性/女性",
+      "price": 225,
+      "includes": "Apolipo A1, Apolipo B, CRP, Homocysteine"
+    },
+    {
+      "name": "荷尔蒙检测(男)",
+      "belongs_to": "男性",
+      "price": 220,
+      "includes": "Testosterone, SHBG"
+    },
+    {
+      "name": "脂肪肝风险评估",
+      "belongs_to": "男性",
+      "price": 280,
+      "includes": "Ferritin, Fasting Insulin, LiverFAST"
+    },
+    {
+      "name": "荷尔蒙检测(女)",
+      "belongs_to": "女性",
+      "price": 250,
+      "includes": "E2 Estrogen, Progesterone, LH, FSH, Prolactin"
+    },
+    {
+      "name": "营养与代谢(女)",
+      "belongs_to": "女性",
+      "price": 330,
+      "includes": "Ferritin, Serum Iron, Vitamin B12, Folate, Vitamin D"
+    },
+    {
+      "name": "癌症风险-男",
+      "belongs_to": "乐龄/体重/营养缺乏",
+      "price": 98,
+      "includes": "CEA, AFP, CA199, PSA"
+    },
+    {
+      "name": "癌症风险-女",
+      "belongs_to": "乐龄/体重/营养缺乏",
+      "price": 118,
+      "includes": "CEA, AFP, CA199, CA125, CA153"
+    }
+  ],
+  "derived_only_not_in_lab_code": [
+    "LiverFAST",
+    "LiverFAST Select"
+  ],
+  "_version": 1,
+  "_updated": "2026-10-13"
+}

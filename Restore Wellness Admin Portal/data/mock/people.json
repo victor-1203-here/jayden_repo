@@ -1,0 +1,67 @@
+{
+  "_notes": "FAKE test data. Roles: mgmt | admin | nutritionist | agent. Developer replaces with real accounts + login.",
+  "people": [
+    {
+      "id": "u-levin",
+      "name": "Levin",
+      "role": "mgmt",
+      "active": true,
+      "dept": "online"
+    },
+    {
+      "id": "u-jayden",
+      "name": "Jayden",
+      "role": "mgmt",
+      "active": true,
+      "dept": "bd"
+    },
+    {
+      "id": "u-amanda",
+      "name": "Amanda",
+      "role": "mgmt",
+      "active": true,
+      "dept": "clinical"
+    },
+    {
+      "id": "u-sophia",
+      "name": "Sophia",
+      "role": "admin",
+      "active": true
+    },
+    {
+      "id": "u-jialing",
+      "name": "Jia Ling",
+      "role": "nutritionist",
+      "active": true,
+      "probation": false
+    },
+    {
+      "id": "u-mslee",
+      "name": "Ms Lee",
+      "role": "nutritionist",
+      "active": true,
+      "probation": true
+    },
+    {
+      "id": "u-sam",
+      "name": "Sam",
+      "role": "agent",
+      "active": true,
+      "leader_id": null
+    },
+    {
+      "id": "u-benne",
+      "name": "Benne",
+      "role": "agent",
+      "active": true,
+      "leader_id": "u-sam"
+    },
+    {
+      "id": "u-nicole",
+      "name": "Nicole",
+      "role": "agent",
+      "active": false,
+      "leader_id": "u-sam"
+    }
+  ]
+}
